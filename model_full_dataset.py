@@ -56,7 +56,7 @@ e = gp.Env(empty=True)
 e.setParam('WLSACCESSID', '7e2d40a7-904b-4d00-b37c-6993c3716fb6')
 e.setParam('WLSSECRET', '731bbd0f-37ee-4c88-9d28-c4f67b9c7952')
 e.setParam('LICENSEID', 2396892)
-e.start()
+e.start() 
 
 # Create the model within the Gurobi environment
 model = gp.Model(env=e)
