@@ -58,15 +58,13 @@ app.layout = html.Div(
     State('ontario-map', 'figure')
 )
 def update_map(clickData, fig):
-    global clicked_points_df, marker_colors  # Include marker_colors in global
+    global clicked_points_df, marker_colors
 
     if clickData:
         point_index = clickData['points'][0]['pointIndex']
 
         # Update the color list
         marker_colors[point_index] = 'green'
-
-        # Update the figure with the new color list
         fig['data'][0]['marker']['color'] = marker_colors
 
         # Get the data of the clicked point
@@ -76,9 +74,9 @@ def update_map(clickData, fig):
             'lon': clickData['points'][0]['lon']
         }
 
-        # Add the clicked point to the DataFrame
-        clicked_points_df = clicked_points_df.append(
-            clicked_point, ignore_index=True)
+        # Add the clicked point to the DataFrame using pd.concat
+        clicked_points_df = pd.concat(
+            [clicked_points_df, pd.DataFrame([clicked_point])], ignore_index=True)
 
     return fig
 
