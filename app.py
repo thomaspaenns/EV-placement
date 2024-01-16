@@ -11,9 +11,12 @@ import pandas as pd
 # Load CSV and select only required columns
 df = pd.read_csv('401_Data.csv', encoding='ISO-8859-1')
 
+# Initialize a dictionary to track clicked LHRS
+clicked_lhrs_dict = {lhrs: 0 for lhrs in df['LHRS']}
+
 # Import model and simulation
-model = Model(df)
-sim = Simulation()
+# model = Model(df)
+# sim = Simulation()
 
 # Initialize Dash app
 app = dash.Dash(__name__)
@@ -63,13 +66,23 @@ app.layout = html.Div(
     State('ontario-map', 'figure')
 )
 def update_map(clickData, fig):
-    global clicked_points_df, marker_colors
+    global clicked_points_df, marker_colors, clicked_lhrs_dict
 
     if clickData:
         point_index = clickData['points'][0]['pointIndex']
 
-        # Update the color list
-        marker_colors[point_index] = 'green'
+        # Toggle the color and update the clicked_lhrs_dict
+        if marker_colors[point_index] == 'grey':
+            marker_colors[point_index] = 'green'
+            clicked_lhrs_dict[df.iloc[point_index]['LHRS']] = 1
+        else:
+            marker_colors[point_index] = 'grey'
+            clicked_lhrs_dict[df.iloc[point_index]['LHRS']] = 0
+        
+        # Print the updated clicked_lhrs_dict for debugging
+        print(f"Updated clicked_lhrs_dict: {clicked_lhrs_dict}")
+
+        # Update the marker colors in the figure
         fig['data'][0]['marker']['color'] = marker_colors
 
         # Get the data of the clicked point
@@ -79,9 +92,19 @@ def update_map(clickData, fig):
             'lon': clickData['points'][0]['lon']
         }
 
-        # Add the clicked point to the DataFrame using pd.concat
-        clicked_points_df = pd.concat(
-            [clicked_points_df, pd.DataFrame([clicked_point])], ignore_index=True)
+        # Check if this point is already in clicked_points_df
+        if clicked_points_df[(clicked_points_df.lat == clicked_point['lat']) & 
+                             (clicked_points_df.lon == clicked_point['lon'])].empty:
+            # Add the clicked point to the DataFrame if not already present
+            clicked_points_df = pd.concat(
+                [clicked_points_df, pd.DataFrame([clicked_point])], ignore_index=True)
+        else:
+            # Remove the clicked point from the DataFrame if it is already present
+            clicked_points_df = clicked_points_df.drop(
+                clicked_points_df[(clicked_points_df.lat == clicked_point['lat']) & 
+                                  (clicked_points_df.lon == clicked_point['lon'])].index
+            )
+        
 
     return fig
 
@@ -91,16 +114,13 @@ def update_map(clickData, fig):
     [Input('ontario-map', 'clickData')]
 )
 def display_click_data(clickData):
-    if clickData:
-        # Extract the data for the clicked point
-        point_index = clickData['points'][0]['pointIndex']
-        location = df.iloc[point_index]['Location Description']
-        lat = clickData['points'][0]['lat']
-        lon = clickData['points'][0]['lon']
+    global clicked_points_df, marker_colors, clicked_lhrs_dict
 
-        # Display the clicked location's information
-        return f"Clicked Location: {location}, Coordinates: ({lat}, {lon})"
+    # Prepare a string to display the current state of clicked LHRs
+    clicked_lhrs_status = '\n'.join([f'LHRS: {lhrs}, Status: {status}' 
+                                     for lhrs, status in clicked_lhrs_dict.items()])
 
+    return clicked_lhrs_status
 
 if __name__ == '__main__':
     app.run_server(debug=True)
