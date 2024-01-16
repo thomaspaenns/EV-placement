@@ -8,15 +8,18 @@ class Model:
     def __init__(self):
         self.data = self.pull_data(file_name='401_Data.csv')
         self.network = self.create_network(self.data)
+        self.model = self.create_model(self.data, self.network)
 
     def pull_data(self, file_name):
-        df = pd.read_csv('401_Data.csv')
+        # df = pd.read_csv('401_Data.csv')
+        df = pd.read_csv('model/401_Data.csv',
+                 encoding='ISO-8859-1')
         df['dist_to_next'] = (df['Sec Len'] + df['Sec Len'].shift(-1)) / 2
-        df = df.astype({'AADT':int, 'LHRS':int})
+        df = df.astype({'AADT':int, 'LHRS':int, 'Latitude':float, 'Longitude':float})
         df['demand'] = df['AADT']*((1-(df['Truck %']/100))*0.033*0.02072)
         return df
 
-    def create_network(self, data):
+    def create_network(self, df):
         G = nx.Graph()
         for index, row in df.iterrows():
             next_index = index + 1
@@ -26,7 +29,7 @@ class Model:
                 G.add_edge(int(current_segment), int(next_segment), length=float(row['dist_to_next']))
         return G
     
-    def run_model(self, df, G):
+    def create_model(self, df, G):
         # Create Sets and Params
         I = df['LHRS']
         J = I
