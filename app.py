@@ -6,6 +6,7 @@ from dash import dcc, html
 from dash.dependencies import Input, Output, State
 import plotly.graph_objs as go
 import pandas as pd
+import dash_bootstrap_components as dbc
 
 
 # Load CSV and select only required columns
@@ -19,7 +20,7 @@ clicked_lhrs_dict = {lhrs: 0 for lhrs in df['LHRS']}
 # sim = Simulation()
 
 # Initialize Dash app
-app = dash.Dash(__name__)
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 # Map configuration
 mapbox_access_token = 'pk.eyJ1IjoienVoYXlyODMiLCJhIjoiY2xrbHc0emVwMHE2NjNsbXZ3cTh2MHNleCJ9.CMVZ7OC27bxxARKMRTttfQ'
@@ -55,57 +56,75 @@ app.layout = html.Div(
                 )
             }
         ),
-        html.Pre(id='clicked-data')
+        html.Pre(id='clicked-data'),
+        dbc.Modal(
+            [
+                dbc.ModalHeader("Select Station Level"),
+                dbc.ModalBody(
+                    dbc.RadioItems(
+                        options=[
+                            {"label": "Level 1", "value": 1},
+                            {"label": "Level 2", "value": 2},
+                            {"label": "Level 3", "value": 3}
+                        ],
+                        id="station-level-radio",
+                        inline=True
+                    )
+                ),
+                dbc.ModalFooter(
+                    dbc.Button("Confirm", id="modal-confirm", n_clicks=0)
+                )
+            ],
+            id="modal",
+            is_open=False,
+        )
     ]
 )
 
+# Place this callback right after the app.layout definition
+
 
 @app.callback(
-    Output('ontario-map', 'figure'),
+    Output('modal', 'is_open'),
     Input('ontario-map', 'clickData'),
-    State('ontario-map', 'figure')
+    State('modal', 'is_open')
 )
-def update_map(clickData, fig):
+def toggle_modal(clickData, is_open):
+    if clickData:
+        return not is_open
+    return is_open
+
+
+# Place this callback right after the first callback
+@app.callback(
+    Output('ontario-map', 'figure'),
+    [Input('modal-confirm', 'n_clicks')],
+    [State('station-level-radio', 'value'),
+     State('ontario-map', 'clickData'),
+     State('ontario-map', 'figure')]
+)
+def update_map_on_modal(n_clicks, selected_level, clickData, fig):
     global clicked_points_df, marker_colors, clicked_lhrs_dict
 
-    if clickData:
+    if n_clicks > 0 and clickData:
         point_index = clickData['points'][0]['pointIndex']
+        lhrs = df.iloc[point_index]['LHRS']
 
-        # Toggle the color and update the clicked_lhrs_dict
-        if marker_colors[point_index] == 'grey':
+        # Update color and clicked_lhrs_dict based on selected level
+        if selected_level:
             marker_colors[point_index] = 'green'
-            clicked_lhrs_dict[df.iloc[point_index]['LHRS']] = 1
+            clicked_lhrs_dict[lhrs] = selected_level
         else:
             marker_colors[point_index] = 'grey'
-            clicked_lhrs_dict[df.iloc[point_index]['LHRS']] = 0
-        
-        # Print the updated clicked_lhrs_dict for debugging
-        print(f"Updated clicked_lhrs_dict: {clicked_lhrs_dict}")
+            clicked_lhrs_dict[lhrs] = 0
 
         # Update the marker colors in the figure
         fig['data'][0]['marker']['color'] = marker_colors
 
-        # Get the data of the clicked point
-        clicked_point = {
-            'Location Description': df.iloc[point_index]['Location Description'],
-            'lat': clickData['points'][0]['lat'],
-            'lon': clickData['points'][0]['lon']
-        }
+        # Return updated figure
+        return fig
 
-        # Check if this point is already in clicked_points_df
-        if clicked_points_df[(clicked_points_df.lat == clicked_point['lat']) & 
-                             (clicked_points_df.lon == clicked_point['lon'])].empty:
-            # Add the clicked point to the DataFrame if not already present
-            clicked_points_df = pd.concat(
-                [clicked_points_df, pd.DataFrame([clicked_point])], ignore_index=True)
-        else:
-            # Remove the clicked point from the DataFrame if it is already present
-            clicked_points_df = clicked_points_df.drop(
-                clicked_points_df[(clicked_points_df.lat == clicked_point['lat']) & 
-                                  (clicked_points_df.lon == clicked_point['lon'])].index
-            )
-        
-
+    # Return the figure unchanged if no level is selected
     return fig
 
 
@@ -117,10 +136,11 @@ def display_click_data(clickData):
     global clicked_points_df, marker_colors, clicked_lhrs_dict
 
     # Prepare a string to display the current state of clicked LHRs
-    clicked_lhrs_status = '\n'.join([f'LHRS: {lhrs}, Status: {status}' 
+    clicked_lhrs_status = '\n'.join([f'LHRS: {lhrs}, Status: {status}'
                                      for lhrs, status in clicked_lhrs_dict.items()])
 
     return clicked_lhrs_status
+
 
 if __name__ == '__main__':
     app.run_server(debug=True)
