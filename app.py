@@ -1,3 +1,6 @@
+from model.model import Model
+from simulation.simulation import Simulation
+
 import dash
 from dash import dcc, html
 from dash.dependencies import Input, Output, State
@@ -6,9 +9,11 @@ import pandas as pd
 
 
 # Load CSV and select only required columns
-df = pd.read_csv('/Users/zuhayrshaikh/Documents/GitHub/EV-placement/model/401_Data.csv',
-                 encoding='ISO-8859-1')[['Location Description', 'Latitude', 'Longitude']]
+df = pd.read_csv('401_Data.csv', encoding='ISO-8859-1')
 
+# Import model and simulation
+model = Model(df)
+sim = Simulation()
 
 # Initialize Dash app
 app = dash.Dash(__name__)

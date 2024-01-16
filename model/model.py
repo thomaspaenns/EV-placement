@@ -4,18 +4,17 @@ import pandas as pd
 import networkx as nx
 import numpy as np
 
+
 class Model:
-    def __init__(self):
-        self.data = self.pull_data(file_name='401_Data.csv')
+    def __init__(self, df):
+        self.data = self.pull_data(df)
         self.network = self.create_network(self.data)
         self.model = self.create_model(self.data, self.network)
 
-    def pull_data(self, file_name):
-        # df = pd.read_csv('401_Data.csv')
-        df = pd.read_csv('model/401_Data.csv',
-                 encoding='ISO-8859-1')
+    def pull_data(self, df):
         df['dist_to_next'] = (df['Sec Len'] + df['Sec Len'].shift(-1)) / 2
-        df = df.astype({'AADT':int, 'LHRS':int, 'Latitude':float, 'Longitude':float})
+        df = df.astype({'AADT': int, 'LHRS': int,
+                       'Latitude': float, 'Longitude': float})
         df['demand'] = df['AADT']*((1-(df['Truck %']/100))*0.033*0.02072)
         return df
 
@@ -26,27 +25,29 @@ class Model:
             if next_index < len(df):
                 current_segment = row['LHRS']
                 next_segment = df.loc[next_index, 'LHRS']
-                G.add_edge(int(current_segment), int(next_segment), length=float(row['dist_to_next']))
+                G.add_edge(int(current_segment), int(next_segment),
+                           length=float(row['dist_to_next']))
         return G
-    
+
     def create_model(self, df, G):
         # Create Sets and Params
         I = df['LHRS']
         J = I
-        C = [1,2,3]
-        Cap = {1:48,2:96,3:192} #Cars charged per hour (2 per port)
+        C = [1, 2, 3]
+        Cap = {1: 48, 2: 96, 3: 192}  # Cars charged per hour (2 per port)
         d = dict(zip(I, df['demand']))
         f = {
-            1:dict(zip(I, df['cost 1'])),
-            2:dict(zip(I, df['cost 2'])),
-            3:dict(zip(I, df['cost 3']))
+            1: dict(zip(I, df['cost 1'])),
+            2: dict(zip(I, df['cost 2'])),
+            3: dict(zip(I, df['cost 3']))
         }
         R = 40
         Budget = 300000
-        #Compute shortest path lengths
+        # Compute shortest path lengths
         paths = {}
         for lhrs_num in df['LHRS']:
-            paths.update({lhrs_num: nx.shortest_path_length(G, source=lhrs_num, weight='length')})
+            paths.update({lhrs_num: nx.shortest_path_length(
+                G, source=lhrs_num, weight='length')})
         l = paths
         # Create environment with WLS license
         e = gp.Env(empty=True)
