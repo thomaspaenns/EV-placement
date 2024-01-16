@@ -10,6 +10,8 @@ class Model:
         self.data = self.pull_data(df)
         self.network = self.create_network(self.data)
         self.model = self.create_model(self.data, self.network)
+        self.optimal = None
+        self.set_stations = None
 
     def pull_data(self, df):
         df['dist_to_next'] = (df['Sec Len'] + df['Sec Len'].shift(-1)) / 2
@@ -30,25 +32,6 @@ class Model:
         return G
 
     def create_model(self, df, G):
-        # Create Sets and Params
-        I = df['LHRS']
-        J = I
-        C = [1, 2, 3]
-        Cap = {1: 48, 2: 96, 3: 192}  # Cars charged per hour (2 per port)
-        d = dict(zip(I, df['demand']))
-        f = {
-            1: dict(zip(I, df['cost 1'])),
-            2: dict(zip(I, df['cost 2'])),
-            3: dict(zip(I, df['cost 3']))
-        }
-        R = 40
-        Budget = 300000
-        # Compute shortest path lengths
-        paths = {}
-        for lhrs_num in df['LHRS']:
-            paths.update({lhrs_num: nx.shortest_path_length(
-                G, source=lhrs_num, weight='length')})
-        l = paths
         # Create environment with WLS license
         e = gp.Env(empty=True)
         e.setParam('WLSACCESSID', '7e2d40a7-904b-4d00-b37c-6993c3716fb6')
@@ -57,3 +40,27 @@ class Model:
         e.start()
         # Create the model within the Gurobi environment
         model = gp.Model(env=e)
+    
+    def get_optimal(self, budget, set_stations):
+        if self.optimal != None and self.set_stations == set_stations:
+            return self.optimal
+        else:
+            # Create Sets and Params
+            I = self.data['LHRS']
+            J = I
+            C = [1, 2, 3]
+            Cap = {1: 48, 2: 96, 3: 192}  # Cars charged per hour (2 per port)
+            d = dict(zip(I, self.data['demand']))
+            f = {
+                1: dict(zip(I, self.data['cost 1'])),
+                2: dict(zip(I, self.data['cost 2'])),
+                3: dict(zip(I, self.data['cost 3']))
+            }
+            R = 40
+            Budget = 300000
+            # Compute shortest path lengths
+            paths = {}
+            for lhrs_num in self.data['LHRS']:
+                paths.update({lhrs_num: nx.shortest_path_length(
+                    self.network, source=lhrs_num, weight='length')})
+            l = paths
