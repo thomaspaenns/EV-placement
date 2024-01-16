@@ -17,7 +17,7 @@ clicked_lhrs_dict = {lhrs: 0 for lhrs in df['LHRS']}
 
 # Import model and simulation
 # model = Model(df)
-# sim = Simulation()
+# sim = Simulation(df)
 
 # Initialize Dash app
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
