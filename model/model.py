@@ -57,10 +57,32 @@ class Model:
                 3: dict(zip(I, self.data['cost 3']))
             }
             R = 40
-            Budget = 300000
             # Compute shortest path lengths
             paths = {}
             for lhrs_num in self.data['LHRS']:
                 paths.update({lhrs_num: nx.shortest_path_length(
                     self.network, source=lhrs_num, weight='length')})
             l = paths
+            # Remove old constraints and decision variables
+            self.model.remove(self.model.getVars()) #Might break
+            self.model.remove(self.model.getConstrs())
+            # Add decision variables
+            x = self.model.addVars(I, C, vtype=GRB.BINARY, name="x")
+            y = self.model.addVars(I, J, vtype=GRB.BINARY, name="y")
+            # Add generic constraints
+            [self.model.addConstr(sum(x[i, c] for c in C) <= 1) for i in I]
+            [self.model.addConstr(
+                sum(d[j]*y[i, j] for j in J) <= sum(Cap[c]*x[i,c] for c in C)
+            ) for i in I]
+            [self.model.addConstr(l[i][j]*y[i,j] <= R) for i in I for j in J]
+            self.model.addConstr(sum(f[c][i]*x[i,c] for i in I for c in C) <= budget)
+
+            self.model.setObjective(sum(d[j]*y[i,j] for i in I for j in J), sense=GRB.MAXIMIZE)
+            #Add must-have station constraints
+            for key in set_stations:
+                if set_stations[key] > 0:
+                    self.model.addConstr(x[key,set_stations[key]] == 1) #If this breaks, sanitize lhrs to int
+
+            self.model.optimize()
+            self.optimal =  self.model.getAttr("x") #CHANGE THIS ONCE LICENSE IS SORTED
+            return self.optimal
