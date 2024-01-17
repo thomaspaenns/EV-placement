@@ -16,7 +16,7 @@ df = pd.read_csv('401_Data.csv', encoding='ISO-8859-1')
 clicked_lhrs_dict = {lhrs: 0 for lhrs in df['LHRS']}
 
 # Import model and simulation
-# model = Model(df)
+model = Model(df)
 # sim = Simulation(df)
 
 # Initialize Dash app
