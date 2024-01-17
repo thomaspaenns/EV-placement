@@ -81,18 +81,6 @@ app.layout = html.Div(
     ]
 )
 
-# Place this callback right after the app.layout definition
-
-
-@app.callback(
-    Output('modal', 'is_open'),
-    Input('ontario-map', 'clickData'),
-    State('modal', 'is_open')
-)
-def toggle_modal(clickData, is_open):
-    if clickData:
-        return not is_open
-    return is_open
 
 
 # Place this callback right after the first callback
@@ -127,6 +115,31 @@ def update_map_on_modal(n_clicks, selected_level, clickData, fig):
     # Return the figure unchanged if no level is selected
     return fig
 
+# Replace toggle_modal and close_modal with this combined callback
+@app.callback(
+    Output('modal', 'is_open'),
+    [Input('ontario-map', 'clickData'), 
+     Input('modal-confirm', 'n_clicks')],
+    [State('modal', 'is_open')]
+)
+def handle_modal(clickData, n_clicks, is_open):
+    ctx = dash.callback_context
+
+    if not ctx.triggered:
+        return is_open  # No input has been triggered, return the current state
+
+    # Check which input triggered the callback
+    input_id = ctx.triggered[0]['prop_id'].split('.')[0]
+
+    if input_id == 'ontario-map' and clickData:
+        return not is_open  # Toggle the modal
+    elif input_id == 'modal-confirm':
+        return False  # Close the modal on confirm button click
+
+    return is_open  # In all other cases, return the current state
+
+# Continue with the rest of your
+
 
 @app.callback(
     Output('clicked-data', 'children'),
@@ -138,6 +151,8 @@ def display_click_data(clickData):
     # Prepare a string to display the current state of clicked LHRs
     clicked_lhrs_status = '\n'.join([f'LHRS: {lhrs}, Status: {status}'
                                      for lhrs, status in clicked_lhrs_dict.items()])
+    
+    print(clicked_lhrs_dict)
 
     return clicked_lhrs_status
 
