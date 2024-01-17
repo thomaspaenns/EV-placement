@@ -83,7 +83,6 @@ app.layout = html.Div(
 
 
 
-# Place this callback right after the first callback
 @app.callback(
     Output('ontario-map', 'figure'),
     [Input('modal-confirm', 'n_clicks')],
@@ -94,26 +93,25 @@ app.layout = html.Div(
 def update_map_on_modal(n_clicks, selected_level, clickData, fig):
     global clicked_points_df, marker_colors, clicked_lhrs_dict
 
-    if n_clicks > 0 and clickData:
+    if clickData:
         point_index = clickData['points'][0]['pointIndex']
         lhrs = df.iloc[point_index]['LHRS']
 
-        # Update color and clicked_lhrs_dict based on selected level
-        if selected_level:
-            marker_colors[point_index] = 'green'
-            clicked_lhrs_dict[lhrs] = selected_level
-        else:
+        # Check if the circle is already green
+        if marker_colors[point_index] == 'green':
+            # Set it back to grey and update the dictionary to 0
             marker_colors[point_index] = 'grey'
             clicked_lhrs_dict[lhrs] = 0
+        elif n_clicks > 0:
+            # Proceed with existing logic to turn it green and update based on selected level
+            marker_colors[point_index] = 'green'
+            clicked_lhrs_dict[lhrs] = selected_level
 
         # Update the marker colors in the figure
         fig['data'][0]['marker']['color'] = marker_colors
 
-        # Return updated figure
-        return fig
-
-    # Return the figure unchanged if no level is selected
     return fig
+
 
 # Replace toggle_modal and close_modal with this combined callback
 @app.callback(
