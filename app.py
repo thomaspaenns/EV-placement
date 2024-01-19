@@ -16,7 +16,7 @@ df = pd.read_csv('401_Data.csv', encoding='ISO-8859-1')
 clicked_lhrs_dict = {lhrs: 0 for lhrs in df['LHRS']}
 
 # Import model and simulation
-model = Model(df)
+# model = Model(df)
 # sim = Simulation(df)
 
 # Initialize Dash app
@@ -50,7 +50,7 @@ app.layout = html.Div(
                     mapbox=dict(
                         accesstoken=mapbox_access_token,
                         center=ontario_location,
-                        zoom=5
+                        zoom=6.8
                     ),
                     margin={'l': 0, 'r': 0, 't': 0, 'b': 0}
                 )
@@ -81,31 +81,56 @@ app.layout = html.Div(
     ]
 )
 
+# Existing modal for station level selection
+# ... [your existing modal code] ...
+
+# Additional modal for confirming the removal of a station
+remove_modal = dbc.Modal(
+    [
+        dbc.ModalHeader("Remove Station"),
+        dbc.ModalBody("Are you sure you want to remove this station?"),
+        dbc.ModalFooter(
+            dbc.Button("Confirm Removal", id="modal-remove-confirm", n_clicks=0)
+        )
+    ],
+    id="remove-modal",
+    is_open=False,
+)
+
+app.layout.children.append(remove_modal)
+
+
 
 
 @app.callback(
     Output('ontario-map', 'figure'),
-    [Input('modal-confirm', 'n_clicks')],
+    [Input('modal-confirm', 'n_clicks'),
+     Input('modal-remove-confirm', 'n_clicks')],  # Added this input
     [State('station-level-radio', 'value'),
      State('ontario-map', 'clickData'),
      State('ontario-map', 'figure')]
 )
-def update_map_on_modal(n_clicks, selected_level, clickData, fig):
+def update_map_on_modal(station_confirm_clicks, remove_confirm_clicks, selected_level, clickData, fig):
     global clicked_points_df, marker_colors, clicked_lhrs_dict
+    ctx = dash.callback_context
+
+    if not ctx.triggered:
+        return fig  # No input has been triggered, return the current figure
+
+    input_id = ctx.triggered[0]['prop_id'].split('.')[0]
 
     if clickData:
         point_index = clickData['points'][0]['pointIndex']
         lhrs = df.iloc[point_index]['LHRS']
 
-        # Check if the circle is already green
-        if marker_colors[point_index] == 'green':
-            # Set it back to grey and update the dictionary to 0
-            marker_colors[point_index] = 'grey'
-            clicked_lhrs_dict[lhrs] = 0
-        elif n_clicks > 0:
-            # Proceed with existing logic to turn it green and update based on selected level
+        if input_id == 'modal-confirm' and station_confirm_clicks > 0:
+            # Logic for station level selection
             marker_colors[point_index] = 'green'
             clicked_lhrs_dict[lhrs] = selected_level
+        elif input_id == 'modal-remove-confirm' and remove_confirm_clicks > 0:
+            # Logic for removing a station
+            marker_colors[point_index] = 'grey'
+            clicked_lhrs_dict[lhrs] = 0
 
         # Update the marker colors in the figure
         fig['data'][0]['marker']['color'] = marker_colors
@@ -113,30 +138,37 @@ def update_map_on_modal(n_clicks, selected_level, clickData, fig):
     return fig
 
 
-# Replace toggle_modal and close_modal with this combined callback
+# Updated callback for handling modals
 @app.callback(
     Output('modal', 'is_open'),
+    Output('remove-modal', 'is_open'),
     [Input('ontario-map', 'clickData'), 
-     Input('modal-confirm', 'n_clicks')],
-    [State('modal', 'is_open')]
+     Input('modal-confirm', 'n_clicks'),
+     Input('modal-remove-confirm', 'n_clicks')],
+    [State('modal', 'is_open'),
+     State('remove-modal', 'is_open')]
 )
-def handle_modal(clickData, n_clicks, is_open):
+def handle_modal(clickData, confirm_clicks, remove_confirm_clicks, is_add_modal_open, is_remove_modal_open):
     ctx = dash.callback_context
 
     if not ctx.triggered:
-        return is_open  # No input has been triggered, return the current state
+        return is_add_modal_open, is_remove_modal_open  # No input has been triggered, return the current states
 
-    # Check which input triggered the callback
     input_id = ctx.triggered[0]['prop_id'].split('.')[0]
 
     if input_id == 'ontario-map' and clickData:
-        return not is_open  # Toggle the modal
-    elif input_id == 'modal-confirm':
-        return False  # Close the modal on confirm button click
+        point_index = clickData['points'][0]['pointIndex']
+        if marker_colors[point_index] == 'green':
+            # If the circle is green, open the remove modal
+            return False, True
+        else:
+            # If the circle is grey, open the add modal
+            return True, False
+    elif input_id in ['modal-confirm', 'modal-remove-confirm']:
+        # Close both modals on confirm button click
+        return False, False
 
-    return is_open  # In all other cases, return the current state
-
-# Continue with the rest of your
+    return is_add_modal_open, is_remove_modal_open  # In all other cases, return the current states
 
 
 @app.callback(
