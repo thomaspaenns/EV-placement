@@ -201,6 +201,9 @@ def update_map_on_modal(station_confirm_clicks, remove_confirm_clicks, toggle_cl
             # Remove stations from the map
             if len(fig['data']) > 1:
                 fig['data'].pop()
+        
+    # Disable the legend
+    fig['layout']['showlegend'] = False
 
     return fig
 
