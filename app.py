@@ -7,6 +7,8 @@ from dash.dependencies import Input, Output, State
 import plotly.graph_objs as go
 import pandas as pd
 import dash_bootstrap_components as dbc
+from dash import no_update
+
 
 
 # Load CSV and select only required columns
@@ -171,20 +173,37 @@ def handle_modal(clickData, confirm_clicks, remove_confirm_clicks, is_add_modal_
     return is_add_modal_open, is_remove_modal_open  # In all other cases, return the current states
 
 
+# Global variable to store the previous state of clicked_lhrs_dict
+prev_clicked_lhrs_dict = clicked_lhrs_dict.copy()
+
 @app.callback(
-    Output('clicked-data', 'children'),
-    [Input('ontario-map', 'clickData')]
+    [Output('clicked-data', 'children')],
+    [Input('modal-confirm', 'n_clicks'),
+     Input('modal-remove-confirm', 'n_clicks')],
+    [State('ontario-map', 'clickData')]
 )
-def display_click_data(clickData):
-    global clicked_points_df, marker_colors, clicked_lhrs_dict
+def display_click_data(confirm_clicks, remove_confirm_clicks, clickData):
+    global clicked_points_df, marker_colors, clicked_lhrs_dict, prev_clicked_lhrs_dict
 
-    # Prepare a string to display the current state of clicked LHRs
-    clicked_lhrs_status = '\n'.join([f'LHRS: {lhrs}, Status: {status}'
-                                     for lhrs, status in clicked_lhrs_dict.items()])
-    
-    print(clicked_lhrs_dict)
+    ctx = dash.callback_context
 
-    return clicked_lhrs_status
+    if not ctx.triggered:
+        return [no_update]  # No button click, no update
+
+    # Compare the current state with the previous state
+    changed_lhrs = {lhrs: status for lhrs, status in clicked_lhrs_dict.items() if clicked_lhrs_dict[lhrs] != prev_clicked_lhrs_dict[lhrs]}
+
+    # Print only the changed key-value pairs
+    if changed_lhrs:
+        print("Changed LHRS Status:")
+        for lhrs, status in changed_lhrs.items():
+            print(f"LHRS: {lhrs}, Status: {status}")
+
+    # Update the previous state for the next comparison
+    prev_clicked_lhrs_dict = clicked_lhrs_dict.copy()
+
+    return [no_update]
+
 
 
 if __name__ == '__main__':

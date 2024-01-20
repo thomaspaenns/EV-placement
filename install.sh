@@ -4,4 +4,6 @@ python3.10 -m pip install networkx
 python3.10 -m pip install dash
 python3.10 -m pip install dash_bootstrap_components
 python3.10 -m pip install simpy
+python3.10 -m pip install geopy
+python3.10 -m pip install shapely
 echo "Setup sequence completed!"
