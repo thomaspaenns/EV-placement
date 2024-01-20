@@ -188,20 +188,36 @@ def update_map_on_modal(station_confirm_clicks, remove_confirm_clicks, toggle_cl
         show_stations = toggle_clicks % 2 == 1
 
         if show_stations:
+            # Create a dictionary to map each station to its level
+            station_levels = {}
+            for _, row in relevant_stations.iterrows():
+                if pd.notna(row['EV DC Fast Count']):
+                    level = 'Level 3'
+                elif pd.notna(row['EV Level2 EVSE Num']):
+                    level = 'Level 2'
+                elif pd.notna(row['EV Level1 EVSE Num']):
+                    level = 'Level 1'
+                else:
+                    level = 'Level Unknown'
+                station_levels[row['Station Name']] = level
+
+            # Prepare the hover text to include station level
+            hover_text = [f"{name} - {station_levels[name]}" for name in relevant_stations['Station Name']]
+
             # Add relevant stations to the map
             fig['data'].append(go.Scattermapbox(
                 lat=relevant_stations['Latitude'],
                 lon=relevant_stations['Longitude'],
                 mode='markers',
                 marker={'color': 'blue', 'size': 8},
-                text=relevant_stations['Station Name'],
+                text=hover_text,
                 hoverinfo='text'
             ))
         else:
             # Remove stations from the map
             if len(fig['data']) > 1:
                 fig['data'].pop()
-        
+
     # Disable the legend
     fig['layout']['showlegend'] = False
 
