@@ -40,6 +40,7 @@ class Model:
         e.start()
         # Create the model within the Gurobi environment
         model = gp.Model(env=e)
+        return model
     
     def get_optimal(self, budget, set_stations):
         if self.optimal != None and self.set_stations == set_stations:
@@ -78,11 +79,20 @@ class Model:
             self.model.addConstr(sum(f[c][i]*x[i,c] for i in I for c in C) <= budget)
 
             self.model.setObjective(sum(d[j]*y[i,j] for i in I for j in J), sense=GRB.MAXIMIZE)
-            #Add must-have station constraints
-            for key in set_stations:
-                if set_stations[key] > 0:
-                    self.model.addConstr(x[key,set_stations[key]] == 1) #If this breaks, sanitize lhrs to int
-
+            # Add must-have station constraints
+            if set_stations:
+                for key in set_stations:
+                    if set_stations[key] > 0:
+                        self.model.addConstr(x[key,set_stations[key]] == 1) #If this breaks, sanitize lhrs to int
+            # Optimize
             self.model.optimize()
-            self.optimal =  self.model.getAttr("x") #CHANGE THIS ONCE LICENSE IS SORTED
+            optimal = {}
+            for v in self.model.getVars():
+                if f"{v.VarName}".startswith("x"):
+                    if int(v.x) == 1:
+                        optimal.update({f"{v.VarName}"[2:7]:f"{v.VarName}"[8]})
+                    else:
+                        optimal.update({f"{v.VarName}"[2:7]:0})
+            self.optimal = optimal
             return self.optimal
+
