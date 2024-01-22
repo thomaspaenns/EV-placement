@@ -2,7 +2,7 @@ from model.model import Model
 from simulation.simulation import Simulation
 
 import dash
-from dash import dcc, html
+from dash import dcc, html, Dash
 from dash.dependencies import Input, Output, State
 import plotly.graph_objs as go
 import pandas as pd
@@ -41,26 +41,40 @@ clicked_points_df = pd.DataFrame(
     columns=['Location Description', 'lat', 'lon'])
 # List of 'grey' colors, one for each point
 marker_colors = ['grey' for _ in range(len(df))]
+
+
 app.layout = html.Div(
     style={'height': '100vh', 'width': '100vw', 'display': 'flex', 'flexDirection': 'column'},
     children=[
-        # Top Bar for Controls
         html.Div(
+            [
+                dbc.Button("Toggle Stations", id="toggle-stations", n_clicks=0, style={'marginRight': '20px'}),
+                html.Div(
+                    dcc.Slider(
+                        id='selected-year-slider',
+                        min=2024,
+                        max=2049,
+                        step=5,
+                        value=2024,
+                        marks={year: str(year) for year in range(2024, 2050, 5)},
+                        disabled=False,
+                    ),
+                    style={'width': '60%', 'marginRight': '20px', 'marginLeft': '20px'}
+                ),
+                dbc.Button("Confirm", id="confirm-year", n_clicks=0, style={'marginLeft': '10px'}),
+                dbc.Button("Edit", id="edit-year", n_clicks=0, style={'marginLeft': '10px', 'display': 'none'}),
+            ],
             style={
-                'height': '10vh',  # 10% of the viewport height
-                'backgroundColor': '#f8f9fa',  # Light grey background
+                'height': '10vh',
+                'backgroundColor': '#f8f9fa',
                 'display': 'flex',
-                'justifyContent': 'flex-start',  # Aligns items to the start (left)
+                'justifyContent': 'flex-start',
                 'alignItems': 'center',
                 'padding': '10px'
-            },
-            children=[
-                dbc.Button("Toggle Stations", id="toggle-stations", n_clicks=0)
-            ]
+            }
         ),
-        # Map
         html.Div(
-            style={'flexGrow': 1},  # Allows the map to fill the remaining space
+            style={'flexGrow': 1},
             children=[
                 dcc.Graph(
                     id='ontario-map',
@@ -70,7 +84,7 @@ app.layout = html.Div(
                             lat=df['Latitude'],
                             lon=df['Longitude'],
                             mode='markers',
-                            marker={'color': marker_colors, 'size': 10},
+                            marker={'color': ['grey']*len(df), 'size': 10},
                             text=df['Location Description'],
                             hoverinfo='text'
                         )],
@@ -86,7 +100,6 @@ app.layout = html.Div(
                 )
             ]
         ),
-        # Modal for Selecting Station Level
         dbc.Modal(
             [
                 dbc.ModalHeader("Select Station Level"),
@@ -102,13 +115,12 @@ app.layout = html.Div(
                     )
                 ),
                 dbc.ModalFooter(
-                    dbc.Button("Confirm", id="modal-confirm", n_clicks=0, disabled=True)  # Initially disabled
+                    dbc.Button("Confirm", id="modal-confirm", n_clicks=0, disabled=True)
                 )
             ],
             id="modal",
             is_open=False,
         ),
-        # Additional Modal for Confirming the Removal of a Station
         dbc.Modal(
             [
                 dbc.ModalHeader("Remove Station"),
@@ -120,8 +132,8 @@ app.layout = html.Div(
             id="remove-modal",
             is_open=False,
         ),
-        # Component for displaying clicked data
-        html.Pre(id='clicked-data')  # Add this line to display clicked data
+        html.Pre(id='clicked-data', style={'whiteSpace': 'pre-wrap'}),
+        html.Div(id='stored-year', style={'display': 'none'})  # For storing selected year after confirmation
     ]
 )
 
@@ -140,6 +152,8 @@ remove_modal = dbc.Modal(
 )
 
 app.layout.children.append(remove_modal)
+# Store the selected year in a hidden div after confirmation
+app.layout.children.append(html.Div(id='stored-year', style={'display': 'none'}))
 
 
 
@@ -155,6 +169,23 @@ relevant_stations = alt_fuel_df[alt_fuel_df.apply(lambda x: is_within_radius(
     x['Latitude'], x['Longitude'], polyline_401), axis=1)]
 
 
+@app.callback(
+    [Output('selected-year-slider', 'disabled'),
+     Output('edit-year', 'style'),
+     Output('confirm-year', 'style'),
+     Output('stored-year', 'children')],
+    [Input('confirm-year', 'n_clicks'),
+     Input('edit-year', 'n_clicks')],
+    [State('selected-year-slider', 'value'),
+     State('selected-year-slider', 'disabled')]
+)
+def lock_unlock_slider(confirm_clicks, edit_clicks, year_value, is_disabled):
+    ctx = dash.callback_context.triggered[0]['prop_id'].split('.')[0]
+    if ctx == 'confirm-year':
+        return True, {}, {'display': 'none'}, year_value
+    elif ctx == 'edit-year':
+        return False, {'display': 'none'}, {}, no_update
+    return is_disabled, {}, {'display': 'none'} if is_disabled else {}, no_update
 
 
 # Assuming your app initialization and other setups are done above
