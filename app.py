@@ -102,7 +102,7 @@ app.layout = html.Div(
                     )
                 ),
                 dbc.ModalFooter(
-                    dbc.Button("Confirm", id="modal-confirm", n_clicks=0)
+                    dbc.Button("Confirm", id="modal-confirm", n_clicks=0, disabled=True)  # Initially disabled
                 )
             ],
             id="modal",
@@ -141,6 +141,8 @@ remove_modal = dbc.Modal(
 
 app.layout.children.append(remove_modal)
 
+
+
 def is_within_radius(station_lat, station_lon, polyline, radius_km=5):
     for point in polyline:
         if great_circle((station_lat, station_lon), point).kilometers <= radius_km:
@@ -151,6 +153,18 @@ def is_within_radius(station_lat, station_lon, polyline, radius_km=5):
 # Filter alt fuel stations that are within 5km of the 401 polyline
 relevant_stations = alt_fuel_df[alt_fuel_df.apply(lambda x: is_within_radius(
     x['Latitude'], x['Longitude'], polyline_401), axis=1)]
+
+
+
+
+# Assuming your app initialization and other setups are done above
+
+@app.callback(
+    Output('modal-confirm', 'disabled'),
+    [Input('station-level-radio', 'value')]
+)
+def toggle_modal_confirm_button(level_selected):
+    return level_selected is None  # Returns True to disable if no level is selected, False to enable if a level is selected
 
 
 @app.callback(
