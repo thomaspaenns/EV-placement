@@ -157,7 +157,7 @@ relevant_stations = alt_fuel_df[alt_fuel_df.apply(lambda x: is_within_radius(
     Output('ontario-map', 'figure'),
     [Input('modal-confirm', 'n_clicks'),
      Input('modal-remove-confirm', 'n_clicks'),
-     Input('toggle-stations', 'n_clicks')],  # Add this input for toggling stations
+     Input('toggle-stations', 'n_clicks')],
     [State('station-level-radio', 'value'),
      State('ontario-map', 'clickData'),
      State('ontario-map', 'figure')]
@@ -166,10 +166,8 @@ def update_map_on_modal(station_confirm_clicks, remove_confirm_clicks, toggle_cl
     global clicked_points_df, marker_colors, clicked_lhrs_dict
     ctx = dash.callback_context
 
-    # Check which input was triggered
     input_id = ctx.triggered[0]['prop_id'].split('.')[0]
 
-    # Update marker colors based on modal confirmations
     if clickData and (input_id == 'modal-confirm' or input_id == 'modal-remove-confirm'):
         point_index = clickData['points'][0]['pointIndex']
         lhrs = df.iloc[point_index]['LHRS']
@@ -183,44 +181,48 @@ def update_map_on_modal(station_confirm_clicks, remove_confirm_clicks, toggle_cl
 
         fig['data'][0]['marker']['color'] = marker_colors
 
-    # Toggle alternative fuel stations on the map
     if input_id == 'toggle-stations':
         show_stations = toggle_clicks % 2 == 1
 
         if show_stations:
-            # Create a dictionary to map each station to its level
-            station_levels = {}
-            for _, row in relevant_stations.iterrows():
+            stations_info = {}
+            for index, row in relevant_stations.iterrows():
+                unique_key = f"{row['Station Name']}_{row['Latitude']}_{row['Longitude']}"
+                level = 'Level Unknown'
                 if pd.notna(row['EV DC Fast Count']):
                     level = 'Level 3'
                 elif pd.notna(row['EV Level2 EVSE Num']):
                     level = 'Level 2'
                 elif pd.notna(row['EV Level1 EVSE Num']):
                     level = 'Level 1'
-                else:
-                    level = 'Level Unknown'
-                station_levels[row['Station Name']] = level
+                
+                stations_info[unique_key] = {
+                    'name': row['Station Name'],
+                    'level': level,
+                    'latitude': row['Latitude'],
+                    'longitude': row['Longitude']
+                }
 
-            # Prepare the hover text to include station level
-            hover_text = [f"{name} - {station_levels[name]}" for name in relevant_stations['Station Name']]
+            # Print the stations_info dictionary to the terminal
+            # print(stations_info)
 
-            # Add relevant stations to the map
+            latitudes = [info['latitude'] for info in stations_info.values()]
+            longitudes = [info['longitude'] for info in stations_info.values()]
+            hover_texts = [f"{info['name']} - {info['level']}" for info in stations_info.values()]
+
             fig['data'].append(go.Scattermapbox(
-                lat=relevant_stations['Latitude'],
-                lon=relevant_stations['Longitude'],
+                lat=latitudes,
+                lon=longitudes,
                 mode='markers',
                 marker={'color': 'blue', 'size': 8},
-                text=hover_text,
+                text=hover_texts,
                 hoverinfo='text'
             ))
         else:
-            # Remove stations from the map
             if len(fig['data']) > 1:
                 fig['data'].pop()
 
-    # Disable the legend
     fig['layout']['showlegend'] = False
-
     return fig
 
 
