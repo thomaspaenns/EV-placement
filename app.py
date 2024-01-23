@@ -26,7 +26,7 @@ polyline_401 = list(zip(df['Latitude'], df['Longitude']))
 clicked_lhrs_dict = {lhrs: 0 for lhrs in df['LHRS']}
 
 # Import model and simulation
-# model = Model(df)
+model = Model(df)
 # sim = Simulation(df)
 
 # Initialize Dash app
@@ -44,11 +44,17 @@ marker_colors = ['grey' for _ in range(len(df))]
 
 
 app.layout = html.Div(
-    style={'height': '100vh', 'width': '100vw', 'display': 'flex', 'flexDirection': 'column'},
+    style={'height': '100vh', 'width': '100vw',
+           'display': 'flex', 'flexDirection': 'column'},
     children=[
         html.Div(
             [
-                dbc.Button("Toggle Stations", id="toggle-stations", n_clicks=0, style={'marginRight': '20px'}),
+                dbc.Button("Toggle Stations", id="toggle-stations",
+                           n_clicks=0, style={'marginRight': '20px'}),
+                html.Div([
+                    dbc.Input(id="budget-input", type="number", placeholder="Enter Budget", style={'marginRight': '10px'}),
+                    dbc.Button("Compute Optimal Solution", id="compute-optimal", n_clicks=0),
+                ], style={'display': 'flex', 'justifyContent': 'center', 'alignItems': 'center', 'padding': '10px'}),
                 html.Div(
                     dcc.Slider(
                         id='selected-year-slider',
@@ -56,13 +62,17 @@ app.layout = html.Div(
                         max=2049,
                         step=5,
                         value=2024,
-                        marks={year: str(year) for year in range(2024, 2050, 5)},
+                        marks={year: str(year)
+                               for year in range(2024, 2050, 5)},
                         disabled=False,
                     ),
-                    style={'width': '60%', 'marginRight': '20px', 'marginLeft': '20px'}
+                    style={'width': '60%', 'marginRight': '20px',
+                           'marginLeft': '20px'}
                 ),
-                dbc.Button("Confirm", id="confirm-year", n_clicks=0, style={'marginLeft': '10px'}),
-                dbc.Button("Edit", id="edit-year", n_clicks=0, style={'marginLeft': '10px', 'display': 'none'}),
+                dbc.Button("Confirm", id="confirm-year", n_clicks=0,
+                           style={'marginLeft': '10px'}),
+                dbc.Button("Edit", id="edit-year", n_clicks=0,
+                           style={'marginLeft': '10px', 'display': 'none'}),
             ],
             style={
                 'height': '10vh',
@@ -115,7 +125,8 @@ app.layout = html.Div(
                     )
                 ),
                 dbc.ModalFooter(
-                    dbc.Button("Confirm", id="modal-confirm", n_clicks=0, disabled=True)
+                    dbc.Button("Confirm", id="modal-confirm",
+                               n_clicks=0, disabled=True)
                 )
             ],
             id="modal",
@@ -126,16 +137,20 @@ app.layout = html.Div(
                 dbc.ModalHeader("Remove Station"),
                 dbc.ModalBody("Are you sure you want to remove this station?"),
                 dbc.ModalFooter(
-                    dbc.Button("Confirm Removal", id="modal-remove-confirm", n_clicks=0)
+                    dbc.Button("Confirm Removal",
+                               id="modal-remove-confirm", n_clicks=0)
                 )
             ],
             id="remove-modal",
             is_open=False,
         ),
         html.Pre(id='clicked-data', style={'whiteSpace': 'pre-wrap'}),
-        html.Div(id='stored-year', style={'display': 'none'})  # For storing selected year after confirmation
+        html.Div(id='placeholder-output', style={'padding': '20px', 'fontSize': '20px'}),
+        # For storing selected year after confirmation
+        html.Div(id='stored-year', style={'display': 'none'})
     ]
 )
+
 
 # Additional modal for confirming the removal of a station
 remove_modal = dbc.Modal(
@@ -153,8 +168,8 @@ remove_modal = dbc.Modal(
 
 app.layout.children.append(remove_modal)
 # Store the selected year in a hidden div after confirmation
-app.layout.children.append(html.Div(id='stored-year', style={'display': 'none'}))
-
+app.layout.children.append(
+    html.Div(id='stored-year', style={'display': 'none'}))
 
 
 def is_within_radius(station_lat, station_lon, polyline, radius_km=5):
@@ -167,6 +182,24 @@ def is_within_radius(station_lat, station_lon, polyline, radius_km=5):
 # Filter alt fuel stations that are within 5km of the 401 polyline
 relevant_stations = alt_fuel_df[alt_fuel_df.apply(lambda x: is_within_radius(
     x['Latitude'], x['Longitude'], polyline_401), axis=1)]
+
+
+@app.callback(
+    Output('placeholder-output', 'children'),
+    [Input('compute-optimal', 'n_clicks')],
+    [State('budget-input', 'value'), State('clicked-data', 'children')]
+)
+def compute_optimal_solution(n_clicks, budget, clicked_data_json):
+    if n_clicks > 0 and budget is not None:
+        # Convert clicked_data_json back to dictionary if necessary
+        # clicked_lhrs_dict = json.loads(clicked_data_json) if clicked_data_json else {}
+
+        # Use the clicked_lhrs_dict as is if it's directly usable
+        optimal_solution = model.get_optimal(budget, clicked_lhrs_dict)
+        # Format the optimal solution for display
+        solution_str = ", ".join(f"LHRS {key}: Level {value}" for key, value in optimal_solution.items())
+        return f"Optimal solution computed: {solution_str}"
+    return no_update
 
 
 @app.callback(
@@ -195,7 +228,8 @@ def lock_unlock_slider(confirm_clicks, edit_clicks, year_value, is_disabled):
     [Input('station-level-radio', 'value')]
 )
 def toggle_modal_confirm_button(level_selected):
-    return level_selected is None  # Returns True to disable if no level is selected, False to enable if a level is selected
+    # Returns True to disable if no level is selected, False to enable if a level is selected
+    return level_selected is None
 
 
 @app.callback(
@@ -240,7 +274,7 @@ def update_map_on_modal(station_confirm_clicks, remove_confirm_clicks, toggle_cl
                     level = 'Level 2'
                 elif pd.notna(row['EV Level1 EVSE Num']):
                     level = 'Level 1'
-                
+
                 stations_info[unique_key] = {
                     'name': row['Station Name'],
                     'level': level,
@@ -253,7 +287,8 @@ def update_map_on_modal(station_confirm_clicks, remove_confirm_clicks, toggle_cl
 
             latitudes = [info['latitude'] for info in stations_info.values()]
             longitudes = [info['longitude'] for info in stations_info.values()]
-            hover_texts = [f"{info['name']} - {info['level']}" for info in stations_info.values()]
+            hover_texts = [
+                f"{info['name']} - {info['level']}" for info in stations_info.values()]
 
             fig['data'].append(go.Scattermapbox(
                 lat=latitudes,
