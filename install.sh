@@ -1,4 +1,9 @@
-pip install pandas
-pip install gurobipy>=9.5.1
-pip install networkx
-pip install dash
+python3.10 -m pip install pandas
+python3.10 -m pip install gurobipy>=9.5.1
+python3.10 -m pip install networkx
+python3.10 -m pip install dash
+python3.10 -m pip install dash_bootstrap_components
+python3.10 -m pip install simpy
+python3.10 -m pip install geopy
+python3.10 -m pip install shapely
+echo "Setup sequence completed!"
