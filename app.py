@@ -16,7 +16,7 @@ df = pd.read_csv('401_Data.csv', encoding='ISO-8859-1')
 
 # Load alt fuel stations data
 alt_fuel_df = pd.read_csv(
-    'alt_fuel_stations (Jan 19 2024).csv', encoding='utf8')
+    'alt_fuel_stations (Jan 23 2024).csv', encoding='utf8')
 
 # Create a polyline from the latitude and longitude of the 401 data
 polyline_401 = list(zip(df['Latitude'], df['Longitude']))
@@ -52,8 +52,10 @@ app.layout = html.Div(
                 dbc.Button("Toggle Stations", id="toggle-stations",
                            n_clicks=0, style={'marginRight': '20px'}),
                 html.Div([
-                    dbc.Input(id="budget-input", type="number", placeholder="Enter Budget", style={'marginRight': '10px'}),
-                    dbc.Button("Compute Optimal Solution", id="compute-optimal", n_clicks=0),
+                    dbc.Input(id="budget-input", type="number",
+                              placeholder="Enter Budget", style={'marginRight': '10px'}),
+                    dbc.Button("Compute Optimal Solution",
+                               id="compute-optimal", n_clicks=0),
                 ], style={'display': 'flex', 'justifyContent': 'center', 'alignItems': 'center', 'padding': '10px'}),
                 html.Div(
                     dcc.Slider(
@@ -145,7 +147,8 @@ app.layout = html.Div(
             is_open=False,
         ),
         html.Pre(id='clicked-data', style={'whiteSpace': 'pre-wrap'}),
-        html.Div(id='placeholder-output', style={'padding': '20px', 'fontSize': '20px'}),
+        html.Div(id='placeholder-output',
+                 style={'padding': '20px', 'fontSize': '20px'}),
         # For storing selected year after confirmation
         html.Div(id='stored-year', style={'display': 'none'})
     ]
@@ -172,7 +175,7 @@ app.layout.children.append(
     html.Div(id='stored-year', style={'display': 'none'}))
 
 
-def is_within_radius(station_lat, station_lon, polyline, radius_km=5):
+def is_within_radius(station_lat, station_lon, polyline, radius_km=1):
     for point in polyline:
         if great_circle((station_lat, station_lon), point).kilometers <= radius_km:
             return True
@@ -197,7 +200,8 @@ def compute_optimal_solution(n_clicks, budget, clicked_data_json):
         # Use the clicked_lhrs_dict as is if it's directly usable
         optimal_solution = model.get_optimal(budget, clicked_lhrs_dict)
         # Format the optimal solution for display
-        solution_str = ", ".join(f"LHRS {key}: Level {value}" for key, value in optimal_solution.items())
+        solution_str = ", ".join(
+            f"LHRS {key}: Level {value}" for key, value in optimal_solution.items())
         return f"Optimal solution computed: {solution_str}"
     return no_update
 
