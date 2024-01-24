@@ -112,12 +112,17 @@ class Model:
                         self.model.addConstr(x[key,set_stations[key]] == 1) #If this breaks, sanitize lhrs to int
         # Optimize
         self.model.optimize()
+        self.model.printAttr('x')
         optimal = {}
         for v in self.model.getVars():
             if f"{v.VarName}".startswith("x"):
+                # print(v.VarName)
+                # print(v.x)
                 if int(v.x) == 1:
+                    # print(v.VarName)
+                    # print(v.x)
                     optimal.update({f"{v.VarName}"[2:7]:f"{v.VarName}"[8]})
-                else:
+                elif int(v.x) == 0 and f"{v.VarName}"[2:7] not in optimal.keys():
                     optimal.update({f"{v.VarName}"[2:7]:0})
         self.optimal = optimal
         return self.optimal
