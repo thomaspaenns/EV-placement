@@ -118,9 +118,9 @@ app.layout = html.Div(
                 dbc.ModalBody(
                     dbc.RadioItems(
                         options=[
-                            {"label": "Level 1", "value": 1},
-                            {"label": "Level 2", "value": 2},
-                            {"label": "Level 3", "value": 3}
+                            {"label": "2 Ports", "value": 1},
+                            {"label": "4 Ports", "value": 2},
+                            {"label": "8 Ports", "value": 3}
                         ],
                         id="station-level-radio",
                         inline=True
@@ -175,7 +175,7 @@ app.layout.children.append(
     html.Div(id='stored-year', style={'display': 'none'}))
 
 
-def is_within_radius(station_lat, station_lon, polyline, radius_km=1):
+def is_within_radius(station_lat, station_lon, polyline, radius_km=0.5):
     for point in polyline:
         if great_circle((station_lat, station_lon), point).kilometers <= radius_km:
             return True
@@ -187,21 +187,76 @@ relevant_stations = alt_fuel_df[alt_fuel_df.apply(lambda x: is_within_radius(
     x['Latitude'], x['Longitude'], polyline_401), axis=1)]
 
 
+def find_closest_lhrs_for_station(station_lat, station_lon, polyline_401):
+    min_distance = float('inf')
+    closest_lhrs = None
+    for (lhrs_lat, lhrs_lon, lhrs) in polyline_401:
+        distance = great_circle(
+            (station_lat, station_lon), (lhrs_lat, lhrs_lon)).kilometers
+        if distance < min_distance:
+            min_distance = distance
+            closest_lhrs = lhrs
+    return closest_lhrs
+
+
+# Assuming polyline_401 is a list of tuples: (Latitude, Longitude, LHRS)
+# Update the polyline_401 data structure to include LHRS values
+polyline_401_with_lhrs = [
+    (row['Latitude'], row['Longitude'], row['LHRS']) for index, row in df.iterrows()]
+
+# Create a dictionary to store the closest LHRS value for each relevant station
+station_to_lhrs = {}
+for index, station in relevant_stations.iterrows():
+    closest_lhrs = find_closest_lhrs_for_station(
+        station['Latitude'], station['Longitude'], polyline_401_with_lhrs)
+    station_to_lhrs[station['Station Name']] = closest_lhrs
+    # Print the station name and its closest LHRS to the terminal
+    print(
+        f"{station['Station Name']} assigned to closest LHRS: {closest_lhrs}")
+
+
+# Initialize a dictionary to sum EV DC Fast Counts for each LHRS
+lhrs_ev_dc_fast_count_sum = {}
+
+# Fill in the EV DC Fast Count for each station, summing by LHRS
+for index, station in relevant_stations.iterrows():
+    # Access the dictionary using station names
+    lhrs = station_to_lhrs[station['Station Name']]
+    ev_dc_fast_count = station['EV DC Fast Count'] if pd.notnull(
+        station['EV DC Fast Count']) else 0
+
+    # Sum the EV DC Fast Counts for each LHRS
+    if lhrs in lhrs_ev_dc_fast_count_sum:
+        lhrs_ev_dc_fast_count_sum[lhrs] += ev_dc_fast_count
+    else:
+        lhrs_ev_dc_fast_count_sum[lhrs] = ev_dc_fast_count
+
+# Print the sums for validation
+# print(lhrs_ev_dc_fast_count_sum)
+# print(len(lhrs_ev_dc_fast_count_sum))
+# for lhrs, total_count in lhrs_ev_dc_fast_count_sum.items():
+#     print(f"LHRS {lhrs} has a total EV DC Fast Count of {total_count}")
+
+
 @app.callback(
     Output('placeholder-output', 'children'),
     [Input('compute-optimal', 'n_clicks')],
-    [State('budget-input', 'value'), State('clicked-data', 'children')]
+    [State('budget-input', 'value'),
+     State('clicked-data', 'children'),
+     State('toggle-stations', 'n_clicks')]  # Add the toggle stations button's n_clicks state
 )
-def compute_optimal_solution(n_clicks, budget, clicked_data_json):
+def compute_optimal_solution(n_clicks, budget, clicked_data_json, toggle_clicks):
     if n_clicks > 0 and budget is not None:
-        # Convert clicked_data_json back to dictionary if necessary
-        # clicked_lhrs_dict = json.loads(clicked_data_json) if clicked_data_json else {}
-
-        # Use the clicked_lhrs_dict as is if it's directly usable
-        optimal_solution = model.get_optimal(budget, clicked_lhrs_dict)
+        # Check if stations are being shown or not
+        if toggle_clicks % 2 == 1:
+            # Stations are shown, pass in both dictionaries
+            optimal_solution = model.get_optimal(budget, clicked_lhrs_dict, lhrs_ev_dc_fast_count_sum)
+        else:
+            # Stations are not shown, pass in only clicked_lhrs_dict
+            optimal_solution = model.get_optimal(budget, clicked_lhrs_dict)
+        
         # Format the optimal solution for display
-        solution_str = ", ".join(
-            f"LHRS {key}: Level {value}" for key, value in optimal_solution.items())
+        solution_str = ", ".join(f"LHRS {key}: Level {value}" for key, value in optimal_solution.items())
         return f"Optimal solution computed: {solution_str}"
     return no_update
 
@@ -286,8 +341,8 @@ def update_map_on_modal(station_confirm_clicks, remove_confirm_clicks, toggle_cl
                     'longitude': row['Longitude']
                 }
 
-            # Print the stations_info dictionary to the terminal
-            # print(stations_info)
+            # # Print the stations_info dictionary to the terminal
+            # print(len(stations_info))
 
             latitudes = [info['latitude'] for info in stations_info.values()]
             longitudes = [info['longitude'] for info in stations_info.values()]
