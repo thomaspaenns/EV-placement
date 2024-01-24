@@ -76,6 +76,7 @@ class Model:
                     existing_stations.update({key:8})
                     stat_type = 3
                 budget = budget + f[stat_type][key]
+        # print(existing_stations)
         # Remove old constraints and decision variables
         self.model.remove(self.model.getVars()) #Might break
         self.model.remove(self.model.getConstrs())
@@ -95,24 +96,24 @@ class Model:
             for key in set_stations:
                 if set_stations[key] > 0:
                     self.model.addConstr(x[key,set_stations[key]] == 1) #If this breaks, sanitize lhrs to int
-        if set_stations and existing_stations:
+        elif set_stations and existing_stations:
             for key in set_stations:
-                if set_stations[key] > 0:
-                    if key in existing_stations.keys():
-                        num_ports = existing_stations[key] + 2^set_stations[key]
-                        stat_type = 0
-                        if 0 < num_ports and num_ports < 3:
-                            stat_type = 1
-                        elif 2 < num_ports and num_ports < 7:
-                            stat_type = 2
-                        elif 6 < num_ports:
-                            stat_type = 3
-                        self.model.addConstr(x[key,stat_type] == 1) #If this breaks, sanitize lhrs to int
-                    else:
-                        self.model.addConstr(x[key,set_stations[key]] == 1) #If this breaks, sanitize lhrs to int
+                if key in existing_stations.keys() or set_stations[key] > 0:
+                    set_ports = 2**set_stations[key] if (set_stations[key] > 0) else 0
+                    exist_ports = existing_stations[key] if (key in existing_stations.keys()) else 0
+                    num_ports = set_ports + exist_ports
+                    stat_type = 0
+                    if 0 < num_ports and num_ports < 3:
+                        stat_type = 1
+                    elif 2 < num_ports and num_ports < 7:
+                        stat_type = 2
+                    elif 6 < num_ports:
+                        stat_type = 3
+                    print(f"LHRS: {key} Level: {stat_type}")
+                    self.model.addConstr(x[key,stat_type] == 1) #If this breaks, sanitize lhrs to int
         # Optimize
         self.model.optimize()
-        self.model.printAttr('x')
+        # self.model.printAttr('x')
         optimal = {}
         for v in self.model.getVars():
             if f"{v.VarName}".startswith("x"):
