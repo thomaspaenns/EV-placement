@@ -71,10 +71,7 @@ app.layout = html.Div(
                     style={'width': '60%', 'marginRight': '20px',
                            'marginLeft': '20px'}
                 ),
-                dbc.Button("Confirm", id="confirm-year", n_clicks=0,
-                           style={'marginLeft': '10px'}),
-                dbc.Button("Edit", id="edit-year", n_clicks=0,
-                           style={'marginLeft': '10px', 'display': 'none'}),
+
             ],
             style={
                 'height': '10vh',
@@ -243,44 +240,48 @@ for index, station in relevant_stations.iterrows():
     [Input('compute-optimal', 'n_clicks')],
     [State('budget-input', 'value'),
      State('clicked-data', 'children'),
-     State('toggle-stations', 'n_clicks')]  # Add the toggle stations button's n_clicks state
+     State('toggle-stations', 'n_clicks'),
+     State('stored-year', 'children')]  # Include stored year as a state
 )
-def compute_optimal_solution(n_clicks, budget, clicked_data_json, toggle_clicks):
+def compute_optimal_solution(n_clicks, budget, clicked_data_json, toggle_clicks, selected_year_str):
     if n_clicks > 0 and budget is not None:
+        # Convert the year from string to integer
+        try:
+            selected_year = int(selected_year_str)
+            # Uncomment the following line when ready to use the year in your model
+            # print("Selected Year:", selected_year)
+        except (ValueError, TypeError):
+            # Handle the case where the year is not a valid integer
+            print("Invalid year format:", selected_year_str)
+            return "Error: Invalid year format"
+
         # Check if stations are being shown or not
         if toggle_clicks % 2 == 1:
             # Stations are shown, pass in both dictionaries
-            optimal_solution = model.get_optimal(budget, clicked_lhrs_dict, lhrs_ev_dc_fast_count_sum)
+            optimal_solution = model.get_optimal(
+                budget, clicked_lhrs_dict, lhrs_ev_dc_fast_count_sum)
         else:
             # Stations are not shown, pass in only clicked_lhrs_dict
             optimal_solution = model.get_optimal(budget, clicked_lhrs_dict)
-        
+
         # Format the optimal solution for display
-        solution_str = ", ".join(f"LHRS {key}: Level {value}" for key, value in optimal_solution.items())
+        solution_str = ", ".join(
+            f"LHRS {key}: Level {value}" for key, value in optimal_solution.items())
         return f"Optimal solution computed: {solution_str}"
     return no_update
 
 
+# Update this callback to remove dependencies on 'confirm-year' and 'edit-year' buttons
 @app.callback(
-    [Output('selected-year-slider', 'disabled'),
-     Output('edit-year', 'style'),
-     Output('confirm-year', 'style'),
-     Output('stored-year', 'children')],
-    [Input('confirm-year', 'n_clicks'),
-     Input('edit-year', 'n_clicks')],
-    [State('selected-year-slider', 'value'),
-     State('selected-year-slider', 'disabled')]
+    Output('stored-year', 'children'),
+    [Input('selected-year-slider', 'value')]
 )
-def lock_unlock_slider(confirm_clicks, edit_clicks, year_value, is_disabled):
-    ctx = dash.callback_context.triggered[0]['prop_id'].split('.')[0]
-    if ctx == 'confirm-year':
-        return True, {}, {'display': 'none'}, year_value
-    elif ctx == 'edit-year':
-        return False, {'display': 'none'}, {}, no_update
-    return is_disabled, {}, {'display': 'none'} if is_disabled else {}, no_update
-
+def update_year(value):
+    # Simply return the slider value, which will be stored in 'stored-year'
+    return value
 
 # Assuming your app initialization and other setups are done above
+
 
 @app.callback(
     Output('modal-confirm', 'disabled'),
