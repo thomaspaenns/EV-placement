@@ -12,6 +12,7 @@ class Model:
         self.model = self.create_model(self.data, self.network)
         self.optimal = None
         self.set_stations = None
+        self.covered = None
 
     def pull_data(self, df):
         df['dist_to_next'] = (df['Sec Len'] + df['Sec Len'].shift(-1)) / 2
@@ -115,6 +116,7 @@ class Model:
         self.model.optimize()
         # self.model.printAttr('x')
         optimal = {}
+        covered = {}
         for v in self.model.getVars():
             if f"{v.VarName}".startswith("x"):
                 # print(v.VarName)
@@ -125,6 +127,24 @@ class Model:
                     optimal.update({f"{v.VarName}"[2:7]:f"{v.VarName}"[8]})
                 elif int(v.x) == 0 and f"{v.VarName}"[2:7] not in optimal.keys():
                     optimal.update({f"{v.VarName}"[2:7]:0})
+            elif f"{v.varName}".startswith("y"):
+                if int(v.x) == 1:
+                    source = f"{v.varName}"[2:7]
+                    reciever = f"{v.varName}"[8:13]
+                    distance = paths[int(reciever)][int(source)]
+                    if reciever in covered.keys():
+                        current = covered[reciever]
+                        current.update({source:distance})
+                        covered.update({reciever:current})
+                    else:
+                        covered.update({reciever:{source:distance}})
+        self.covered = covered
         self.optimal = optimal
         return self.optimal
+    
+    def get_coverage(self):
+        if self.covered:
+            return self.covered
+        else:
+            raise Exception("Model must be optimized to get coverage!")
 
