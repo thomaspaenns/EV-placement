@@ -32,6 +32,13 @@ model = Model(df)
 # Initialize Dash app
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
+# Global variable to track if a budget is set
+is_budget_set = False
+
+# Global variable to track the current budget and cumulative cost
+current_budget = 0
+cumulative_cost = 0
+
 # Map configuration
 mapbox_access_token = 'pk.eyJ1IjoienVoYXlyODMiLCJhIjoiY2xrbHc0emVwMHE2NjNsbXZ3cTh2MHNleCJ9.CMVZ7OC27bxxARKMRTttfQ'
 ontario_location = {'lat': 44.0, 'lon': -79.0}  # Approximate center of Ontario
@@ -57,6 +64,9 @@ app.layout = html.Div(
                     dbc.Button("Compute Optimal Solution",
                                id="compute-optimal", n_clicks=0),
                 ], style={'display': 'flex', 'justifyContent': 'center', 'alignItems': 'center', 'padding': '10px'}),
+                html.Div(id='remaining-budget',
+                         style={'padding': '10px', 'fontSize': '16px'}),
+
                 html.Div(
                     dcc.Slider(
                         id='selected-year-slider',
@@ -101,7 +111,8 @@ app.layout = html.Div(
                             mapbox=dict(
                                 accesstoken=mapbox_access_token,
                                 center=ontario_location,
-                                zoom=6.8
+                                zoom=6.8,
+                                uirevision=False  # Set a fixed uirevision
                             ),
                             margin={'l': 0, 'r': 0, 't': 0, 'b': 0}
                         )
@@ -285,11 +296,66 @@ def update_year(value):
 
 @app.callback(
     Output('modal-confirm', 'disabled'),
-    [Input('station-level-radio', 'value')]
+    [Input('station-level-radio', 'value'),
+     Input('ontario-map', 'clickData')],
+    [State('budget-input', 'value')]
 )
-def toggle_modal_confirm_button(level_selected):
-    # Returns True to disable if no level is selected, False to enable if a level is selected
-    return level_selected is None
+def toggle_modal_confirm_button(level_selected, clickData, budget):
+    global cumulative_cost, is_budget_set
+    if level_selected is None or not clickData:
+        return True
+    else:
+        is_budget_set = budget is not None and budget > 0
+        if not is_budget_set:
+            return True
+
+        point_index = clickData['points'][0]['pointIndex']
+        cost_column = f'cost {level_selected}'
+        station_cost = df.iloc[point_index][cost_column]
+        if cumulative_cost + station_cost > budget:
+            return True
+        return False
+
+
+def toggle_stations_on_map(fig, toggle_clicks, relevant_stations):
+    show_stations = toggle_clicks % 2 == 1
+    if show_stations:
+        add_stations_to_map(fig, relevant_stations)
+    else:
+        remove_stations_from_map(fig)
+
+
+def add_stations_to_map(fig, relevant_stations):
+    latitudes, longitudes, hover_texts = [], [], []
+    for index, row in relevant_stations.iterrows():
+        latitudes.append(row['Latitude'])
+        longitudes.append(row['Longitude'])
+        hover_texts.append(
+            f"{row['Station Name']} - Level: {get_station_level(row)}")
+
+    fig['data'].append(go.Scattermapbox(
+        lat=latitudes,
+        lon=longitudes,
+        mode='markers',
+        marker={'color': 'blue', 'size': 8},
+        text=hover_texts,
+        hoverinfo='text'
+    ))
+
+
+def remove_stations_from_map(fig):
+    if len(fig['data']) > 1:
+        fig['data'].pop()
+
+
+def get_station_level(row):
+    if pd.notna(row['EV DC Fast Count']):
+        return 'Level 3'
+    elif pd.notna(row['EV Level2 EVSE Num']):
+        return 'Level 2'
+    elif pd.notna(row['EV Level1 EVSE Num']):
+        return 'Level 1'
+    return 'Unknown'
 
 
 @app.callback(
@@ -299,71 +365,89 @@ def toggle_modal_confirm_button(level_selected):
      Input('toggle-stations', 'n_clicks')],
     [State('station-level-radio', 'value'),
      State('ontario-map', 'clickData'),
-     State('ontario-map', 'figure')]
+     State('ontario-map', 'figure'),
+     State('budget-input', 'value')]
 )
-def update_map_on_modal(station_confirm_clicks, remove_confirm_clicks, toggle_clicks, selected_level, clickData, fig):
-    global clicked_points_df, marker_colors, clicked_lhrs_dict
+def update_map_on_modal(station_confirm_clicks, remove_confirm_clicks, toggle_clicks, selected_level, clickData, fig, budget):
+    global clicked_points_df, marker_colors, clicked_lhrs_dict, cumulative_cost
     ctx = dash.callback_context
 
     input_id = ctx.triggered[0]['prop_id'].split('.')[0]
+    budget_set = budget is not None and budget > 0
 
-    if clickData and (input_id == 'modal-confirm' or input_id == 'modal-remove-confirm'):
+    # Debugging: Print current center and zoom before updates
+    print("Before update:", fig['layout']['mapbox']
+          ['center'], fig['layout']['mapbox']['zoom'])
+
+    if clickData and (input_id in ['modal-confirm', 'modal-remove-confirm']) and budget_set:
         point_index = clickData['points'][0]['pointIndex']
         lhrs = df.iloc[point_index]['LHRS']
+        cost_column = f'cost {selected_level}'
+        station_cost = df.iloc[point_index][cost_column]
 
         if input_id == 'modal-confirm' and station_confirm_clicks > 0:
-            marker_colors[point_index] = 'green'
-            clicked_lhrs_dict[lhrs] = selected_level
+            if cumulative_cost + station_cost <= budget:
+                cumulative_cost += station_cost
+                marker_colors[point_index] = 'green'
+                clicked_lhrs_dict[lhrs] = selected_level
         elif input_id == 'modal-remove-confirm' and remove_confirm_clicks > 0:
+            removed_station_level = clicked_lhrs_dict[lhrs]
+            if removed_station_level > 0:
+                cost_column = f'cost {removed_station_level}'
+                station_cost = df.iloc[point_index][cost_column]
+                cumulative_cost -= station_cost
             marker_colors[point_index] = 'grey'
             clicked_lhrs_dict[lhrs] = 0
 
         fig['data'][0]['marker']['color'] = marker_colors
 
+    # Handling toggle stations
     if input_id == 'toggle-stations':
-        show_stations = toggle_clicks % 2 == 1
+        toggle_stations_on_map(fig, toggle_clicks, relevant_stations)
 
-        if show_stations:
-            stations_info = {}
-            for index, row in relevant_stations.iterrows():
-                unique_key = f"{row['Station Name']}_{row['Latitude']}_{row['Longitude']}"
-                level = 'Level Unknown'
-                if pd.notna(row['EV DC Fast Count']):
-                    level = 'Level 3'
-                elif pd.notna(row['EV Level2 EVSE Num']):
-                    level = 'Level 2'
-                elif pd.notna(row['EV Level1 EVSE Num']):
-                    level = 'Level 1'
+    fig['layout']['mapbox']['uirevision'] = False
 
-                stations_info[unique_key] = {
-                    'name': row['Station Name'],
-                    'level': level,
-                    'latitude': row['Latitude'],
-                    'longitude': row['Longitude']
-                }
+    # Debugging: Print current center and zoom after updates
+    print("After update:", fig['layout']['mapbox']
+          ['center'], fig['layout']['mapbox']['zoom'])
 
-            # # Print the stations_info dictionary to the terminal
-            # print(len(stations_info))
-
-            latitudes = [info['latitude'] for info in stations_info.values()]
-            longitudes = [info['longitude'] for info in stations_info.values()]
-            hover_texts = [
-                f"{info['name']} - {info['level']}" for info in stations_info.values()]
-
-            fig['data'].append(go.Scattermapbox(
-                lat=latitudes,
-                lon=longitudes,
-                mode='markers',
-                marker={'color': 'blue', 'size': 8},
-                text=hover_texts,
-                hoverinfo='text'
-            ))
-        else:
-            if len(fig['data']) > 1:
-                fig['data'].pop()
-
-    fig['layout']['showlegend'] = False
     return fig
+
+
+@app.callback(
+    Output('remaining-budget', 'children'),
+    [Input('budget-input', 'value'),
+     Input('modal-confirm', 'n_clicks'),
+     Input('modal-remove-confirm', 'n_clicks')],
+    [State('station-level-radio', 'value'),
+     State('ontario-map', 'clickData')]
+)
+def update_remaining_budget(budget, confirm_clicks, remove_clicks, selected_level, clickData):
+    global cumulative_cost
+
+    if budget is None:
+        return "Please enter a budget."
+
+    remaining_budget = budget - cumulative_cost
+    return f"Remaining Budget: ${remaining_budget}"
+
+
+# @app.callback(
+#     Output('error-message', 'children'),
+#     Output('error-message', 'style'),
+#     [Input('modal-confirm', 'n_clicks')],
+#     [State('station-level-radio', 'value'),
+#      State('ontario-map', 'clickData'),
+#      State('budget-input', 'value')]
+# )
+# def display_error_message(n_clicks, selected_level, clickData, budget):
+#     if n_clicks and clickData and selected_level:
+#         point_index = clickData['points'][0]['pointIndex']
+#         cost_column = f'cost {selected_level}'
+#         station_cost = df.iloc[point_index][cost_column]
+#         if cumulative_cost + station_cost > budget:
+#             return "Error: Selection exceeds budget.", {'color': 'red', 'display': 'block'}
+#     return "", {'display': 'none'}
 
 
 # Updated callback for handling modals
