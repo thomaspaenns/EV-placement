@@ -64,15 +64,22 @@ class Car:
         return self.car_origin
 
 class Simulation:
-    def __init__(self, points):
-        self.points = points  # Example point IDs along the highway
+    def __init__(self, df):
+        self.data = self.pull_data(df)
+        self.points = self.data['LHRS'].tolist()
         self.arrival_times = None
         self.stations = None
         self.station_ranges = None
         self.max_simulation_time = 120
         self.cars_charged = None
         self.cars_not_charged = None
-        # self.wait_times = None
+    
+    def pull_data(self, df):
+        df['dist_to_next'] = (df['Sec Len'] + df['Sec Len'].shift(-1)) / 2
+        df = df.astype({'AADT': int, 'LHRS': int,
+                       'Latitude': float, 'Longitude': float})
+        df['demand'] = df['AADT']*((1-(df['Truck %']/100))*0.033*0.02072)
+        return df
 
     def setup(self, charging_stations, station_ranges):
         #Eventually random generate these based on demand
@@ -182,7 +189,7 @@ class Simulation:
 
 
 if __name__ == '__main__':
-    points = [1, 2, 3, 4, 5]
+    points = [1, 2, 3, 4, 5] #Testing will break on this, just set this to points in the Simulation init
     sim = Simulation(points)
     charging_stations = {2: 2, 5: 3}
     # Nearest charging station and distance
