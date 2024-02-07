@@ -1,5 +1,5 @@
 from model.model import Model
-from simulation.simulation import Simulation
+from simulation.sim import Simulation
 
 import dash
 from dash import dcc, html, Dash
@@ -12,11 +12,11 @@ from geopy.distance import great_circle
 
 
 # Load CSV and select only required columns
-df = pd.read_csv('401_Data.csv', encoding='ISO-8859-1')
+df = pd.read_csv('data/401_Data.csv', encoding='ISO-8859-1')
 
 # Load alt fuel stations data
 alt_fuel_df = pd.read_csv(
-    'alt_fuel_stations (Jan 23 2024).csv', encoding='utf8')
+    'data/alt_fuel_stations (Jan 23 2024).csv', encoding='utf8')
 
 # Create a polyline from the latitude and longitude of the 401 data
 polyline_401 = list(zip(df['Latitude'], df['Longitude']))
