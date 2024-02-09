@@ -43,6 +43,9 @@ class Model:
         model = gp.Model(env=e)
         return model
     
+    # A method to get the optimal station locations and covered surrounding areas
+    # based on the budget, the set_stations (set by user) and the existing
+    # stations (if the toggle is enabled)
     def get_optimal(self, budget, set_stations, existing_stations=None):
         # Create Sets and Params
         I = self.data['LHRS']
@@ -124,13 +127,13 @@ class Model:
                 if int(v.x) == 1:
                     # print(v.VarName)
                     # print(v.x)
-                    optimal.update({f"{v.VarName}"[2:7]:f"{v.VarName}"[8]})
-                elif int(v.x) == 0 and f"{v.VarName}"[2:7] not in optimal.keys():
-                    optimal.update({f"{v.VarName}"[2:7]:0})
+                    optimal.update({int(f"{v.VarName}"[2:7]):int(f"{v.VarName}"[8])})
+                elif int(v.x) == 0 and int(f"{v.VarName}"[2:7]) not in optimal.keys():
+                    optimal.update({int(f"{v.VarName}"[2:7]):0})
             elif f"{v.varName}".startswith("y"):
                 if int(v.x) == 1:
-                    source = f"{v.varName}"[2:7]
-                    reciever = f"{v.varName}"[8:13]
+                    source = int(f"{v.varName}"[2:7])
+                    reciever = int(f"{v.varName}"[8:13])
                     distance = paths[int(reciever)][int(source)]
                     if reciever in covered.keys():
                         current = covered[reciever]
