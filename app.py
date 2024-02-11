@@ -9,6 +9,8 @@ import pandas as pd
 import dash_bootstrap_components as dbc
 from dash import no_update
 from geopy.distance import great_circle
+from dash import callback_context as ctx
+
 
 
 # Load CSV and select only required columns
@@ -22,8 +24,8 @@ alt_fuel_df = pd.read_csv(
 polyline_401 = list(zip(df['Latitude'], df['Longitude']))
 
 
-# Initialize a dictionary to track clicked LHRS
-clicked_lhrs_dict = {lhrs: 0 for lhrs in df['LHRS']}
+# Initialize `store-clicked-lhrs` with all LHRS values set to 0
+initial_clicked_lhrs_dict = {str(lhrs): 0 for lhrs in df['LHRS'].unique()}
 
 # Import model and simulation
 model = Model(df)
@@ -35,9 +37,9 @@ app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 # Global variable to track if a budget is set
 is_budget_set = False
 
-# Global variable to track the current budget and cumulative cost
+# Global variable to track the current budget
 current_budget = 0
-cumulative_cost = 0
+
 
 # Map configuration
 mapbox_access_token = 'pk.eyJ1IjoienVoYXlyODMiLCJhIjoiY2xrbHc0emVwMHE2NjNsbXZ3cTh2MHNleCJ9.CMVZ7OC27bxxARKMRTttfQ'
@@ -54,6 +56,10 @@ app.layout = html.Div(
     style={'height': '100vh', 'width': '100vw',
            'display': 'flex', 'flexDirection': 'column'},
     children=[
+        # Adding dcc.Store at the top for better organization
+        dcc.Store(id='store-clicked-lhrs', storage_type='memory', data=initial_clicked_lhrs_dict),
+        dcc.Store(id='cumulative-cost-store', storage_type='memory', data={'cumulative_cost': 0}),
+        dcc.Store(id='budget-store', storage_type='memory', data={'current_budget': 0}),
         html.Div(
             [
                 dbc.Button("Toggle Stations", id="toggle-stations",
@@ -219,8 +225,8 @@ for index, station in relevant_stations.iterrows():
         station['Latitude'], station['Longitude'], polyline_401_with_lhrs)
     station_to_lhrs[station['Station Name']] = closest_lhrs
     # Print the station name and its closest LHRS to the terminal
-    print(
-        f"{station['Station Name']} assigned to closest LHRS: {closest_lhrs}")
+    # print(
+    #     f"{station['Station Name']} assigned to closest LHRS: {closest_lhrs}")
 
 
 # Initialize a dictionary to sum EV DC Fast Counts for each LHRS
@@ -249,36 +255,44 @@ for index, station in relevant_stations.iterrows():
 @app.callback(
     Output('placeholder-output', 'children'),
     [Input('compute-optimal', 'n_clicks')],
-    [State('budget-input', 'value'),
-     State('clicked-data', 'children'),
+    [State('budget-store', 'data'),  # Use the budget from the budget-store
+     State('store-clicked-lhrs', 'data'),
      State('toggle-stations', 'n_clicks'),
-     State('stored-year', 'children')]  # Include stored year as a state
+     State('stored-year', 'children')]
 )
-def compute_optimal_solution(n_clicks, budget, clicked_data_json, toggle_clicks, selected_year_str):
-    if n_clicks > 0 and budget is not None:
-        # Convert the year from string to integer
-        try:
-            selected_year = int(selected_year_str)
-            # Uncomment the following line when ready to use the year in your model
-            # print("Selected Year:", selected_year)
-        except (ValueError, TypeError):
-            # Handle the case where the year is not a valid integer
-            print("Invalid year format:", selected_year_str)
-            return "Error: Invalid year format"
+def compute_optimal_solution(n_clicks, budget_data, stored_clicked_lhrs, toggle_clicks, selected_year_str):
+    if n_clicks > 0:
+        # Extract budget from budget_data
+        budget = budget_data.get('current_budget') if budget_data else None
 
-        # Check if stations are being shown or not
-        if toggle_clicks % 2 == 1:
-            # Stations are shown, pass in both dictionaries
-            optimal_solution = model.get_optimal(
-                budget, clicked_lhrs_dict, lhrs_ev_dc_fast_count_sum)
+        if budget is not None:
+            # Convert the year from string to integer
+            try:
+                selected_year = int(selected_year_str)
+            except (ValueError, TypeError):
+                print("Invalid year format:", selected_year_str)
+                return "Error: Invalid year format"
+
+            # Use stored_clicked_lhrs instead of clicked_lhrs_dict
+            if stored_clicked_lhrs is None:
+                stored_clicked_lhrs = {}
+
+            # Check if stations are being shown or not
+            if toggle_clicks % 2 == 1:
+                # Stations are shown, pass in both dictionaries
+                optimal_solution = model.get_optimal(
+                    budget, stored_clicked_lhrs, lhrs_ev_dc_fast_count_sum)
+            else:
+                # Stations are not shown, pass in only stored_clicked_lhrs
+                optimal_solution = model.get_optimal(
+                    budget, stored_clicked_lhrs)
+
+            # Format the optimal solution for display
+            solution_str = ", ".join(
+                f"LHRS {key}: Level {value}" for key, value in optimal_solution.items())
+            return f"Optimal solution computed: {solution_str}"
         else:
-            # Stations are not shown, pass in only clicked_lhrs_dict
-            optimal_solution = model.get_optimal(budget, clicked_lhrs_dict)
-
-        # Format the optimal solution for display
-        solution_str = ", ".join(
-            f"LHRS {key}: Level {value}" for key, value in optimal_solution.items())
-        return f"Optimal solution computed: {solution_str}"
+            return "Please enter a valid budget."
     return no_update
 
 
@@ -298,23 +312,30 @@ def update_year(value):
     Output('modal-confirm', 'disabled'),
     [Input('station-level-radio', 'value'),
      Input('ontario-map', 'clickData')],
-    [State('budget-input', 'value')]
+    [State('budget-store', 'data'),  # Use budget from the budget-store
+     State('cumulative-cost-store', 'data')]  # Existing state for cumulative cost
 )
-def toggle_modal_confirm_button(level_selected, clickData, budget):
-    global cumulative_cost, is_budget_set
-    if level_selected is None or not clickData:
-        return True
-    else:
-        is_budget_set = budget is not None and budget > 0
-        if not is_budget_set:
-            return True
+def toggle_modal_confirm_button(level_selected, clickData, budget_data, cumulative_cost_data):
+    # Extract budget from budget_data
+    budget = budget_data.get('current_budget') if budget_data else None
+    is_budget_set = budget is not None and budget > 0
 
-        point_index = clickData['points'][0]['pointIndex']
-        cost_column = f'cost {level_selected}'
-        station_cost = df.iloc[point_index][cost_column]
-        if cumulative_cost + station_cost > budget:
-            return True
-        return False
+    if level_selected is None or not clickData or not is_budget_set:
+        return True
+
+    point_index = clickData['points'][0]['pointIndex']
+    cost_column = f'cost {level_selected}'
+    station_cost = df.iloc[point_index][cost_column]
+
+    # Get the current cumulative cost from the store
+    cumulative_cost = cumulative_cost_data.get('cumulative_cost', 0)  # Default to 0 if key does not exist
+
+
+    # Check if adding this station exceeds the budget
+    if cumulative_cost + station_cost > budget:
+        return True
+
+    return False
 
 
 def toggle_stations_on_map(fig, toggle_clicks, relevant_stations):
@@ -323,6 +344,9 @@ def toggle_stations_on_map(fig, toggle_clicks, relevant_stations):
         add_stations_to_map(fig, relevant_stations)
     else:
         remove_stations_from_map(fig)
+    # Update the figure layout to hide the legend
+    fig['layout']['showlegend'] = False
+
 
 
 def add_stations_to_map(fig, relevant_stations):
@@ -331,7 +355,7 @@ def add_stations_to_map(fig, relevant_stations):
         latitudes.append(row['Latitude'])
         longitudes.append(row['Longitude'])
         hover_texts.append(
-            f"{row['Station Name']} - Level: {get_station_level(row)}")
+            f"{row['Station Name']}: {get_station_level(row)}")
 
     fig['data'].append(go.Scattermapbox(
         lat=latitudes,
@@ -358,77 +382,35 @@ def get_station_level(row):
     return 'Unknown'
 
 
+
+
+
 @app.callback(
-    Output('ontario-map', 'figure'),
-    [Input('modal-confirm', 'n_clicks'),
-     Input('modal-remove-confirm', 'n_clicks'),
-     Input('toggle-stations', 'n_clicks')],
-    [State('station-level-radio', 'value'),
-     State('ontario-map', 'clickData'),
-     State('ontario-map', 'figure'),
-     State('budget-input', 'value')]
+    Output('budget-store', 'data'),
+    [Input('budget-input', 'value')]
 )
-def update_map_on_modal(station_confirm_clicks, remove_confirm_clicks, toggle_clicks, selected_level, clickData, fig, budget):
-    global clicked_points_df, marker_colors, clicked_lhrs_dict, cumulative_cost
-    ctx = dash.callback_context
-
-    input_id = ctx.triggered[0]['prop_id'].split('.')[0]
-    budget_set = budget is not None and budget > 0
-
-    # Debugging: Print current center and zoom before updates
-    print("Before update:", fig['layout']['mapbox']
-          ['center'], fig['layout']['mapbox']['zoom'])
-
-    if clickData and (input_id in ['modal-confirm', 'modal-remove-confirm']) and budget_set:
-        point_index = clickData['points'][0]['pointIndex']
-        lhrs = df.iloc[point_index]['LHRS']
-        cost_column = f'cost {selected_level}'
-        station_cost = df.iloc[point_index][cost_column]
-
-        if input_id == 'modal-confirm' and station_confirm_clicks > 0:
-            if cumulative_cost + station_cost <= budget:
-                cumulative_cost += station_cost
-                marker_colors[point_index] = 'green'
-                clicked_lhrs_dict[lhrs] = selected_level
-        elif input_id == 'modal-remove-confirm' and remove_confirm_clicks > 0:
-            removed_station_level = clicked_lhrs_dict[lhrs]
-            if removed_station_level > 0:
-                cost_column = f'cost {removed_station_level}'
-                station_cost = df.iloc[point_index][cost_column]
-                cumulative_cost -= station_cost
-            marker_colors[point_index] = 'grey'
-            clicked_lhrs_dict[lhrs] = 0
-
-        fig['data'][0]['marker']['color'] = marker_colors
-
-    # Handling toggle stations
-    if input_id == 'toggle-stations':
-        toggle_stations_on_map(fig, toggle_clicks, relevant_stations)
-
-    fig['layout']['mapbox']['uirevision'] = False
-
-    # Debugging: Print current center and zoom after updates
-    print("After update:", fig['layout']['mapbox']
-          ['center'], fig['layout']['mapbox']['zoom'])
-
-    return fig
-
+def update_budget_store(value):
+    # Check if the budget input is not None and is a positive number
+    if value is not None and value > 0:
+        return {'current_budget': value}
+    return {}  # Return an empty dictionary if the input is invalid
 
 @app.callback(
     Output('remaining-budget', 'children'),
-    [Input('budget-input', 'value'),
-     Input('modal-confirm', 'n_clicks'),
-     Input('modal-remove-confirm', 'n_clicks')],
-    [State('station-level-radio', 'value'),
-     State('ontario-map', 'clickData')]
+    [Input('modal-confirm', 'n_clicks'),
+     Input('modal-remove-confirm', 'n_clicks'),
+     Input('budget-input', 'value'),  # React to budget input changes directly
+     Input('cumulative-cost-store', 'data')],  # Listen to cumulative cost updates
+    [State('budget-store', 'data')]
 )
-def update_remaining_budget(budget, confirm_clicks, remove_clicks, selected_level, clickData):
-    global cumulative_cost
+def update_remaining_budget(n_clicks_confirm, n_clicks_remove, budget_input, cumulative_cost_data, budget_store_data):
+    # If budget_input is not None, update the budget store
+    budget = budget_store_data.get('current_budget', 0)  # Default to 0 if key does not exist
 
-    if budget is None:
-        return "Please enter a budget."
-
+    # Calculate the remaining budget
+    cumulative_cost = cumulative_cost_data.get('cumulative_cost', 0)  # Default to 0 if key does not exist # Assuming cumulative_cost_data is always a dict
     remaining_budget = budget - cumulative_cost
+
     return f"Remaining Budget: ${remaining_budget}"
 
 
@@ -450,73 +432,122 @@ def update_remaining_budget(budget, confirm_clicks, remove_clicks, selected_leve
 #     return "", {'display': 'none'}
 
 
-# Updated callback for handling modals
 @app.callback(
-    Output('modal', 'is_open'),
-    Output('remove-modal', 'is_open'),
+    [Output('modal', 'is_open'),
+     Output('remove-modal', 'is_open')],
     [Input('ontario-map', 'clickData'),
      Input('modal-confirm', 'n_clicks'),
      Input('modal-remove-confirm', 'n_clicks')],
     [State('modal', 'is_open'),
-     State('remove-modal', 'is_open')]
+     State('remove-modal', 'is_open'),
+     State('store-clicked-lhrs', 'data')]
 )
-def handle_modal(clickData, confirm_clicks, remove_confirm_clicks, is_add_modal_open, is_remove_modal_open):
+def handle_modal_and_map_clicks(clickData, confirm_clicks, remove_confirm_clicks, is_add_modal_open, is_remove_modal_open, stored_clicked_lhrs):
     ctx = dash.callback_context
 
+    # Check what triggered the callback
     if not ctx.triggered:
-        # No input has been triggered, return the current states
-        return is_add_modal_open, is_remove_modal_open
+        trigger_id = 'No clicks yet'
+    else:
+        trigger_id = ctx.triggered[0]['prop_id'].split('.')[0]
 
-    input_id = ctx.triggered[0]['prop_id'].split('.')[0]
+    # Default modal states
+    open_add_modal = is_add_modal_open
+    open_remove_modal = is_remove_modal_open
 
-    if input_id == 'ontario-map' and clickData:
+    if trigger_id == 'ontario-map' and clickData:
         point_index = clickData['points'][0]['pointIndex']
-        if marker_colors[point_index] == 'green':
-            # If the circle is green, open the remove modal
-            return False, True
+        lhrs = str(df.iloc[point_index]['LHRS'])
+
+        # Determine if this LHRS has been clicked/selected before
+        if stored_clicked_lhrs.get(lhrs, 0) > 0:
+            # Already selected; initiate removal
+            open_remove_modal = True
+            open_add_modal = False  # Ensure add modal is closed
         else:
-            # If the circle is grey, open the add modal
-            return True, False
-    elif input_id in ['modal-confirm', 'modal-remove-confirm']:
+            # Not yet selected; initiate addition
+            open_add_modal = True
+            open_remove_modal = False  # Ensure remove modal is closed
+    elif 'modal-confirm' in trigger_id or 'modal-remove-confirm' in trigger_id:
         # Close both modals on confirm button click
-        return False, False
+        open_add_modal = False
+        open_remove_modal = False
 
-    # In all other cases, return the current states
-    return is_add_modal_open, is_remove_modal_open
+    return open_add_modal, open_remove_modal
 
 
-# Global variable to store the previous state of clicked_lhrs_dict
-prev_clicked_lhrs_dict = clicked_lhrs_dict.copy()
+
+@app.callback(
+    [Output('ontario-map', 'figure'),
+     Output('cumulative-cost-store', 'data'),
+     Output('store-clicked-lhrs', 'data')],
+    [Input('modal-confirm', 'n_clicks'),
+     Input('modal-remove-confirm', 'n_clicks'),
+     Input('toggle-stations', 'n_clicks')],
+    [State('station-level-radio', 'value'),
+     State('ontario-map', 'clickData'),
+     State('ontario-map', 'figure'),
+     State('budget-input', 'value'),  # Using 'budget-input' value directly
+     State('store-clicked-lhrs', 'data'),
+     State('cumulative-cost-store', 'data')]
+)
+def update_map_and_stored_lhrs_data(confirm_clicks, remove_confirm_clicks, toggle_clicks, selected_level, clickData, fig, budget, stored_clicked_lhrs, cumulative_cost_data):
+    cumulative_cost = cumulative_cost_data.get('cumulative_cost', 0)
+    ctx = dash.callback_context
+    if not ctx.triggered:
+        trigger_id = 'No clicks yet'
+    else:
+        trigger_id = ctx.triggered[0]['prop_id'].split('.')[0]
+    
+
+    # Handling adding or removing stations
+    if trigger_id in ['modal-confirm', 'modal-remove-confirm'] and clickData:
+        point_index = clickData['points'][0]['pointIndex']
+        lhrs = str(df.iloc[point_index]['LHRS'])
+        station_cost = df.iloc[point_index][f'cost {selected_level}'] if selected_level else 0
+        cumulative_cost = cumulative_cost_data.get('cumulative_cost', 0)
+
+        if 'modal-confirm' in trigger_id and budget - cumulative_cost >= station_cost:
+            stored_clicked_lhrs[lhrs] = selected_level
+            cumulative_cost += station_cost
+        elif 'modal-remove-confirm' in trigger_id and lhrs in stored_clicked_lhrs:
+            level_removed = stored_clicked_lhrs[lhrs]
+            station_cost_removed = df.iloc[point_index][f'cost {level_removed}']
+            cumulative_cost -= station_cost_removed
+            stored_clicked_lhrs[lhrs] = 0  # Setting back to 0 instead of removing, to signify station removal
+
+    # Handling station visibility toggle
+    if trigger_id == 'toggle-stations':
+        toggle_stations_on_map(fig, toggle_clicks, relevant_stations)        
+
+    # Update the map's marker colors based on the stored_clicked_lhrs
+    updated_colors = []
+    for index, row in df.iterrows():
+        lhrs_str = str(row['LHRS'])
+        station_level = stored_clicked_lhrs.get(lhrs_str, 0)
+        if station_level > 0:
+            updated_colors.append('green')  # Station added, represented by green
+        else:
+            updated_colors.append('grey')  # No station or removed, represented by grey
+
+    fig['data'][0]['marker']['color'] = updated_colors  # Applying the color update to the figure
+
+    # Ensure to return the updated figure, cumulative cost, and store data
+    return fig, {'cumulative_cost': cumulative_cost}, stored_clicked_lhrs
+
+
 
 
 @app.callback(
     [Output('clicked-data', 'children')],
-    [Input('modal-confirm', 'n_clicks'),
-     Input('modal-remove-confirm', 'n_clicks')],
-    [State('ontario-map', 'clickData')]
+    [Input('store-clicked-lhrs', 'data')]  # Listening to updates in the store
 )
-def display_click_data(confirm_clicks, remove_confirm_clicks, clickData):
-    global clicked_points_df, marker_colors, clicked_lhrs_dict, prev_clicked_lhrs_dict
-
-    ctx = dash.callback_context
-
-    if not ctx.triggered:
-        return [no_update]  # No button click, no update
-
-    # Compare the current state with the previous state
-    changed_lhrs = {lhrs: status for lhrs, status in clicked_lhrs_dict.items(
-    ) if clicked_lhrs_dict[lhrs] != prev_clicked_lhrs_dict[lhrs]}
-
-    # Print only the changed key-value pairs
-    if changed_lhrs:
-        print("Changed LHRS Status:")
-        for lhrs, status in changed_lhrs.items():
-            print(f"LHRS: {lhrs}, Status: {status}")
-
-    # Update the previous state for the next comparison
-    prev_clicked_lhrs_dict = clicked_lhrs_dict.copy()
-
-    return [no_update]
+def display_click_data(stored_clicked_lhrs):
+    # This function now purely displays data based on the store's state
+    changed_lhrs_statuses = "\n".join(
+        f"LHRS: {lhrs}, Status: {status}" for lhrs, status in stored_clicked_lhrs.items())
+    print(f"Changed LHRS Status:\n{changed_lhrs_statuses}")
+    return [f"Changed LHRS Status:\n{changed_lhrs_statuses}"]
 
 
 if __name__ == '__main__':
