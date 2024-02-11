@@ -1,0 +1,1135 @@
+T0: Car appeared at 47440, not in range
+T0: Car appeared at 47573, driving for 1 mins to 47594
+T0: Car appeared at 47654, not in range
+T0: Car appeared at 47675, driving for 21 mins to 47629
+T0: Car appeared at 47820, not in range
+T1: Car appeared at 47598, driving for 4 mins to 47647
+T1: Car appeared at 47635, not in range
+T1: Car appeared at 47643, not in range
+T1: Car appeared at 47650, not in range
+T1: Car appeared at 47667, not in range
+T1: Car appeared at 47695, driving for 14 mins to 47720
+T1: Car appeared at 47910, not in range
+T1: Car from 47573 arrived at station 47594 and entered queue
+T1: Car from 47573 began charging at station 47594 for 28 minutes
+T2: Car appeared at 47440, not in range
+T2: Car appeared at 47558, driving for 8 mins to 47594
+T2: Car appeared at 47578, driving for 16 mins to 47604
+T2: Car appeared at 47610, driving for 15 mins to 47647
+T2: Car appeared at 47627, not in range
+T2: Car appeared at 47631, not in range
+T2: Car appeared at 47643, not in range
+T2: Car appeared at 47680, not in range
+T2: Car appeared at 47695, driving for 14 mins to 47720
+T2: Car appeared at 47725, not in range
+T3: Car appeared at 47643, not in range
+T3: Car appeared at 47667, not in range
+T3: Car appeared at 47673, not in range
+T4: Car appeared at 47260, not in range
+T4: Car appeared at 47587, driving for 0 mins to 47587
+T4: Car appeared at 47598, driving for 4 mins to 47647
+T4: Car appeared at 47614, not in range
+T4: Car appeared at 47622, not in range
+T4: Car from 47587 arrived at station 47587 and entered queue
+T4: Car from 47587 began charging at station 47587 for 13 minutes
+T5: Car appeared at 47520, not in range
+T5: Car appeared at 47602, driving for 16 mins to 47577
+T5: Car appeared at 47614, not in range
+T5: Car appeared at 47640, not in range
+T5: Car appeared at 47647, not in range
+T5: Car appeared at 47652, not in range
+T5: Car appeared at 47656, not in range
+T5: Car appeared at 47672, not in range
+T5: Car from 47598 arrived at station 47647 and entered queue
+T5: Car from 47598 began charging at station 47647 for 21 minutes
+T6: Car appeared at 47596, driving for 7 mins to 47604
+T6: Car appeared at 47624, not in range
+T6: Car appeared at 47640, not in range
+T6: Car appeared at 47660, not in range
+T6: Car appeared at 47780, not in range
+T7: Car appeared at 47607, driving for 11 mins to 47587
+T7: Car appeared at 47622, not in range
+T7: Car appeared at 47661, driving for 21 mins to 47695
+T7: Car appeared at 47667, not in range
+T7: Car appeared at 47671, not in range
+T7: Car appeared at 47723, driving for 12 mins to 47745
+T7: Car appeared at 47805, not in range
+T8: Car appeared at 47566, not in range
+T8: Car appeared at 47598, driving for 4 mins to 47647
+T8: Car appeared at 47607, driving for 11 mins to 47587
+T8: Car appeared at 47625, not in range
+T8: Car appeared at 47652, not in range
+T8: Car appeared at 47654, not in range
+T8: Car from 47598 arrived at station 47647 and entered queue
+T8: Car from 47598 began charging at station 47647 for 19 minutes
+T9: Car appeared at 47573, driving for 1 mins to 47594
+T9: Car appeared at 47622, not in range
+T9: Car appeared at 47633, not in range
+T9: Car appeared at 47667, not in range
+T9: Car appeared at 47671, not in range
+T10: Car appeared at 47250, not in range
+T10: Car appeared at 47580, driving for 10 mins to 47604
+T10: Car appeared at 47590, not in range
+T10: Car appeared at 47640, not in range
+T10: Car appeared at 47660, not in range
+T10: Car appeared at 47663, not in range
+T10: Car appeared at 47675, driving for 21 mins to 47629
+T10: Car appeared at 47793, driving for 3 mins to 47790
+T10: Car from 47558 arrived at station 47594 and entered queue
+T10: Car from 47558 began charging at station 47594 for 13 minutes
+T10: Car from 47573 arrived at station 47594 and entered queue
+T10: Car from 47573 began charging at station 47594 for 27 minutes
+T11: Car appeared at 47322, not in range
+T11: Car appeared at 47622, not in range
+T11: Car appeared at 47640, not in range
+T11: Car appeared at 47745, driving for 0 mins to 47745
+T11: Car from 47745 arrived at station 47745 and entered queue
+T11: Car from 47745 began charging at station 47745 for 15 minutes
+T12: Car appeared at 47610, driving for 15 mins to 47647
+T12: Car appeared at 47629, driving for 21 mins to 47594
+T12: Car appeared at 47672, not in range
+T12: Car appeared at 47730, driving for 11 mins to 47720
+T12: Car from 47598 arrived at station 47647 and entered queue
+T12: Car from 47598 began charging at station 47647 for 22 minutes
+T13: Car appeared at 47220, not in range
+T13: Car appeared at 47558, driving for 8 mins to 47594
+T13: Car appeared at 47590, not in range
+T13: Car appeared at 47610, driving for 15 mins to 47647
+T13: Car appeared at 47626, driving for 17 mins to 47663
+T13: Car appeared at 47643, not in range
+T13: Car appeared at 47661, driving for 21 mins to 47695
+T13: Car appeared at 47671, not in range
+T13: Car appeared at 47672, not in range
+T13: Car from 47596 arrived at station 47604 and entered queue
+T13: Car from 47596 began charging at station 47604 for 17 minutes
+T13: Car from 47793 arrived at station 47790 and entered queue
+T13: Car from 47793 began charging at station 47790 for 17 minutes
+T14: Car appeared at 47566, not in range
+T14: Car appeared at 47580, driving for 10 mins to 47604
+T14: Car appeared at 47614, not in range
+T14: Car appeared at 47640, not in range
+T14: Car appeared at 47654, not in range
+T14: Car appeared at 47688, not in range
+T14: Car appeared at 47728, driving for 7 mins to 47745
+T15: Car appeared at 47577, driving for 7 mins to 47604
+T15: Car appeared at 47580, driving for 10 mins to 47604
+T15: Car appeared at 47594, not in range
+T15: Car appeared at 47604, driving for 18 mins to 47647
+T15: Car appeared at 47627, not in range
+T15: Car appeared at 47629, driving for 21 mins to 47594
+T15: Car appeared at 47642, not in range
+T15: Car appeared at 47654, not in range
+T15: Car appeared at 47656, not in range
+T15: Car appeared at 47660, not in range
+T15: Car appeared at 47784, not in range
+T15: Car from 47695 arrived at station 47720 and entered queue
+T15: Car from 47695 began charging at station 47720 for 22 minutes
+T16: Car appeared at 47610, driving for 15 mins to 47647
+T16: Car appeared at 47643, not in range
+T16: Car appeared at 47673, not in range
+T16: Car appeared at 47920, not in range
+T16: Car appeared at 47970, not in range
+T16: Car from 47695 arrived at station 47720 and entered queue
+T16: Car from 47695 began charging at station 47720 for 17 minutes
+T17: Car appeared at 47624, not in range
+T17: Car appeared at 47647, not in range
+T17: Car appeared at 47654, not in range
+T17: Car appeared at 47663, not in range
+T17: Car appeared at 47695, driving for 14 mins to 47720
+T17: Car appeared at 47793, driving for 3 mins to 47790
+T17: Car left station 47587
+T17: Car from 47610 arrived at station 47647 and entered queue
+T17: Car from 47610 began charging at station 47647 for 31 minutes
+T18: Car appeared at 47650, not in range
+T18: Car appeared at 47673, not in range
+T18: Car from 47578 arrived at station 47604 and entered queue
+T18: Car from 47578 began charging at station 47604 for 25 minutes
+T18: Car from 47607 arrived at station 47587 and entered queue
+T18: Car from 47607 began charging at station 47587 for 20 minutes
+T19: Car appeared at 47450, not in range
+T19: Car appeared at 47587, driving for 0 mins to 47587
+T19: Car appeared at 47796, driving for 7 mins to 47790
+T19: Car from 47723 arrived at station 47745 and entered queue
+T19: Car from 47723 began charging at station 47745 for 31 minutes
+T19: Car from 47607 arrived at station 47587 and entered queue
+T19: Car from 47607 began charging at station 47587 for 24 minutes
+T19: Car from 47587 arrived at station 47587 and entered queue
+T19: Car from 47587 began charging at station 47587 for 24 minutes
+T20: Car appeared at 47490, not in range
+T20: Car appeared at 47560, driving for 18 mins to 47594
+T20: Car appeared at 47578, driving for 16 mins to 47604
+T20: Car appeared at 47584, driving for 24 mins to 47629
+T20: Car appeared at 47612, driving for 8 mins to 47629
+T20: Car appeared at 47625, not in range
+T20: Car appeared at 47629, driving for 21 mins to 47594
+T20: Car appeared at 47647, not in range
+T20: Car appeared at 47650, not in range
+T20: Car appeared at 47654, not in range
+T20: Car appeared at 47656, not in range
+T20: Car appeared at 47661, driving for 21 mins to 47695
+T20: Car appeared at 47710, driving for 7 mins to 47695
+T20: Car from 47580 arrived at station 47604 and entered queue
+T20: Car from 47580 began charging at station 47604 for 19 minutes
+T20: Car from 47793 arrived at station 47790 and entered queue
+T20: Car from 47793 began charging at station 47790 for 28 minutes
+T21: Car appeared at 47315, not in range
+T21: Car appeared at 47416, not in range
+T21: Car appeared at 47566, not in range
+T21: Car appeared at 47627, not in range
+T21: Car appeared at 47640, not in range
+T21: Car appeared at 47652, not in range
+T21: Car appeared at 47673, not in range
+T21: Car appeared at 47695, driving for 14 mins to 47720
+T21: Car appeared at 47830, not in range
+T21: Car from 47675 arrived at station 47629 and entered queue
+T21: Car from 47675 began charging at station 47629 for 25 minutes
+T21: Car from 47602 arrived at station 47577 and entered queue
+T21: Car from 47602 began charging at station 47577 for 23 minutes
+T21: Car from 47558 arrived at station 47594 and entered queue
+T21: Car from 47558 began charging at station 47594 for 21 minutes
+T21: Car from 47728 arrived at station 47745 and entered queue
+T21: Car from 47728 began charging at station 47745 for 17 minutes
+T22: Car appeared at 47430, not in range
+T22: Car appeared at 47435, not in range
+T22: Car appeared at 47614, not in range
+T22: Car appeared at 47627, not in range
+T22: Car appeared at 47640, not in range
+T22: Car appeared at 47654, not in range
+T22: Car appeared at 47672, not in range
+T22: Car appeared at 47673, not in range
+T22: Car appeared at 47810, not in range
+T22: Car appeared at 47823, driving for 20 mins to 47790
+T22: Car from 47577 arrived at station 47604 and entered queue
+T22: Car from 47577 began charging at station 47604 for 15 minutes
+T23: Car appeared at 47577, driving for 7 mins to 47604
+T23: Car appeared at 47607, driving for 11 mins to 47587
+T23: Car appeared at 47631, not in range
+T23: Car appeared at 47660, not in range
+T23: Car appeared at 47672, not in range
+T23: Car appeared at 47689, driving for 8 mins to 47700
+T23: Car appeared at 47790, not in range
+T23: Car appeared at 47810, not in range
+T23: Car left station 47594
+T23: Car from 47730 arrived at station 47720 and entered queue
+T23: Car from 47730 began charging at station 47720 for 20 minutes
+T24: Car appeared at 47602, driving for 16 mins to 47577
+T24: Car appeared at 47627, not in range
+T24: Car appeared at 47823, driving for 20 mins to 47790
+T24: Car from 47580 arrived at station 47604 and entered queue
+T24: Car from 47580 began charging at station 47604 for 16 minutes
+T25: Car appeared at 47484, not in range
+T25: Car appeared at 47570, driving for 11 mins to 47594
+T25: Car appeared at 47584, driving for 24 mins to 47629
+T25: Car appeared at 47627, not in range
+T25: Car appeared at 47654, not in range
+T25: Car appeared at 47661, driving for 21 mins to 47695
+T25: Car appeared at 47745, driving for 0 mins to 47745
+T25: Car from 47580 arrived at station 47604 and entered queue
+T25: Car from 47580 began charging at station 47604 for 18 minutes
+T25: Car from 47745 arrived at station 47745 and entered queue
+T25: Car from 47745 began charging at station 47745 for 16 minutes
+T26: Car appeared at 47440, not in range
+T26: Car appeared at 47575, driving for 2 mins to 47570
+T26: Car appeared at 47610, driving for 15 mins to 47647
+T26: Car appeared at 47663, not in range
+T26: Car appeared at 47672, not in range
+T26: Car appeared at 47750, driving for 7 mins to 47745
+T26: Car left station 47647
+T26: Car left station 47745
+T26: Car from 47796 arrived at station 47790 and entered queue
+T26: Car from 47796 began charging at station 47790 for 21 minutes
+T27: Car appeared at 47643, not in range
+T27: Car appeared at 47654, not in range
+T27: Car appeared at 47710, driving for 7 mins to 47695
+T27: Car appeared at 47860, not in range
+T27: Car left station 47647
+T27: Car from 47610 arrived at station 47647 and entered queue
+T27: Car from 47610 began charging at station 47647 for 21 minutes
+T27: Car from 47710 arrived at station 47695 and entered queue
+T27: Car from 47710 began charging at station 47695 for 28 minutes
+T28: Car appeared at 47484, not in range
+T28: Car appeared at 47594, not in range
+T28: Car appeared at 47628, not in range
+T28: Car appeared at 47656, not in range
+T28: Car appeared at 47663, not in range
+T28: Car from 47661 arrived at station 47695 and entered queue
+T28: Car from 47661 began charging at station 47695 for 18 minutes
+T28: Car from 47610 arrived at station 47647 and entered queue
+T28: Car from 47610 began charging at station 47647 for 17 minutes
+T28: Car from 47612 arrived at station 47629 and entered queue
+T28: Car from 47612 began charging at station 47629 for 23 minutes
+T28: Car from 47575 arrived at station 47570 and entered queue
+T28: Car from 47575 began charging at station 47570 for 21 minutes
+T29: Car appeared at 47598, driving for 4 mins to 47647
+T29: Car appeared at 47610, driving for 15 mins to 47647
+T29: Car appeared at 47627, not in range
+T29: Car appeared at 47628, not in range
+T29: Car appeared at 47643, not in range
+T29: Car appeared at 47652, not in range
+T29: Car appeared at 47661, driving for 21 mins to 47695
+T29: Car appeared at 47685, driving for 22 mins to 47720
+T29: Car left station 47594
+T30: Car appeared at 47430, not in range
+T30: Car appeared at 47580, driving for 10 mins to 47604
+T30: Car appeared at 47610, driving for 15 mins to 47647
+T30: Car appeared at 47654, not in range
+T30: Car left station 47604
+T30: Car left station 47790
+T30: Car from 47626 arrived at station 47663 and entered queue
+T30: Car from 47626 began charging at station 47663 for 14 minutes
+T30: Car from 47577 arrived at station 47604 and entered queue
+T30: Car from 47577 began charging at station 47604 for 16 minutes
+T31: Car appeared at 47413, not in range
+T31: Car appeared at 47689, driving for 8 mins to 47700
+T31: Car appeared at 47786, not in range
+T31: Car from 47675 arrived at station 47629 and entered queue
+T31: Car from 47675 began charging at station 47629 for 16 minutes
+T31: Car from 47610 arrived at station 47647 and entered queue
+T31: Car from 47610 began charging at station 47647 for 23 minutes
+T31: Car from 47695 arrived at station 47720 and entered queue
+T31: Car from 47695 began charging at station 47720 for 22 minutes
+T31: Car from 47689 arrived at station 47700 and entered queue
+T31: Car from 47689 began charging at station 47700 for 19 minutes
+T32: Car appeared at 47577, driving for 7 mins to 47604
+T32: Car appeared at 47627, not in range
+T32: Car appeared at 47647, not in range
+T32: Car appeared at 47660, not in range
+T32: Car appeared at 47672, not in range
+T33: Car appeared at 47604, driving for 18 mins to 47647
+T33: Car appeared at 47612, driving for 8 mins to 47629
+T33: Car appeared at 47643, not in range
+T33: Car appeared at 47800, not in range
+T33: Car left station 47720
+T33: Car from 47629 arrived at station 47594 and entered queue
+T33: Car from 47629 began charging at station 47594 for 23 minutes
+T33: Car from 47604 arrived at station 47647 and entered queue
+T33: Car from 47604 began charging at station 47647 for 21 minutes
+T33: Car from 47750 arrived at station 47745 and entered queue
+T33: Car from 47750 began charging at station 47745 for 19 minutes
+T33: Car from 47598 arrived at station 47647 and entered queue
+T33: Car from 47598 began charging at station 47647 for 16 minutes
+T34: Car appeared at 47614, not in range
+T34: Car appeared at 47629, driving for 21 mins to 47594
+T34: Car appeared at 47672, not in range
+T34: Car appeared at 47673, not in range
+T34: Car left station 47647
+T34: Car from 47661 arrived at station 47695 and entered queue
+T34: Car from 47661 began charging at station 47695 for 21 minutes
+T34: Car from 47607 arrived at station 47587 and entered queue
+T34: Car from 47607 began charging at station 47587 for 18 minutes
+T34: Car from 47710 arrived at station 47695 and entered queue
+T34: Car from 47710 began charging at station 47695 for 11 minutes
+T35: Car appeared at 47520, not in range
+T35: Car appeared at 47577, driving for 7 mins to 47604
+T35: Car appeared at 47587, driving for 0 mins to 47587
+T35: Car appeared at 47610, driving for 15 mins to 47647
+T35: Car appeared at 47654, not in range
+T35: Car appeared at 47673, not in range
+T35: Car appeared at 47740, driving for 3 mins to 47745
+T35: Car appeared at 47805, not in range
+T35: Car from 47695 arrived at station 47720 and entered queue
+T35: Car from 47695 began charging at station 47720 for 21 minutes
+T35: Car from 47587 arrived at station 47587 and entered queue
+T35: Car from 47587 began charging at station 47587 for 24 minutes
+T36: Car appeared at 47607, driving for 11 mins to 47587
+T36: Car appeared at 47629, driving for 21 mins to 47594
+T36: Car appeared at 47672, not in range
+T36: Car appeared at 47673, not in range
+T36: Car appeared at 47682, driving for 24 mins to 47720
+T36: Car appeared at 47695, driving for 14 mins to 47720
+T36: Car appeared at 47784, not in range
+T36: Car appeared at 47786, not in range
+T36: Car from 47629 arrived at station 47594 and entered queue
+T36: Car from 47629 began charging at station 47594 for 23 minutes
+T36: Car from 47578 arrived at station 47604 and entered queue
+T36: Car from 47578 began charging at station 47604 for 28 minutes
+T36: Car from 47570 arrived at station 47594 and entered queue
+T36: Car from 47570 began charging at station 47594 for 23 minutes
+T37: Car appeared at 47484, not in range
+T37: Car appeared at 47663, not in range
+T37: Car appeared at 47672, not in range
+T37: Car appeared at 47689, driving for 8 mins to 47700
+T37: Car appeared at 47745, driving for 0 mins to 47745
+T37: Car appeared at 47786, not in range
+T37: Car appeared at 47823, driving for 20 mins to 47790
+T37: Car left station 47594
+T37: Car left station 47720
+T37: Car left station 47604
+T37: Car from 47745 arrived at station 47745 and entered queue
+T37: Car from 47745 began charging at station 47745 for 19 minutes
+T38: Car appeared at 47625, not in range
+T38: Car appeared at 47631, not in range
+T38: Car appeared at 47688, not in range
+T38: Car appeared at 47810, not in range
+T38: Car appeared at 47980, not in range
+T38: Car left station 47587
+T38: Car left station 47745
+T38: Car from 47560 arrived at station 47594 and entered queue
+T38: Car from 47560 began charging at station 47594 for 9 minutes
+T38: Car from 47740 arrived at station 47745 and entered queue
+T38: Car from 47740 began charging at station 47745 for 20 minutes
+T39: Car appeared at 47640, not in range
+T39: Car appeared at 47643, not in range
+T39: Car appeared at 47663, not in range
+T39: Car left station 47604
+T39: Car from 47689 arrived at station 47700 and entered queue
+T39: Car from 47689 began charging at station 47700 for 12 minutes
+T39: Car from 47577 arrived at station 47604 and entered queue
+T39: Car from 47577 began charging at station 47604 for 16 minutes
+T40: Car appeared at 47628, not in range
+T40: Car appeared at 47654, not in range
+T40: Car appeared at 47800, not in range
+T40: Car left station 47604
+T40: Car from 47602 arrived at station 47577 and entered queue
+T40: Car from 47602 began charging at station 47577 for 14 minutes
+T40: Car from 47580 arrived at station 47604 and entered queue
+T40: Car from 47580 began charging at station 47604 for 23 minutes
+T41: Car appeared at 47594, not in range
+T41: Car appeared at 47625, not in range
+T41: Car appeared at 47740, driving for 3 mins to 47745
+T41: Car left station 47745
+T41: Car from 47629 arrived at station 47594 and entered queue
+T41: Car from 47629 began charging at station 47594 for 18 minutes
+T41: Car from 47661 arrived at station 47695 and entered queue
+T41: Car from 47661 began charging at station 47695 for 10 minutes
+T41: Car from 47610 arrived at station 47647 and entered queue
+T41: Car from 47610 began charging at station 47647 for 14 minutes
+T41: Car from 47612 arrived at station 47629 and entered queue
+T41: Car from 47612 began charging at station 47629 for 15 minutes
+T42: Car appeared at 47631, not in range
+T42: Car appeared at 47725, not in range
+T42: Car appeared at 47815, driving for 15 mins to 47790
+T42: Car left station 47594
+T42: Car from 47823 arrived at station 47790 and entered queue
+T42: Car from 47823 began charging at station 47790 for 22 minutes
+T42: Car from 47577 arrived at station 47604 and entered queue
+T42: Car from 47577 began charging at station 47604 for 24 minutes
+T43: Car appeared at 47602, driving for 16 mins to 47577
+T43: Car appeared at 47614, not in range
+T43: Car appeared at 47631, not in range
+T43: Car appeared at 47647, not in range
+T43: Car appeared at 47652, not in range
+T43: Car appeared at 47680, not in range
+T43: Car left station 47604
+T43: Car left station 47587
+T43: Car left station 47587
+T43: Car left station 47720
+T43: Car left station 47604
+T44: Car appeared at 47607, driving for 11 mins to 47587
+T44: Car appeared at 47643, not in range
+T44: Car appeared at 47647, not in range
+T44: Car appeared at 47672, not in range
+T44: Car appeared at 47688, not in range
+T44: Car left station 47577
+T44: Car left station 47663
+T44: Car from 47584 arrived at station 47629 and entered queue
+T44: Car from 47584 began charging at station 47629 for 19 minutes
+T44: Car from 47823 arrived at station 47790 and entered queue
+T44: Car from 47823 began charging at station 47790 for 19 minutes
+T44: Car from 47610 arrived at station 47647 and entered queue
+T44: Car from 47610 began charging at station 47647 for 21 minutes
+T44: Car from 47740 arrived at station 47745 and entered queue
+T44: Car from 47740 began charging at station 47745 for 26 minutes
+T45: Car appeared at 47604, driving for 18 mins to 47647
+T45: Car appeared at 47627, not in range
+T45: Car appeared at 47643, not in range
+T45: Car appeared at 47663, not in range
+T45: Car appeared at 47700, not in range
+T45: Car appeared at 47725, not in range
+T45: Car appeared at 47730, driving for 11 mins to 47720
+T45: Car left station 47647
+T45: Car left station 47695
+T45: Car from 47610 arrived at station 47647 and entered queue
+T45: Car from 47610 began charging at station 47647 for 17 minutes
+T45: Car from 47689 arrived at station 47700 and entered queue
+T46: Car appeared at 47631, not in range
+T46: Car left station 47629
+T46: Car left station 47695
+T46: Car left station 47604
+T46: Car from 47661 arrived at station 47695 and entered queue
+T46: Car from 47661 began charging at station 47695 for 19 minutes
+T47: Car appeared at 47390, not in range
+T47: Car appeared at 47566, not in range
+T47: Car appeared at 47602, driving for 16 mins to 47577
+T47: Car left station 47790
+T47: Car left station 47629
+T47: Car left station 47594
+T47: Car from 47607 arrived at station 47587 and entered queue
+T47: Car from 47607 began charging at station 47587 for 17 minutes
+T48: Car appeared at 47270, not in range
+T48: Car appeared at 47360, not in range
+T48: Car appeared at 47410, not in range
+T48: Car appeared at 47580, driving for 10 mins to 47604
+T48: Car appeared at 47610, driving for 15 mins to 47647
+T48: Car appeared at 47625, not in range
+T48: Car appeared at 47689, driving for 8 mins to 47700
+T48: Car left station 47647
+T48: Car left station 47790
+T48: Car left station 47647
+T49: Car appeared at 47575, driving for 2 mins to 47570
+T49: Car appeared at 47625, not in range
+T49: Car appeared at 47631, not in range
+T49: Car left station 47570
+T49: Car left station 47647
+T49: Car from 47584 arrived at station 47629 and entered queue
+T49: Car from 47584 began charging at station 47629 for 16 minutes
+T50: Car appeared at 47602, driving for 16 mins to 47577
+T50: Car appeared at 47642, not in range
+T50: Car appeared at 47820, not in range
+T50: Car appeared at 47880, not in range
+T50: Car left station 47745
+T50: Car left station 47700
+T50: Another car from 47689 began charging at station 47700 for 21 minutes
+T50: Car from 47661 arrived at station 47695 and entered queue
+T50: Car from 47661 began charging at station 47695 for 17 minutes
+T50: Car from 47610 arrived at station 47647 and entered queue
+T50: Car from 47610 began charging at station 47647 for 27 minutes
+T50: Car from 47695 arrived at station 47720 and entered queue
+T50: Car from 47695 began charging at station 47720 for 26 minutes
+T51: Car appeared at 47415, not in range
+T51: Car appeared at 47430, not in range
+T51: Car appeared at 47566, not in range
+T51: Car appeared at 47604, driving for 18 mins to 47647
+T51: Car appeared at 47625, not in range
+T51: Car appeared at 47643, not in range
+T51: Car appeared at 47680, not in range
+T51: Car appeared at 47770, not in range
+T51: Car appeared at 47776, driving for 10 mins to 47790
+T51: Car left station 47629
+T51: Car left station 47700
+T51: Car left station 47695
+T51: Car from 47685 arrived at station 47720 and entered queue
+T51: Car from 47685 began charging at station 47720 for 25 minutes
+T51: Car from 47604 arrived at station 47647 and entered queue
+T51: Car from 47604 began charging at station 47647 for 26 minutes
+T51: Car from 47575 arrived at station 47570 and entered queue
+T51: Car from 47575 began charging at station 47570 for 24 minutes
+T52: Car appeared at 47410, not in range
+T52: Car appeared at 47555, driving for 11 mins to 47587
+T52: Car appeared at 47575, driving for 2 mins to 47570
+T52: Car appeared at 47577, driving for 7 mins to 47604
+T52: Car appeared at 47596, driving for 7 mins to 47604
+T52: Car appeared at 47598, driving for 4 mins to 47647
+T52: Car appeared at 47607, driving for 11 mins to 47587
+T52: Car appeared at 47628, not in range
+T52: Car appeared at 47663, not in range
+T52: Car left station 47745
+T52: Car left station 47587
+T53: Car appeared at 47590, not in range
+T53: Car appeared at 47631, not in range
+T53: Car appeared at 47805, not in range
+T53: Car left station 47720
+T54: Car appeared at 47577, driving for 7 mins to 47604
+T54: Car appeared at 47627, not in range
+T54: Car appeared at 47654, not in range
+T54: Car appeared at 47656, not in range
+T54: Car appeared at 47673, not in range
+T54: Car appeared at 47690, not in range
+T54: Car appeared at 47695, driving for 14 mins to 47720
+T54: Car left station 47647
+T54: Car left station 47647
+T54: Car left station 47577
+T54: Car from 47575 arrived at station 47570 and entered queue
+T54: Car from 47575 began charging at station 47570 for 18 minutes
+T55: Car appeared at 47612, driving for 8 mins to 47629
+T55: Car appeared at 47656, not in range
+T55: Car appeared at 47689, driving for 8 mins to 47700
+T55: Car appeared at 47820, not in range
+T55: Car left station 47695
+T55: Car left station 47695
+T55: Car left station 47604
+T55: Car left station 47647
+T55: Car from 47629 arrived at station 47594 and entered queue
+T55: Car from 47629 began charging at station 47594 for 15 minutes
+T55: Car from 47607 arrived at station 47587 and entered queue
+T55: Car from 47607 began charging at station 47587 for 25 minutes
+T56: Car appeared at 47450, not in range
+T56: Car appeared at 47480, not in range
+T56: Car appeared at 47587, driving for 0 mins to 47587
+T56: Car appeared at 47631, not in range
+T56: Car appeared at 47654, not in range
+T56: Car appeared at 47690, not in range
+T56: Car appeared at 47710, driving for 7 mins to 47695
+T56: Car appeared at 47720, driving for 16 mins to 47745
+T56: Car left station 47594
+T56: Car left station 47720
+T56: Car left station 47745
+T56: Car left station 47629
+T56: Car from 47730 arrived at station 47720 and entered queue
+T56: Car from 47730 began charging at station 47720 for 17 minutes
+T56: Car from 47689 arrived at station 47700 and entered queue
+T56: Car from 47689 began charging at station 47700 for 19 minutes
+T56: Car from 47598 arrived at station 47647 and entered queue
+T56: Car from 47598 began charging at station 47647 for 19 minutes
+T56: Car from 47587 arrived at station 47587 and entered queue
+T56: Car from 47587 began charging at station 47587 for 12 minutes
+T57: Car appeared at 47550, driving for 12 mins to 47577
+T57: Car appeared at 47590, not in range
+T57: Car appeared at 47647, not in range
+T57: Car appeared at 47680, not in range
+T57: Car from 47629 arrived at station 47594 and entered queue
+T57: Car from 47629 began charging at station 47594 for 19 minutes
+T57: Car from 47823 arrived at station 47790 and entered queue
+T57: Car from 47823 began charging at station 47790 for 16 minutes
+T57: Car from 47815 arrived at station 47790 and entered queue
+T57: Car from 47815 began charging at station 47790 for 17 minutes
+T58: Car appeared at 47577, driving for 7 mins to 47604
+T58: Car appeared at 47604, driving for 18 mins to 47647
+T58: Car appeared at 47607, driving for 11 mins to 47587
+T58: Car appeared at 47663, not in range
+T58: Car left station 47745
+T58: Car from 47580 arrived at station 47604 and entered queue
+T58: Car from 47580 began charging at station 47604 for 25 minutes
+T59: Car appeared at 47413, not in range
+T59: Car appeared at 47577, driving for 7 mins to 47604
+T59: Car appeared at 47643, not in range
+T59: Car appeared at 47654, not in range
+T59: Car appeared at 47663, not in range
+T59: Car appeared at 47730, driving for 11 mins to 47720
+T59: Car left station 47587
+T59: Car left station 47594
+T59: Car left station 47594
+T59: Car left station 47594
+T59: Car from 47602 arrived at station 47577 and entered queue
+T59: Car from 47602 began charging at station 47577 for 10 minutes
+T59: Car from 47577 arrived at station 47604 and entered queue
+T59: Car from 47577 began charging at station 47604 for 21 minutes
+T59: Car from 47596 arrived at station 47604 and entered queue
+T59: Car from 47596 began charging at station 47604 for 18 minutes
+T60: Car appeared at 47830, not in range
+T60: Car from 47682 arrived at station 47720 and entered queue
+T60: Car from 47682 began charging at station 47720 for 21 minutes
+T61: Car appeared at 47612, driving for 8 mins to 47629
+T61: Car appeared at 47740, driving for 3 mins to 47745
+T61: Car appeared at 47810, not in range
+T61: Car from 47776 arrived at station 47790 and entered queue
+T61: Car from 47577 arrived at station 47604 and entered queue
+T61: Car from 47577 began charging at station 47604 for 12 minutes
+T62: Car appeared at 47450, not in range
+T62: Car appeared at 47530, not in range
+T62: Car appeared at 47654, not in range
+T62: Car appeared at 47680, not in range
+T62: Car appeared at 47685, driving for 22 mins to 47720
+T62: Car appeared at 47740, driving for 3 mins to 47745
+T62: Car left station 47647
+T63: Car appeared at 47200, not in range
+T63: Car appeared at 47656, not in range
+T63: Car left station 47604
+T63: Car left station 47629
+T63: Car left station 47790
+T63: Another car from 47776 began charging at station 47790 for 12 minutes
+T63: Car from 47604 arrived at station 47647 and entered queue
+T63: Car from 47604 began charging at station 47647 for 16 minutes
+T63: Car from 47602 arrived at station 47577 and entered queue
+T63: Car from 47602 began charging at station 47577 for 28 minutes
+T63: Car from 47610 arrived at station 47647 and entered queue
+T63: Car from 47610 began charging at station 47647 for 25 minutes
+T63: Car from 47555 arrived at station 47587 and entered queue
+T63: Car from 47555 began charging at station 47587 for 14 minutes
+T63: Car from 47607 arrived at station 47587 and entered queue
+T63: Car from 47607 began charging at station 47587 for 26 minutes
+T63: Car from 47612 arrived at station 47629 and entered queue
+T63: Car from 47612 began charging at station 47629 for 15 minutes
+T63: Car from 47689 arrived at station 47700 and entered queue
+T63: Car from 47710 arrived at station 47695 and entered queue
+T63: Car from 47710 began charging at station 47695 for 23 minutes
+T64: Car appeared at 47596, driving for 7 mins to 47604
+T64: Car appeared at 47631, not in range
+T64: Car appeared at 47654, not in range
+T64: Car appeared at 47682, driving for 24 mins to 47720
+T64: Car left station 47604
+T64: Car left station 47790
+T64: Car left station 47587
+T64: Car from 47740 arrived at station 47745 and entered queue
+T64: Car from 47740 began charging at station 47745 for 17 minutes
+T65: Car appeared at 47540, not in range
+T65: Car appeared at 47643, not in range
+T65: Car appeared at 47823, driving for 20 mins to 47790
+T65: Car left station 47647
+T65: Car left station 47695
+T65: Car left station 47629
+T65: Car from 47577 arrived at station 47604 and entered queue
+T65: Car from 47577 began charging at station 47604 for 16 minutes
+T65: Car from 47740 arrived at station 47745 and entered queue
+T65: Car from 47740 began charging at station 47745 for 30 minutes
+T66: Car appeared at 47417, not in range
+T66: Car appeared at 47435, not in range
+T66: Car appeared at 47890, not in range
+T66: Car left station 47604
+T66: Car from 47602 arrived at station 47577 and entered queue
+T66: Car from 47602 began charging at station 47577 for 21 minutes
+T66: Car from 47577 arrived at station 47604 and entered queue
+T66: Car from 47577 began charging at station 47604 for 22 minutes
+T67: Car appeared at 47340, not in range
+T67: Car appeared at 47400, not in range
+T67: Car appeared at 47578, driving for 16 mins to 47604
+T67: Car appeared at 47631, not in range
+T67: Car appeared at 47673, not in range
+T67: Car appeared at 47700, not in range
+T67: Car appeared at 47796, driving for 7 mins to 47790
+T67: Car left station 47695
+T68: Car appeared at 47575, driving for 2 mins to 47570
+T68: Car appeared at 47596, driving for 7 mins to 47604
+T68: Car appeared at 47673, not in range
+T68: Car left station 47587
+T68: Car from 47695 arrived at station 47720 and entered queue
+T68: Car from 47695 began charging at station 47720 for 15 minutes
+T69: Car appeared at 47450, not in range
+T69: Car appeared at 47587, driving for 0 mins to 47587
+T69: Car appeared at 47602, driving for 16 mins to 47577
+T69: Car appeared at 47604, driving for 18 mins to 47647
+T69: Car appeared at 47614, not in range
+T69: Car appeared at 47631, not in range
+T69: Car appeared at 47688, not in range
+T69: Car left station 47577
+T69: Car from 47604 arrived at station 47647 and entered queue
+T69: Car from 47604 began charging at station 47647 for 19 minutes
+T69: Car from 47550 arrived at station 47577 and entered queue
+T69: Car from 47550 began charging at station 47577 for 24 minutes
+T69: Car from 47607 arrived at station 47587 and entered queue
+T69: Car from 47607 began charging at station 47587 for 24 minutes
+T69: Car from 47612 arrived at station 47629 and entered queue
+T69: Car from 47612 began charging at station 47629 for 21 minutes
+T69: Car from 47587 arrived at station 47587 and entered queue
+T69: Car from 47587 began charging at station 47587 for 20 minutes
+T70: Car appeared at 47604, driving for 18 mins to 47647
+T70: Car appeared at 47612, driving for 8 mins to 47629
+T70: Car left station 47745
+T70: Car left station 47594
+T70: Car from 47730 arrived at station 47720 and entered queue
+T70: Car from 47730 began charging at station 47720 for 12 minutes
+T70: Car from 47575 arrived at station 47570 and entered queue
+T70: Car from 47575 began charging at station 47570 for 16 minutes
+T71: Car appeared at 47584, driving for 24 mins to 47629
+T71: Car appeared at 47590, not in range
+T71: Car appeared at 47614, not in range
+T71: Car appeared at 47628, not in range
+T71: Car appeared at 47715, driving for 19 mins to 47745
+T71: Car left station 47700
+T71: Another car from 47689 began charging at station 47700 for 14 minutes
+T71: Car from 47596 arrived at station 47604 and entered queue
+T71: Car from 47596 began charging at station 47604 for 27 minutes
+T72: Car appeared at 47310, not in range
+T72: Car appeared at 47413, not in range
+T72: Car appeared at 47631, not in range
+T72: Car appeared at 47643, not in range
+T72: Car appeared at 47680, not in range
+T72: Car left station 47570
+T72: Car from 47720 arrived at station 47745 and entered queue
+T72: Car from 47720 began charging at station 47745 for 11 minutes
+T73: Car appeared at 47250, not in range
+T73: Car appeared at 47577, driving for 7 mins to 47604
+T73: Car appeared at 47673, not in range
+T73: Car left station 47720
+T73: Car left station 47790
+T73: Car left station 47604
+T74: Car appeared at 47628, not in range
+T74: Car appeared at 47673, not in range
+T74: Car appeared at 47845, not in range
+T74: Car left station 47790
+T74: Car from 47796 arrived at station 47790 and entered queue
+T74: Car from 47796 began charging at station 47790 for 10 minutes
+T75: Car appeared at 47200, not in range
+T75: Car appeared at 47510, not in range
+T75: Car appeared at 47578, driving for 16 mins to 47604
+T75: Car appeared at 47625, not in range
+T75: Car appeared at 47643, not in range
+T75: Car appeared at 47689, driving for 8 mins to 47700
+T75: Car left station 47570
+T75: Car left station 47700
+T75: Car left station 47647
+T75: Car left station 47790
+T75: Car from 47596 arrived at station 47604 and entered queue
+T75: Car from 47596 began charging at station 47604 for 20 minutes
+T76: Car appeared at 47484, not in range
+T76: Car appeared at 47610, driving for 15 mins to 47647
+T76: Car appeared at 47612, driving for 8 mins to 47629
+T76: Car left station 47720
+T76: Car left station 47720
+T76: Car left station 47594
+T76: Car from 47604 arrived at station 47647 and entered queue
+T76: Car from 47604 began charging at station 47647 for 18 minutes
+T77: Car left station 47647
+T77: Car left station 47647
+T77: Car left station 47604
+T77: Car left station 47587
+T78: Car appeared at 47260, not in range
+T78: Car appeared at 47573, driving for 1 mins to 47594
+T78: Car appeared at 47587, driving for 0 mins to 47587
+T78: Car appeared at 47602, driving for 16 mins to 47577
+T78: Car appeared at 47643, not in range
+T78: Car appeared at 47656, not in range
+T78: Car appeared at 47673, not in range
+T78: Car appeared at 47815, driving for 15 mins to 47790
+T78: Car appeared at 47900, not in range
+T78: Car left station 47629
+T78: Car from 47612 arrived at station 47629 and entered queue
+T78: Car from 47612 began charging at station 47629 for 20 minutes
+T78: Car from 47587 arrived at station 47587 and entered queue
+T78: Car from 47587 began charging at station 47587 for 20 minutes
+T79: Car appeared at 47590, not in range
+T79: Car left station 47647
+T79: Car from 47573 arrived at station 47594 and entered queue
+T79: Car from 47573 began charging at station 47594 for 19 minutes
+T80: Car appeared at 47594, not in range
+T80: Car appeared at 47656, not in range
+T80: Car left station 47587
+T80: Car left station 47604
+T80: Car from 47577 arrived at station 47604 and entered queue
+T80: Car from 47577 began charging at station 47604 for 31 minutes
+T81: Car appeared at 47520, not in range
+T81: Car appeared at 47598, driving for 4 mins to 47647
+T81: Car appeared at 47625, not in range
+T81: Car appeared at 47642, not in range
+T81: Car appeared at 47680, not in range
+T81: Car appeared at 47688, not in range
+T81: Car appeared at 47830, not in range
+T81: Car left station 47720
+T81: Car left station 47745
+T81: Car left station 47604
+T82: Car appeared at 47490, not in range
+T82: Car appeared at 47520, not in range
+T82: Car appeared at 47587, driving for 0 mins to 47587
+T82: Car appeared at 47590, not in range
+T82: Car appeared at 47750, driving for 7 mins to 47745
+T82: Car left station 47720
+T82: Car from 47587 arrived at station 47587 and entered queue
+T82: Car from 47587 began charging at station 47587 for 18 minutes
+T83: Car appeared at 47400, not in range
+T83: Car appeared at 47566, not in range
+T83: Car appeared at 47656, not in range
+T83: Car appeared at 47682, driving for 24 mins to 47720
+T83: Car appeared at 47700, not in range
+T83: Car appeared at 47740, driving for 3 mins to 47745
+T83: Car left station 47604
+T83: Car left station 47720
+T83: Car left station 47745
+T83: Car from 47578 arrived at station 47604 and entered queue
+T83: Car from 47578 began charging at station 47604 for 18 minutes
+T83: Car from 47689 arrived at station 47700 and entered queue
+T83: Car from 47689 began charging at station 47700 for 19 minutes
+T84: Car appeared at 47590, not in range
+T84: Car appeared at 47656, not in range
+T84: Car appeared at 47673, not in range
+T84: Car appeared at 47796, driving for 7 mins to 47790
+T84: Car appeared at 47960, not in range
+T84: Car left station 47790
+T84: Car from 47685 arrived at station 47720 and entered queue
+T84: Car from 47685 began charging at station 47720 for 24 minutes
+T84: Car from 47612 arrived at station 47629 and entered queue
+T84: Car from 47612 began charging at station 47629 for 22 minutes
+T85: Car appeared at 47631, not in range
+T85: Car appeared at 47642, not in range
+T85: Car appeared at 47654, not in range
+T85: Car left station 47700
+T85: Car from 47823 arrived at station 47790 and entered queue
+T85: Car from 47823 began charging at station 47790 for 14 minutes
+T85: Car from 47602 arrived at station 47577 and entered queue
+T85: Car from 47602 began charging at station 47577 for 28 minutes
+T85: Car from 47598 arrived at station 47647 and entered queue
+T85: Car from 47598 began charging at station 47647 for 8 minutes
+T86: Car appeared at 47200, not in range
+T86: Car appeared at 47484, not in range
+T86: Car appeared at 47570, driving for 11 mins to 47594
+T86: Car appeared at 47607, driving for 11 mins to 47587
+T86: Car appeared at 47610, driving for 15 mins to 47647
+T86: Car appeared at 47627, not in range
+T86: Car appeared at 47631, not in range
+T86: Car appeared at 47642, not in range
+T86: Car appeared at 47740, driving for 3 mins to 47745
+T86: Car appeared at 47820, not in range
+T86: Car left station 47695
+T86: Car left station 47570
+T86: Car from 47740 arrived at station 47745 and entered queue
+T86: Car from 47740 began charging at station 47745 for 26 minutes
+T87: Car appeared at 47607, driving for 11 mins to 47587
+T87: Car appeared at 47627, not in range
+T87: Car appeared at 47642, not in range
+T87: Car appeared at 47654, not in range
+T87: Car appeared at 47685, driving for 22 mins to 47720
+T87: Car appeared at 47800, not in range
+T87: Car left station 47577
+T87: Car from 47604 arrived at station 47647 and entered queue
+T87: Car from 47604 began charging at station 47647 for 21 minutes
+T88: Car appeared at 47435, not in range
+T88: Car appeared at 47560, driving for 18 mins to 47594
+T88: Car left station 47647
+T88: Car left station 47604
+T88: Car left station 47647
+T88: Car from 47682 arrived at station 47720 and entered queue
+T88: Car from 47682 began charging at station 47720 for 17 minutes
+T88: Car from 47604 arrived at station 47647 and entered queue
+T88: Car from 47604 began charging at station 47647 for 31 minutes
+T89: Car appeared at 47625, not in range
+T89: Car appeared at 47627, not in range
+T89: Car appeared at 47730, driving for 11 mins to 47720
+T89: Car appeared at 47784, not in range
+T89: Car left station 47587
+T89: Car left station 47587
+T89: Car from 47750 arrived at station 47745 and entered queue
+T89: Car from 47750 began charging at station 47745 for 19 minutes
+T89: Car from 47740 arrived at station 47745 and entered queue
+T89: Car from 47740 began charging at station 47745 for 18 minutes
+T90: Car appeared at 47625, not in range
+T90: Car appeared at 47654, not in range
+T90: Car appeared at 47656, not in range
+T90: Car appeared at 47682, driving for 24 mins to 47720
+T90: Car appeared at 47710, driving for 7 mins to 47695
+T90: Car appeared at 47800, not in range
+T90: Car appeared at 47823, driving for 20 mins to 47790
+T90: Car appeared at 47860, not in range
+T90: Car left station 47629
+T90: Car from 47715 arrived at station 47745 and entered queue
+T90: Car from 47715 began charging at station 47745 for 13 minutes
+T91: Car appeared at 47325, not in range
+T91: Car appeared at 47490, not in range
+T91: Car appeared at 47575, driving for 2 mins to 47570
+T91: Car appeared at 47612, driving for 8 mins to 47629
+T91: Car appeared at 47625, not in range
+T91: Car appeared at 47654, not in range
+T91: Car appeared at 47656, not in range
+T91: Car appeared at 47793, driving for 3 mins to 47790
+T91: Car appeared at 47796, driving for 7 mins to 47790
+T91: Car appeared at 47823, driving for 20 mins to 47790
+T91: Car left station 47577
+T91: Car from 47578 arrived at station 47604 and entered queue
+T91: Car from 47578 began charging at station 47604 for 15 minutes
+T91: Car from 47610 arrived at station 47647 and entered queue
+T91: Car from 47610 began charging at station 47647 for 19 minutes
+T91: Car from 47796 arrived at station 47790 and entered queue
+T91: Car from 47796 began charging at station 47790 for 20 minutes
+T92: Car appeared at 47614, not in range
+T92: Car appeared at 47631, not in range
+T92: Car appeared at 47740, driving for 3 mins to 47745
+T93: Car appeared at 47596, driving for 7 mins to 47604
+T93: Car appeared at 47610, driving for 15 mins to 47647
+T93: Car appeared at 47642, not in range
+T93: Car appeared at 47728, driving for 7 mins to 47745
+T93: Car left station 47577
+T93: Car left station 47587
+T93: Car left station 47647
+T93: Car from 47815 arrived at station 47790 and entered queue
+T93: Car from 47815 began charging at station 47790 for 23 minutes
+T93: Car from 47575 arrived at station 47570 and entered queue
+T93: Car from 47575 began charging at station 47570 for 16 minutes
+T94: Car appeared at 47628, not in range
+T94: Car appeared at 47680, not in range
+T94: Car left station 47647
+T94: Car from 47602 arrived at station 47577 and entered queue
+T94: Car from 47602 began charging at station 47577 for 20 minutes
+T94: Car from 47793 arrived at station 47790 and entered queue
+T94: Car from 47793 began charging at station 47790 for 12 minutes
+T95: Car appeared at 47325, not in range
+T95: Car appeared at 47578, driving for 16 mins to 47604
+T95: Car appeared at 47631, not in range
+T95: Car appeared at 47656, not in range
+T95: Car appeared at 47673, not in range
+T95: Car appeared at 47680, not in range
+T95: Car appeared at 47689, driving for 8 mins to 47700
+T95: Car appeared at 47823, driving for 20 mins to 47790
+T95: Car left station 47745
+T95: Car left station 47604
+T95: Car from 47584 arrived at station 47629 and entered queue
+T95: Car from 47584 began charging at station 47629 for 19 minutes
+T95: Car from 47740 arrived at station 47745 and entered queue
+T95: Car from 47740 began charging at station 47745 for 16 minutes
+T96: Car appeared at 47575, driving for 2 mins to 47570
+T96: Car appeared at 47628, not in range
+T96: Car appeared at 47793, driving for 3 mins to 47790
+T97: Car appeared at 47440, not in range
+T97: Car appeared at 47560, driving for 18 mins to 47594
+T97: Car appeared at 47598, driving for 4 mins to 47647
+T97: Car appeared at 47614, not in range
+T97: Car appeared at 47654, not in range
+T97: Car appeared at 47680, not in range
+T97: Car appeared at 47805, not in range
+T97: Car from 47570 arrived at station 47594 and entered queue
+T97: Car from 47570 began charging at station 47594 for 16 minutes
+T97: Car from 47607 arrived at station 47587 and entered queue
+T97: Car from 47607 began charging at station 47587 for 31 minutes
+T97: Car from 47710 arrived at station 47695 and entered queue
+T97: Car from 47710 began charging at station 47695 for 17 minutes
+T98: Car appeared at 47625, not in range
+T98: Car appeared at 47628, not in range
+T98: Car appeared at 47656, not in range
+T98: Car appeared at 47730, driving for 11 mins to 47720
+T98: Car left station 47604
+T98: Car left station 47629
+T98: Car left station 47587
+T98: Car left station 47594
+T98: Car from 47607 arrived at station 47587 and entered queue
+T98: Car from 47607 began charging at station 47587 for 17 minutes
+T98: Car from 47796 arrived at station 47790 and entered queue
+T98: Car from 47575 arrived at station 47570 and entered queue
+T98: Car from 47575 began charging at station 47570 for 23 minutes
+T99: Car appeared at 47612, driving for 8 mins to 47629
+T99: Car appeared at 47614, not in range
+T99: Car appeared at 47631, not in range
+T99: Car appeared at 47940, not in range
+T99: Car appeared at 47960, not in range
+T99: Car left station 47790
+T99: Another car from 47796 began charging at station 47790 for 18 minutes
+T99: Car from 47612 arrived at station 47629 and entered queue
+T99: Car from 47612 began charging at station 47629 for 15 minutes
+T99: Car from 47793 arrived at station 47790 and entered queue
+T100: Car appeared at 47566, not in range
+T100: Car appeared at 47598, driving for 4 mins to 47647
+T100: Car appeared at 47607, driving for 11 mins to 47587
+T100: Car appeared at 47680, not in range
+T100: Car left station 47587
+T100: Car from 47730 arrived at station 47720 and entered queue
+T100: Car from 47730 began charging at station 47720 for 18 minutes
+T100: Car from 47596 arrived at station 47604 and entered queue
+T100: Car from 47596 began charging at station 47604 for 20 minutes
+T100: Car from 47728 arrived at station 47745 and entered queue
+T100: Car from 47728 began charging at station 47745 for 22 minutes
+T101: Car appeared at 47573, driving for 1 mins to 47594
+T101: Car appeared at 47612, driving for 8 mins to 47629
+T101: Car appeared at 47631, not in range
+T101: Car appeared at 47642, not in range
+T101: Car appeared at 47870, not in range
+T101: Car left station 47604
+T101: Car from 47610 arrived at station 47647 and entered queue
+T101: Car from 47610 began charging at station 47647 for 17 minutes
+T101: Car from 47598 arrived at station 47647 and entered queue
+T101: Car from 47598 began charging at station 47647 for 26 minutes
+T102: Car appeared at 47380, not in range
+T102: Car appeared at 47628, not in range
+T102: Car appeared at 47656, not in range
+T102: Car left station 47700
+T102: Car from 47573 arrived at station 47594 and entered queue
+T102: Car from 47573 began charging at station 47594 for 19 minutes
+T103: Car appeared at 47430, not in range
+T103: Car appeared at 47460, not in range
+T103: Car appeared at 47602, driving for 16 mins to 47577
+T103: Car left station 47745
+T103: Car from 47689 arrived at station 47700 and entered queue
+T103: Car from 47689 began charging at station 47700 for 23 minutes
+T104: Car appeared at 47484, not in range
+T104: Car appeared at 47654, not in range
+T104: Car from 47598 arrived at station 47647 and entered queue
+T104: Car from 47598 began charging at station 47647 for 20 minutes
+T105: Car appeared at 47793, driving for 3 mins to 47790
+T105: Car left station 47720
+T106: Car appeared at 47625, not in range
+T106: Car left station 47629
+T106: Car left station 47604
+T106: Car left station 47790
+T106: Another car from 47793 began charging at station 47790 for 30 minutes
+T106: Car from 47560 arrived at station 47594 and entered queue
+T106: Car from 47560 began charging at station 47594 for 25 minutes
+T107: Car appeared at 47310, not in range
+T107: Car appeared at 47315, not in range
+T107: Car appeared at 47335, not in range
+T107: Car appeared at 47654, not in range
+T107: Car appeared at 47900, not in range
+T107: Car left station 47745
+T107: Car from 47682 arrived at station 47720 and entered queue
+T107: Car from 47682 began charging at station 47720 for 27 minutes
+T107: Car from 47612 arrived at station 47629 and entered queue
+T107: Car from 47612 began charging at station 47629 for 14 minutes
+T108: Car appeared at 47415, not in range
+T108: Car appeared at 47594, not in range
+T108: Car appeared at 47673, not in range
+T108: Car appeared at 47680, not in range
+T108: Car appeared at 47805, not in range
+T108: Car left station 47720
+T108: Car left station 47647
+T108: Car left station 47745
+T108: Car from 47610 arrived at station 47647 and entered queue
+T108: Car from 47610 began charging at station 47647 for 15 minutes
+T108: Car from 47793 arrived at station 47790 and entered queue
+T109: Car appeared at 47610, driving for 15 mins to 47647
+T109: Car left station 47570
+T109: Car from 47685 arrived at station 47720 and entered queue
+T109: Car from 47685 began charging at station 47720 for 21 minutes
+T109: Car from 47730 arrived at station 47720 and entered queue
+T109: Car from 47730 began charging at station 47720 for 15 minutes
+T109: Car from 47612 arrived at station 47629 and entered queue
+T109: Car from 47612 began charging at station 47629 for 15 minutes
+T110: Car appeared at 47570, driving for 11 mins to 47594
+T110: Car appeared at 47642, not in range
+T110: Car appeared at 47710, driving for 7 mins to 47695
+T110: Car left station 47647
+T110: Car from 47823 arrived at station 47790 and entered queue
+T111: Car appeared at 47400, not in range
+T111: Car left station 47604
+T111: Car left station 47790
+T111: Another car from 47793 began charging at station 47790 for 21 minutes
+T111: Car left station 47745
+T111: Car from 47823 arrived at station 47790 and entered queue
+T111: Car from 47578 arrived at station 47604 and entered queue
+T111: Car from 47578 began charging at station 47604 for 20 minutes
+T111: Car from 47607 arrived at station 47587 and entered queue
+T111: Car from 47607 began charging at station 47587 for 18 minutes
+T112: Car appeared at 47435, not in range
+T112: Car appeared at 47673, not in range
+T112: Car appeared at 47728, driving for 7 mins to 47745
+T112: Car appeared at 47750, driving for 7 mins to 47745
+T112: Car left station 47745
+T113: Car appeared at 47534, driving for 18 mins to 47570
+T113: Car appeared at 47598, driving for 4 mins to 47647
+T113: Car appeared at 47614, not in range
+T113: Car appeared at 47654, not in range
+T113: Car appeared at 47688, not in range
+T113: Car appeared at 47780, not in range
+T113: Car left station 47577
+T113: Car left station 47594
+T114: Car appeared at 47540, not in range
+T114: Car appeared at 47602, driving for 16 mins to 47577
+T114: Car appeared at 47628, not in range
+T114: Car appeared at 47642, not in range
+T114: Car left station 47577
+T114: Car left station 47629
+T114: Car left station 47695
+T114: Car left station 47629
+T114: Car from 47682 arrived at station 47720 and entered queue
+T114: Car from 47682 began charging at station 47720 for 24 minutes
+T115: Car appeared at 47578, driving for 16 mins to 47604
+T115: Car appeared at 47602, driving for 16 mins to 47577
+T115: Car appeared at 47607, driving for 11 mins to 47587
+T115: Car left station 47587
+T115: Car from 47823 arrived at station 47790 and entered queue
+T115: Car from 47560 arrived at station 47594 and entered queue
+T115: Car from 47560 began charging at station 47594 for 22 minutes
+T116: Car appeared at 47577, driving for 7 mins to 47604
+T116: Car appeared at 47642, not in range
+T116: Car left station 47790
+T116: Another car from 47823 began charging at station 47790 for 11 minutes
+T117: Car appeared at 47570, driving for 11 mins to 47594
+T117: Car appeared at 47573, driving for 1 mins to 47594
+T117: Car appeared at 47590, not in range
+T117: Car appeared at 47612, driving for 8 mins to 47629
+T117: Car appeared at 47656, not in range
+T117: Car left station 47790
+T117: Another car from 47823 began charging at station 47790 for 19 minutes
+T117: Car from 47710 arrived at station 47695 and entered queue
+T117: Car from 47710 began charging at station 47695 for 18 minutes
+T117: Car from 47598 arrived at station 47647 and entered queue
+T117: Car from 47598 began charging at station 47647 for 21 minutes
+T118: Car appeared at 47315, not in range
+T118: Car appeared at 47417, not in range
+T118: Car appeared at 47790, not in range
+T118: Car left station 47720
+T118: Car left station 47647
+T118: Car from 47573 arrived at station 47594 and entered queue
+T118: Car from 47573 began charging at station 47594 for 25 minutes
+T119: Car appeared at 47604, driving for 18 mins to 47647
+T119: Car appeared at 47688, not in range
+T119: Car appeared at 47823, driving for 20 mins to 47790
+T119: Car left station 47647
+T119: Car from 47602 arrived at station 47577 and entered queue
+T119: Car from 47602 began charging at station 47577 for 17 minutes
+T119: Car from 47728 arrived at station 47745 and entered queue
+T119: Car from 47728 began charging at station 47745 for 23 minutes
+T119: Car from 47750 arrived at station 47745 and entered queue
+T119: Car from 47750 began charging at station 47745 for 18 minutes
+
+ COVERAGE DICT:
+{47200: 0.0, 47210: '-', 47220: 0.0, 47230: '-', 47240: '-', 47245: '-', 47250: 0.0, 47260: 0.0, 47270: 0.0, 47280: '-', 47290: '-', 47300: '-', 47310: 0.0, 47315: 0.0, 47320: '-', 47322: 0.0, 47325: 0.0, 47330: '-', 47335: 0.0, 47340: 0.0, 47350: '-', 47354: '-', 47360: 0.0, 47370: '-', 47374: '-', 47380: 0.0, 47384: '-', 47390: 0.0, 47400: 0.0, 47410: 0.0, 47413: 0.0, 47415: 0.0, 47416: 0.0, 47417: 0.0, 47420: '-', 47425: '-', 47430: 0.0, 47435: 0.0, 47440: 0.0, 47445: '-', 47450: 0.0, 47460: 0.0, 47470: '-', 47480: 0.0, 47484: 0.0, 47487: '-', 47490: 0.0, 47494: '-', 47500: '-', 47510: 0.0, 47520: 0.0, 47530: 0.0, 47534: '-', 47540: 0.0, 47550: 1.0, 47555: 1.0, 47558: 1.0, 47560: 1.0, 47566: 0.0, 47570: 1.0, 47573: 1.0, 47575: 1.0, 47577: 1.0, 47578: 1.0, 47580: 1.0, 47584: 1.0, 47587: 1.0, 47590: 0.0, 47594: 0.0, 47596: 1.0, 47598: 1.0, 47602: 1.0, 47604: 1.0, 47607: 1.0, 47610: 1.0, 47612: 1.0, 47614: 0.0, 47622: 0.0, 47624: 0.0, 47625: 0.0, 47626: 1.0, 47627: 0.0, 47628: 0.0, 47629: 1.0, 47631: 0.0, 47633: 0.0, 47635: 0.0, 47640: 0.0, 47642: 0.0, 47643: 0.0, 47647: 0.0, 47650: 0.0, 47652: 0.0, 47654: 0.0, 47656: 0.0, 47660: 0.0, 47661: 1.0, 47663: 0.0, 47667: 0.0, 47671: 0.0, 47672: 0.0, 47673: 0.0, 47675: 1.0, 47680: 0.0, 47682: 1.0, 47685: 1.0, 47688: 0.0, 47689: 1.0, 47690: 0.0, 47695: 1.0, 47700: 0.0, 47710: 1.0, 47715: 1.0, 47720: 1.0, 47723: 1.0, 47725: 0.0, 47728: 1.0, 47730: 1.0, 47740: 1.0, 47745: 1.0, 47750: 1.0, 47760: '-', 47770: 0.0, 47776: 1.0, 47780: 0.0, 47784: 0.0, 47786: 0.0, 47790: 0.0, 47793: 1.0, 47796: 1.0, 47800: 0.0, 47805: 0.0, 47810: 0.0, 47815: 1.0, 47820: 0.0, 47823: 1.0, 47826: '-', 47828: '-', 47830: 0.0, 47840: '-', 47845: 0.0, 47850: '-', 47860: 0.0, 47870: 0.0, 47880: 0.0, 47890: 0.0, 47900: 0.0, 47910: 0.0, 47920: 0.0, 47940: 0.0, 47950: '-', 47960: 0.0, 47970: 0.0, 47980: 0.0, 47990: '-', 48000: '-', 48006: '-', 48010: '-'}
+
+ UTIL DICT:
+{47566: 0.0, 47570: 0.12, 47577: 0.19, 47587: 0.38, 47594: 0.36, 47604: 0.5, 47629: 0.27, 47642: 0.0, 47647: 0.59, 47663: 0.03, 47695: 0.19, 47700: 0.53, 47720: 0.38, 47745: 0.39, 47790: 0.69}
+
+ WAIT TIMES DICT:
+{47566: '-', 47570: 0.0, 47577: 0.0, 47587: 0.0, 47594: 0.0, 47604: 0.0, 47629: 0.0, 47642: '-', 47647: 0.0, 47663: 0.0, 47695: 0.0, 47700: 1.9, 47720: 0.0, 47745: 0.0, 47790: 1.4}
