@@ -99,12 +99,12 @@ class Model:
         if set_stations and not existing_stations:
             for key in set_stations:
                 if set_stations[key] > 0:
-                    self.model.addConstr(x[key,set_stations[key]] == 1) #If this breaks, sanitize lhrs to int
+                    self.model.addConstr(x[int(key),set_stations[key]] == 1) #If this breaks, sanitize lhrs to int
         elif set_stations and existing_stations:
             for key in set_stations:
-                if key in existing_stations.keys() or set_stations[key] > 0:
+                if int(key) in existing_stations.keys() or set_stations[key] > 0:
                     set_ports = 2**set_stations[key] if (set_stations[key] > 0) else 0
-                    exist_ports = existing_stations[key] if (key in existing_stations.keys()) else 0
+                    exist_ports = existing_stations[int(key)] if (int(key) in existing_stations.keys()) else 0
                     num_ports = set_ports + exist_ports
                     stat_type = 0
                     if 0 < num_ports and num_ports < 3:
@@ -113,8 +113,7 @@ class Model:
                         stat_type = 2
                     elif 6 < num_ports:
                         stat_type = 3
-                    print(f"LHRS: {key} Level: {stat_type}")
-                    self.model.addConstr(x[key,stat_type] == 1) #If this breaks, sanitize lhrs to int
+                    self.model.addConstr(x[int(key),stat_type] == 1) #If this breaks, sanitize lhrs to int
         # Optimize
         self.model.optimize()
         # self.model.printAttr('x')
