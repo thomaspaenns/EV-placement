@@ -127,6 +127,13 @@ class Model:
                     # print(v.VarName)
                     # print(v.x)
                     optimal.update({int(f"{v.VarName}"[2:7]):int(f"{v.VarName}"[8])})
+                    source_and_reciever = int(f"{v.VarName}"[2:7])
+                    if source_and_reciever in covered.keys():
+                        current = covered[reciever]
+                        current.update({source_and_reciever:0})
+                        covered.update({source_and_reciever:current})
+                    else:
+                        covered.update({source_and_reciever:{source_and_reciever:0}})
                 elif int(v.x) == 0 and int(f"{v.VarName}"[2:7]) not in optimal.keys():
                     optimal.update({int(f"{v.VarName}"[2:7]):0})
             elif f"{v.varName}".startswith("y"):
@@ -142,6 +149,9 @@ class Model:
                         covered.update({reciever:{source:distance}})
         self.covered = covered
         self.optimal = optimal
+        print(optimal)
+        print("COVERED:")
+        print(covered)
         return self.optimal
     
     def get_coverage(self):
@@ -149,4 +159,4 @@ class Model:
             return self.covered
         else:
             raise Exception("Model must be optimized to get coverage!")
-
+    
