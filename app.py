@@ -12,7 +12,6 @@ from geopy.distance import great_circle
 from dash import callback_context as ctx
 
 
-
 # Load CSV and select only required columns
 df = pd.read_csv('data/401_Data.csv', encoding='ISO-8859-1')
 
@@ -226,9 +225,12 @@ app.layout = html.Div(
            'display': 'flex', 'flexDirection': 'column'},
     children=[
         # Adding dcc.Store at the top for better organization
-        dcc.Store(id='store-clicked-lhrs', storage_type='memory', data=initial_clicked_lhrs_dict),
-        dcc.Store(id='cumulative-cost-store', storage_type='memory', data={'cumulative_cost': 0}),
-        dcc.Store(id='budget-store', storage_type='memory', data={'current_budget': 0}),
+        dcc.Store(id='store-clicked-lhrs', storage_type='memory',
+                  data=initial_clicked_lhrs_dict),
+        dcc.Store(id='cumulative-cost-store', storage_type='memory',
+                  data={'cumulative_cost': 0}),
+        dcc.Store(id='budget-store', storage_type='memory',
+                  data={'current_budget': 0}),
         html.Div(
             [
                 dbc.Button("Toggle Stations", id="toggle-stations",
@@ -238,7 +240,9 @@ app.layout = html.Div(
                               placeholder="Enter Budget", style={'marginRight': '10px'}),
                     dbc.Button("Compute Optimal Solution",
                                id="compute-optimal", n_clicks=0),
+                    dbc.Button("Run Simulation", id="compute-sim", n_clicks=0),
                 ], style={'display': 'flex', 'justifyContent': 'center', 'alignItems': 'center', 'padding': '10px'}),
+
                 html.Div(id='remaining-budget',
                          style={'padding': '10px', 'fontSize': '16px'}),
 
@@ -331,6 +335,8 @@ app.layout = html.Div(
         ),
         html.Pre(id='clicked-data', style={'whiteSpace': 'pre-wrap'}),
         html.Div(id='placeholder-output',
+                 style={'padding': '20px', 'fontSize': '20px'}),
+        html.Div(id='placeholder-output-two',
                  style={'padding': '20px', 'fontSize': '20px'}),
         # For storing selected year after confirmation
         html.Div(id='stored-year', style={'display': 'none'})
@@ -465,6 +471,59 @@ def compute_optimal_solution(n_clicks, budget_data, stored_clicked_lhrs, toggle_
     return no_update
 
 
+
+@app.callback(
+    Output('placeholder-output-two', 'children'),
+    [Input('compute-sim', 'n_clicks')],
+    [State('budget-store', 'data'),
+     State('store-clicked-lhrs', 'data'),
+     State('toggle-stations', 'n_clicks'),
+     State('stored-year', 'children')]
+)
+def compute_optimal_solution_and_run_simulation(n_clicks, budget_data, stored_clicked_lhrs, toggle_clicks, selected_year_str):
+    if n_clicks > 0:
+        budget = budget_data.get('current_budget') if budget_data else None
+        if budget is not None:
+            try:
+                selected_year = int(selected_year_str)
+            except (ValueError, TypeError):
+                return "Error: Invalid year format."
+
+            # Compute the optimal solution based on the budget and clicked LHRS
+            # This step remains unchanged
+            if toggle_clicks % 2 == 1:
+                optimal_solution = model.get_optimal(
+                    budget, stored_clicked_lhrs, lhrs_ev_dc_fast_count_sum)
+                station_ranges = model.get_ranges()
+            else:
+                optimal_solution = model.get_optimal(
+                    budget, stored_clicked_lhrs)
+                station_ranges = model.get_ranges()
+            # print(optimal_solution, station_ranges)
+            # Run the simulation with the optimal solution
+            # Run the simulation
+            sim.simulate(optimal_solution, station_ranges)
+
+            # Gather results from the simulation
+            coverage = sim.get_coverage()
+            util = sim.get_util()
+            wait_times = sim.get_wait_times()
+
+            # Format the optimal solution and simulation results for display
+            solution_summary = "Optimal Solution:\n" + \
+                ", ".join(f"LHRS {lhrs}: Level {value}" for lhrs,
+                          value in optimal_solution.items())
+            simulation_summary = "\n\nSimulation Results:\n" + \
+                f"Coverage: {coverage}\nUtilization: {util}\nWait Times: {wait_times}"
+
+            # Combine summaries
+            results_summary = solution_summary + simulation_summary
+            return results_summary
+        else:
+            return "Please enter a valid budget."
+    return "Click 'Compute Optimal Solution' to start."
+
+
 # Update this callback to remove dependencies on 'confirm-year' and 'edit-year' buttons
 @app.callback(
     Output('stored-year', 'children'),
@@ -497,8 +556,8 @@ def toggle_modal_confirm_button(level_selected, clickData, budget_data, cumulati
     station_cost = df.iloc[point_index][cost_column]
 
     # Get the current cumulative cost from the store
-    cumulative_cost = cumulative_cost_data.get('cumulative_cost', 0)  # Default to 0 if key does not exist
-
+    cumulative_cost = cumulative_cost_data.get(
+        'cumulative_cost', 0)  # Default to 0 if key does not exist
 
     # Check if adding this station exceeds the budget
     if cumulative_cost + station_cost > budget:
@@ -515,7 +574,6 @@ def toggle_stations_on_map(fig, toggle_clicks, relevant_stations):
         remove_stations_from_map(fig)
     # Update the figure layout to hide the legend
     fig['layout']['showlegend'] = False
-
 
 
 def add_stations_to_map(fig, relevant_stations):
@@ -551,9 +609,6 @@ def get_station_level(row):
     return 'Unknown'
 
 
-
-
-
 @app.callback(
     Output('budget-store', 'data'),
     [Input('budget-input', 'value')]
@@ -563,6 +618,7 @@ def update_budget_store(value):
     if value is not None and value > 0:
         return {'current_budget': value}
     return {}  # Return an empty dictionary if the input is invalid
+
 
 @app.callback(
     Output('remaining-budget', 'children'),
@@ -574,10 +630,12 @@ def update_budget_store(value):
 )
 def update_remaining_budget(n_clicks_confirm, n_clicks_remove, budget_input, cumulative_cost_data, budget_store_data):
     # If budget_input is not None, update the budget store
-    budget = budget_store_data.get('current_budget', 0)  # Default to 0 if key does not exist
+    # Default to 0 if key does not exist
+    budget = budget_store_data.get('current_budget', 0)
 
     # Calculate the remaining budget
-    cumulative_cost = cumulative_cost_data.get('cumulative_cost', 0)  # Default to 0 if key does not exist # Assuming cumulative_cost_data is always a dict
+    # Default to 0 if key does not exist # Assuming cumulative_cost_data is always a dict
+    cumulative_cost = cumulative_cost_data.get('cumulative_cost', 0)
     remaining_budget = budget - cumulative_cost
 
     return f"Remaining Budget: ${remaining_budget}"
@@ -645,7 +703,6 @@ def handle_modal_and_map_clicks(clickData, confirm_clicks, remove_confirm_clicks
     return open_add_modal, open_remove_modal
 
 
-
 @app.callback(
     [Output('ontario-map', 'figure'),
      Output('cumulative-cost-store', 'data'),
@@ -667,7 +724,6 @@ def update_map_and_stored_lhrs_data(confirm_clicks, remove_confirm_clicks, toggl
         trigger_id = 'No clicks yet'
     else:
         trigger_id = ctx.triggered[0]['prop_id'].split('.')[0]
-    
 
     # Handling adding or removing stations
     if trigger_id in ['modal-confirm', 'modal-remove-confirm'] and clickData:
@@ -683,11 +739,12 @@ def update_map_and_stored_lhrs_data(confirm_clicks, remove_confirm_clicks, toggl
             level_removed = stored_clicked_lhrs[lhrs]
             station_cost_removed = df.iloc[point_index][f'cost {level_removed}']
             cumulative_cost -= station_cost_removed
-            stored_clicked_lhrs[lhrs] = 0  # Setting back to 0 instead of removing, to signify station removal
+            # Setting back to 0 instead of removing, to signify station removal
+            stored_clicked_lhrs[lhrs] = 0
 
     # Handling station visibility toggle
     if trigger_id == 'toggle-stations':
-        toggle_stations_on_map(fig, toggle_clicks, relevant_stations)        
+        toggle_stations_on_map(fig, toggle_clicks, relevant_stations)
 
     # Update the map's marker colors based on the stored_clicked_lhrs
     updated_colors = []
@@ -695,16 +752,17 @@ def update_map_and_stored_lhrs_data(confirm_clicks, remove_confirm_clicks, toggl
         lhrs_str = str(row['LHRS'])
         station_level = stored_clicked_lhrs.get(lhrs_str, 0)
         if station_level > 0:
-            updated_colors.append('green')  # Station added, represented by green
+            # Station added, represented by green
+            updated_colors.append('green')
         else:
-            updated_colors.append('grey')  # No station or removed, represented by grey
+            # No station or removed, represented by grey
+            updated_colors.append('grey')
 
-    fig['data'][0]['marker']['color'] = updated_colors  # Applying the color update to the figure
+    # Applying the color update to the figure
+    fig['data'][0]['marker']['color'] = updated_colors
 
     # Ensure to return the updated figure, cumulative cost, and store data
     return fig, {'cumulative_cost': cumulative_cost}, stored_clicked_lhrs
-
-
 
 
 @app.callback(
@@ -715,7 +773,7 @@ def display_click_data(stored_clicked_lhrs):
     # This function now purely displays data based on the store's state
     changed_lhrs_statuses = "\n".join(
         f"LHRS: {lhrs}, Status: {status}" for lhrs, status in stored_clicked_lhrs.items())
-    print(f"Changed LHRS Status:\n{changed_lhrs_statuses}")
+    # print(f"Changed LHRS Status:\n{changed_lhrs_statuses}")
     return [f"Changed LHRS Status:\n{changed_lhrs_statuses}"]
 
 

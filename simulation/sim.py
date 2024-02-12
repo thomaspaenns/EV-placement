@@ -74,14 +74,14 @@ class Simulation:
         self.points =self.data['LHRS'].tolist() #  [1, 2, 3, 4, 5] # for testing
         self.stations = None
         self.station_ranges = None
-        self.max_simulation_time = 120
+        self.max_simulation_time = 1440
         self.cars_charged = None
         self.cars_not_charged = None
         self.arrival_times = {}
         for index, row in self.data.iterrows():
             inter_time = (24*60)/row['demand']
             beta = inter_time # 0
-            # This is an adjustor - un-comment to artifically increase rural demand
+            # # This is an adjustor - un-comment to artifically increase rural demand
             # if inter_time > 100.0:
             #     beta = inter_time/2
             # elif inter_time > 40.0:
@@ -134,13 +134,24 @@ class Simulation:
 
     #Method to find the closest station to a segment
     def get_closest_station(self, point_id, station_ranges):
-        min_distance = None
+        min_distance = 100000000.0
         station = None
         for station_id, distance in iter(station_ranges[point_id].items()):
-            if not min_distance or distance < min_distance:
-                min_distance = distance
+            if float(distance) < min_distance:
+                min_distance = float(distance)
                 station = station_id
-        return station_id, min_distance
+        return station, min_distance
+
+    # def get_closest_station(self, point_id, station_ranges):
+    #     closest_station = None
+    #     min_distance = 500000
+    #     for station_id, stations_info in station_ranges.items():
+    #         distance = stations_info.get(point_id)
+    #         if distance is not None and distance < min_distance:
+    #             min_distance = distance
+    #             closest_station = station_id
+    #     return closest_station, min_distance
+
 
     #Method to execute the simulation
     def simulate(self, charging_stations, station_ranges):
