@@ -161,3 +161,8 @@ cython_debug/
 
 # Gurobi Install
 =9.5.1
+
+# Dependency directories
+node_modules/
+package-lock.json
+package.json
