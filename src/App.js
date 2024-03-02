@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 import Home from "./routes/Home";
 import Map from "./routes/Map";
-// import Work from "./Components/Work";
+import Work from './Components/Works';
 // import Testimonial from "./Components/Testimonial";
 // import Contact from "./Components/Contact";
 // import Footer from "./Components/Footer";
