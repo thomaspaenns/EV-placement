@@ -139,7 +139,7 @@ class Model:
                         if dist < R:
                             if reciever in ranges.keys():
                                 current = ranges[reciever]
-                                current.update({source:R})
+                                current.update({source:dist})
                                 ranges.update({reciever:current})
                             else:
                                 ranges.update({reciever:{source:dist}})
