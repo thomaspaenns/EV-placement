@@ -24,17 +24,17 @@ alt_fuel_df = pd.read_csv(
 polyline_401 = list(zip(df['Latitude'], df['Longitude']))
 
 
-# Initialize `store-clicked-lhrs` with all LHRS values set to 0
-initial_clicked_lhrs_dict = {str(lhrs): 0 for lhrs in df['LHRS'].unique()}
+# # Initialize `store-clicked-lhrs` with all LHRS values set to 0
+# initial_clicked_lhrs_dict = {str(lhrs): 0 for lhrs in df['LHRS'].unique()}
 
-# Initialize `store-clicked-lhrs` with all LHRS values set to -1
-initial_coverage_dict = {str(lhrs): -1 for lhrs in df['LHRS'].unique()}
-
-
-initial_util_dict = {str(lhrs): -1 for lhrs in df['LHRS'].unique()}
+# # Initialize `store-clicked-lhrs` with all LHRS values set to -1
+# initial_coverage_dict = {str(lhrs): -1 for lhrs in df['LHRS'].unique()}
 
 
-initial_wait_dict ={str(lhrs): -1 for lhrs in df['LHRS'].unique()} 
+# initial_util_dict = {str(lhrs): -1 for lhrs in df['LHRS'].unique()}
+
+
+# initial_wait_dict ={str(lhrs): -1 for lhrs in df['LHRS'].unique()}
 
 # Import model and simulation
 model = Model(df)
@@ -65,28 +65,28 @@ layout = html.Div(
     style={'height': '100vh', 'width': '100vw',
            'display': 'flex', 'flexDirection': 'column'},
     children=[
-        # Adding dcc.Store at the top for better organization
-        dcc.Store(id='store-clicked-lhrs', storage_type='memory',
-                  data=initial_clicked_lhrs_dict),
-        dcc.Store(id='cumulative-cost-store', storage_type='memory',
-                  data={'cumulative_cost': 0}),
-        dcc.Store(id='budget-store', storage_type='memory',
-                  data={'current_budget': 0}),
-        dcc.Store(id='coverage', storage_type='memory',
-                  data=initial_coverage_dict),
-        dcc.Store(id='wait_time', storage_type='memory',
-                  data=initial_wait_dict),
-        dcc.Store(id='util', storage_type='memory',
-                  data=initial_util_dict),
+        # # Adding dcc.Store at the top for better organization
+        # dcc.Store(id='store-clicked-lhrs', storage_type='memory',
+        #           data=initial_clicked_lhrs_dict),
+        # dcc.Store(id='cumulative-cost-store', storage_type='memory',
+        #           data={'cumulative_cost': 0}),
+        # dcc.Store(id='budget-store', storage_type='memory',
+        #           data={'current_budget': 0}),
+        # dcc.Store(id='coverage', storage_type='memory',
+        #           data=initial_coverage_dict),
+        # dcc.Store(id='wait_time', storage_type='memory',
+        #           data=initial_wait_dict),
+        # dcc.Store(id='util', storage_type='memory',
+        #           data=initial_util_dict),
         html.Div(
             [
                 dbc.Button("Toggle Stations", id="toggle-stations",
                            n_clicks=0),
                 # html.Div([
                 dbc.Input(id="budget-input", type="number",
-                            placeholder="Enter Budget", style={'width': '15%'}),
+                          placeholder="Enter Budget", style={'width': '15%'}),
                 dbc.Button("Compute Optimal Solution",
-                            id="compute-optimal", n_clicks=0),
+                           id="compute-optimal", n_clicks=0),
                 dbc.Button("Run Simulation", id="compute-sim", n_clicks=0),
                 # ], style={'display': 'flex', 'gap': '10px', 'marginTop': '10px','marginBottom': '10px'}),
 
@@ -110,13 +110,13 @@ layout = html.Div(
 
             ],
             style={
-            'height': '12vh',
-            'backgroundColor': '#f8f9fa',
-            'display': 'flex',
-            # 'justifyContent': 'flex-start',
-            'alignItems': 'center',
-            'gap': '10px'
-        }
+                'height': '12vh',
+                'backgroundColor': '#f8f9fa',
+                'display': 'flex',
+                # 'justifyContent': 'flex-start',
+                'alignItems': 'center',
+                'gap': '10px'
+            }
         ),
         html.Div(
             style={'flexGrow': 1},
@@ -320,9 +320,9 @@ def compute_optimal_solution(n_clicks, budget_data, stored_clicked_lhrs, toggle_
 
 @callback(
     [Output('placeholder-output-two', 'children'),
-    Output('coverage', 'data'),
-    Output('wait_time', 'data'),
-    Output('util', 'data')],
+     Output('coverage', 'data'),
+     Output('wait_time', 'data'),
+     Output('util', 'data')],
     [Input('compute-sim', 'n_clicks')],
     [State('budget-store', 'data'),
      State('store-clicked-lhrs', 'data'),
@@ -368,7 +368,7 @@ def compute_optimal_solution_and_run_simulation(n_clicks, budget_data, stored_cl
             # Combine summaries
             results_summary = solution_summary + simulation_summary
             print(results_summary)
-            return results_summary, coverage, util, wait_time
+            return results_summary, coverage, wait_time, util
         else:
             return "Please enter a valid budget.", dash.no_update, dash.no_update, dash.no_update
     return dash.no_update, dash.no_update, dash.no_update, dash.no_update
