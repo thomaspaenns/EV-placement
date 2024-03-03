@@ -104,7 +104,7 @@ layout = html.Div(
                                for year in range(2024, 2050, 5)},
                         disabled=False,
                     ),
-                    style={'width': '60%', 'marginRight': '20px',
+                    style={'width': '40%', 'marginRight': '20px',
                            'marginLeft': '20px'}
                 ),
 
