@@ -81,17 +81,17 @@ layout = html.Div(
         html.Div(
             [
                 dbc.Button("Toggle Stations", id="toggle-stations",
-                           n_clicks=0, style={'marginRight': '20px'}),
-                html.Div([
-                    dbc.Input(id="budget-input", type="number",
-                              placeholder="Enter Budget", style={'marginRight': '10px'}),
-                    dbc.Button("Compute Optimal Solution",
-                               id="compute-optimal", n_clicks=0),
-                    dbc.Button("Run Simulation", id="compute-sim", n_clicks=0),
-                ], style={'display': 'flex', 'justifyContent': 'center', 'alignItems': 'center', 'padding': '10px'}),
+                           n_clicks=0),
+                # html.Div([
+                dbc.Input(id="budget-input", type="number",
+                            placeholder="Enter Budget", style={'width': '15%'}),
+                dbc.Button("Compute Optimal Solution",
+                            id="compute-optimal", n_clicks=0),
+                dbc.Button("Run Simulation", id="compute-sim", n_clicks=0),
+                # ], style={'display': 'flex', 'gap': '10px', 'marginTop': '10px','marginBottom': '10px'}),
 
                 html.Div(id='remaining-budget',
-                         style={'padding': '10px', 'fontSize': '16px'}),
+                         style={'fontSize': '16px'}),
 
                 html.Div(
                     dcc.Slider(
@@ -104,19 +104,19 @@ layout = html.Div(
                                for year in range(2024, 2050, 5)},
                         disabled=False,
                     ),
-                    style={'width': '40%', 'marginRight': '20px',
+                    style={'width': '30%', 'marginRight': '20px',
                            'marginLeft': '20px'}
                 ),
 
             ],
             style={
-                'height': '10vh',
-                'backgroundColor': '#f8f9fa',
-                'display': 'flex',
-                'justifyContent': 'flex-start',
-                'alignItems': 'center',
-                'padding': '10px'
-            }
+            'height': '12vh',
+            'backgroundColor': '#f8f9fa',
+            'display': 'flex',
+            # 'justifyContent': 'flex-start',
+            'alignItems': 'center',
+            'gap': '10px'
+        }
         ),
         html.Div(
             style={'flexGrow': 1},
