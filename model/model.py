@@ -119,6 +119,7 @@ class Model:
         # self.model.printAttr('x')
         optimal = {}
         covered = {}
+        ranges = {}
         for v in self.model.getVars():
             if f"{v.VarName}".startswith("x"):
                 # print(v.VarName)
@@ -127,6 +128,22 @@ class Model:
                     # print(v.VarName)
                     # print(v.x)
                     optimal.update({int(f"{v.VarName}"[2:7]):int(f"{v.VarName}"[8])})
+                    source = int(f"{v.VarName}"[2:7])
+                    if source in covered.keys():
+                        current = covered[source]
+                        current.update({source:0})
+                        covered.update({source:current})
+                    else:
+                        covered.update({source:{source:0}})
+                    for reciever, dist in paths[source].items():
+                        if dist < R:
+                            if reciever in ranges.keys():
+                                current = ranges[reciever]
+                                current.update({source:R})
+                                ranges.update({reciever:current})
+                            else:
+                                ranges.update({reciever:{source:dist}})
+
                 elif int(v.x) == 0 and int(f"{v.VarName}"[2:7]) not in optimal.keys():
                     optimal.update({int(f"{v.VarName}"[2:7]):0})
             elif f"{v.varName}".startswith("y"):
@@ -142,6 +159,12 @@ class Model:
                         covered.update({reciever:{source:distance}})
         self.covered = covered
         self.optimal = optimal
+        self.ranges = ranges
+        # print(optimal)
+        # print("COVERED:")
+        # print(covered)
+        # print("RANGES:")
+        # print(ranges)
         return self.optimal
     
     def get_coverage(self):
@@ -149,4 +172,10 @@ class Model:
             return self.covered
         else:
             raise Exception("Model must be optimized to get coverage!")
-
+        
+    def get_ranges(self):
+        if self.ranges:
+            return self.ranges
+        else:
+            raise Exception("Model must be optimized to get ranges!")
+    
