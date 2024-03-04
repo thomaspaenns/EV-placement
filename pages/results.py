@@ -14,9 +14,41 @@ dash.register_page(__name__)
 mapbox_access_token = 'pk.eyJ1IjoienVoYXlyODMiLCJhIjoiY2xrbHc0emVwMHE2NjNsbXZ3cTh2MHNleCJ9.CMVZ7OC27bxxARKMRTttfQ'
 
 layout = html.Div([
-    html.H1('Coverage Map'),
-    dcc.Graph(id='coverage-map')
-])
+    html.Div([
+        html.H3('Coverage Map',style={"font-weight": "bold"}),
+        html.Div(id='overall-stats', style={"font-weight": "bold"}),
+        dcc.Graph(id='coverage-map')
+    ], style={'marginLeft': '20px', 'marginRight': '20px'})
+], style={'marginTop': '10px','backgroundColor': '#f8f9fa',})
+
+@callback(
+    Output('overall-stats', 'children'),
+    [Input('coverage', 'data'), Input(
+        'util', 'data'), Input('wait_time', 'data')]
+)
+def update_overall_stats(coverage_data, util_data, wait_time):
+    seg_count = 0
+    tot_coverage = 0.0
+    for k, v in coverage_data.items():
+        seg_count += 1
+        tot_coverage += v
+    avg_coverage = round(tot_coverage/seg_count,2)
+    station_count = 0
+    tot_util = 0.0
+    for k, v in util_data.items():
+        station_count += 1
+        tot_util += v
+    avg_util = round(tot_util/station_count,2)
+    tot_wait = 0.0
+    for k, v in wait_time.items():
+        tot_wait += v
+    avg_wait = round(tot_wait/station_count,2)
+    if avg_wait < 0 or avg_coverage < 0 or avg_util < 0:
+        return 'Run the model to see your results'
+    else:
+        return f"Average Coverage: {avg_coverage*100}%. Average Utilization: {avg_util*100}%. Average Wait Time: {avg_wait} min."
+
+
 
 
 @callback(
@@ -49,7 +81,7 @@ def update_coverage_map(coverage_data, util_data, wait_time):
                     lon=[row['Longitude']],
                     mode='markers',
                     marker=dict(color='purple', size=10),
-                    text=row['Location Description'],
+                    text=f"Util: {util_data[lhrs_str]*100}% | Avg wait: {wait_time[lhrs_str]} min | {row['Location Description']}",
                     hoverinfo='text'
                 ))
 
@@ -93,12 +125,6 @@ def draw_coverage_lines(coverage_dict, fig):
                 'Latitude', 'Longitude']].iloc[0]
             group_lat.append(lat)
             group_lon.append(lon)
-        # lat1, lon1 = df[df['LHRS'] == segment_group[0]
-        #                 ][['Latitude', 'Longitude']].iloc[0]
-        # lat2, lon2 = df[df['LHRS'] == segment_group[-1]
-        #                 ][['Latitude', 'Longitude']].iloc[0]
-        # latitudes = [lat1, lat2]
-        # longitudes = [lon1, lon2]
         fig.add_trace(go.Scattermapbox(
             lat=group_lat,
             lon=group_lon,
@@ -106,22 +132,6 @@ def draw_coverage_lines(coverage_dict, fig):
             line=dict(width=4, color=color),
             hoverinfo='none'
         ))
-
-        # for lhrs in segment_group:
-        #     lat, lon = df[df['LHRS'] == lhrs][['Latitude', 'Longitude']].iloc[0]
-        #     segments_to_color[color].append((lat, lon))
-
-    # for color, coordinates in segments_to_color.items():
-    #     if coordinates:
-    #         latitudes, longitudes = zip(*coordinates)
-    #         fig.add_trace(go.Scattermapbox(
-    #             lat=latitudes,
-    #             lon=longitudes,
-    #             mode='lines',
-    #             line=dict(width=4, color=color),
-    #             hoverinfo='none'
-    #         ))
-
     return fig
 
 

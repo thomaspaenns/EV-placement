@@ -62,7 +62,8 @@ marker_colors = ['grey' for _ in range(len(df))]
 
 
 layout = html.Div(
-    style={'height': '100vh', 'width': '100vw',
+    style={'height': '100vh', 'width': '100vw', 'marginLeft': '10px',
+           'backgroundColor': '#f8f9fa', 'marginRight': '10px',
            'display': 'flex', 'flexDirection': 'column'},
     children=[
         # # Adding dcc.Store at the top for better organization
@@ -119,7 +120,7 @@ layout = html.Div(
             }
         ),
         html.Div(
-            style={'flexGrow': 1},
+            style={'flexGrow': 1, 'marginRight':'30px'},
             children=[
                 dcc.Graph(
                     id='ontario-map',
