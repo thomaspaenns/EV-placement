@@ -349,9 +349,7 @@ def compute_optimal_solution_and_run_simulation(n_clicks, budget_data, stored_cl
                 optimal_solution = model.get_optimal(
                     budget, stored_clicked_lhrs)
                 station_ranges = model.get_ranges()
-            # print(optimal_solution, station_ranges)
             # Run the simulation with the optimal solution
-            # Run the simulation
             sim.simulate(optimal_solution, station_ranges)
 
             # Gather results from the simulation
@@ -368,7 +366,7 @@ def compute_optimal_solution_and_run_simulation(n_clicks, budget_data, stored_cl
 
             # Combine summaries
             results_summary = solution_summary + simulation_summary
-            print(results_summary)
+            # print(results_summary)
             return results_summary, coverage, wait_time, util
         else:
             return "Please enter a valid budget.", dash.no_update, dash.no_update, dash.no_update
@@ -630,7 +628,6 @@ def draw_coverage_lines(coverage_dict, fig):
     #     segment_group = sorted_lhrs[i:i+4]
     #     covered_count = sum(1 for lhrs in segment_group if coverage_dict[str(lhrs)] >= 1.0)
     #     print(covered_count)
-    print(coverage_dict)
     i = 0
     while i < len(sorted_lhrs):
         segment_group = sorted_lhrs[i:i+4]
