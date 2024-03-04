@@ -14,22 +14,22 @@ layout = html.Div([
         html.Br(),
         dbc.Row([
             dbc.Col([
-                html.Img(src='assets/constraint.png', style={'width': '40%', 'height': 'auto'}),
+                html.Img(src='assets/constraint.png', style={'width': '40%', 'height': 'auto'},
+                         title="From: https://www.flaticon.com/free-icons/constraint Constraint icons created by noomtah - Flaticon"),
                 html.H5("Select Your Constraints", 
                          style={'font-weight': 'bold', 'marginTop': '15px'}),
-                # <a href="https://www.flaticon.com/free-icons/constraint" title="constraint icons">Constraint icons created by noomtah - Flaticon</a>
                 html.Div("Use the map page to set your budget and select any must-have stations along with the number of associated ports. Decide whether to take into account existing stations. Select the year for which you want to optimize/simulate."),
             ], style={'text-align': 'center'}),
             dbc.Col([
-                html.Img(src='assets/two-cars-in-line.png', style={'width': '40%', 'height': 'auto'}),
+                html.Img(src='assets/two-cars-in-line.png', style={'width': '40%', 'height': 'auto'},
+                         title="From https://www.flaticon.com/free-icons/traffic Traffic icons created by Freepik - Flaticon"),
                 html.H5("Optimize and Simulate", 
                          style={'font-weight': 'bold', 'marginTop': '15px'}),
-                # <a href="https://www.flaticon.com/free-icons/traffic" title="traffic icons">Traffic icons created by Freepik - Flaticon</a>
                 html.Div("Run the optimization model and discrete event simulation to select remaining optimal locations and then simulate the effects on the road network. Interpret the outputs in the results page and download the results as a CSV file."),
             ], style={'text-align': 'center'}),
             dbc.Col([
-                html.Img(src='assets/iterative.png', style={'width': '40%', 'height': 'auto'}),
-                # <a href="https://www.flaticon.com/free-icons/iterative" title="iterative icons">Iterative icons created by JunGSa - Flaticon</a>
+                html.Img(src='assets/iterative.png', style={'width': '40%', 'height': 'auto'},
+                         title="From https://www.flaticon.com/free-icons/iterative Iterative icons created by JunGSa - Flaticon"),
                 html.H5("Iterate!", 
                          style={'font-weight': 'bold', 'marginTop': '15px'}),
                 html.Div("Based on the outputs of the model and simulation, adjust your constraints/locations and try out new scenarios. Continue iterating until you have a solution that suits your specific requirements and priorities."),

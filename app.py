@@ -32,8 +32,7 @@ app.layout = html.Div([
     dcc.Store(id='wait_time', storage_type='memory', data=initial_wait_dict),
     dcc.Store(id='util', storage_type='memory', data=initial_util_dict),
     
-    # Your existing layout components
-    # html.H1('Multi-page app with Dash Pages'),
+    # Navbar
     html.Img(src=image_path, style={'display': 'inline-block', 'verticalAlign': 'top'}),
     html.Div([
         html.Div(
@@ -43,7 +42,16 @@ app.layout = html.Div([
     ], style={'display': 'inline-block', 'marginRight': '10px'}),
     
     # Page container
-    dash.page_container
+    dash.page_container,
+
+    #Footer
+    html.Div([
+        html.A('Contact Us', href='mailto:tenns@uwaterloo.ca?cc=z22shaikh@uwaterloo.ca&subject=Voltpath%20Contact'),
+    ], style={'marginLeft': '20px',
+              'marginRight': '20px',
+              'marginTop': '10px',
+              'marginBottom': '10px',
+              'text-align': 'center'}),
 ])
 
 if __name__ == '__main__':
