@@ -163,5 +163,5 @@ cython_debug/
 =9.5.1
 
 # Logs
+
 simulation/sim_log.txt
-sim_log.txt
