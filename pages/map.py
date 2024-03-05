@@ -24,17 +24,17 @@ alt_fuel_df = pd.read_csv(
 polyline_401 = list(zip(df['Latitude'], df['Longitude']))
 
 
-# Initialize `store-clicked-lhrs` with all LHRS values set to 0
-initial_clicked_lhrs_dict = {str(lhrs): 0 for lhrs in df['LHRS'].unique()}
+# # Initialize `store-clicked-lhrs` with all LHRS values set to 0
+# initial_clicked_lhrs_dict = {str(lhrs): 0 for lhrs in df['LHRS'].unique()}
 
-# Initialize `store-clicked-lhrs` with all LHRS values set to -1
-initial_coverage_dict = {str(lhrs): -1 for lhrs in df['LHRS'].unique()}
-
-
-initial_util_dict = {str(lhrs): -1 for lhrs in df['LHRS'].unique()}
+# # Initialize `store-clicked-lhrs` with all LHRS values set to -1
+# initial_coverage_dict = {str(lhrs): -1 for lhrs in df['LHRS'].unique()}
 
 
-initial_wait_dict ={str(lhrs): -1 for lhrs in df['LHRS'].unique()} 
+# initial_util_dict = {str(lhrs): -1 for lhrs in df['LHRS'].unique()}
+
+
+# initial_wait_dict ={str(lhrs): -1 for lhrs in df['LHRS'].unique()}
 
 # Import model and simulation
 model = Model(df)
@@ -63,30 +63,31 @@ marker_colors = ['grey' for _ in range(len(df))]
 
 layout = html.Div(
     style={'height': '100vh', 'width': '100vw',
+           'backgroundColor': '#f8f9fa',
            'display': 'flex', 'flexDirection': 'column'},
     children=[
-        # Adding dcc.Store at the top for better organization
-        dcc.Store(id='store-clicked-lhrs', storage_type='memory',
-                  data=initial_clicked_lhrs_dict),
-        dcc.Store(id='cumulative-cost-store', storage_type='memory',
-                  data={'cumulative_cost': 0}),
-        dcc.Store(id='budget-store', storage_type='memory',
-                  data={'current_budget': 0}),
-        dcc.Store(id='coverage', storage_type='memory',
-                  data=initial_coverage_dict),
-        dcc.Store(id='wait_time', storage_type='memory',
-                  data=initial_wait_dict),
-        dcc.Store(id='util', storage_type='memory',
-                  data=initial_util_dict),
+        # # Adding dcc.Store at the top for better organization
+        # dcc.Store(id='store-clicked-lhrs', storage_type='memory',
+        #           data=initial_clicked_lhrs_dict),
+        # dcc.Store(id='cumulative-cost-store', storage_type='memory',
+        #           data={'cumulative_cost': 0}),
+        # dcc.Store(id='budget-store', storage_type='memory',
+        #           data={'current_budget': 0}),
+        # dcc.Store(id='coverage', storage_type='memory',
+        #           data=initial_coverage_dict),
+        # dcc.Store(id='wait_time', storage_type='memory',
+        #           data=initial_wait_dict),
+        # dcc.Store(id='util', storage_type='memory',
+        #           data=initial_util_dict),
         html.Div(
             [
                 dbc.Button("Toggle Stations", id="toggle-stations",
                            n_clicks=0),
                 # html.Div([
                 dbc.Input(id="budget-input", type="number",
-                            placeholder="Enter Budget", style={'width': '15%'}),
+                          placeholder="Enter Budget", style={'width': '15%'}),
                 dbc.Button("Compute Optimal Solution",
-                            id="compute-optimal", n_clicks=0),
+                           id="compute-optimal", n_clicks=0),
                 dbc.Button("Run Simulation", id="compute-sim", n_clicks=0),
                 # ], style={'display': 'flex', 'gap': '10px', 'marginTop': '10px','marginBottom': '10px'}),
 
@@ -110,16 +111,18 @@ layout = html.Div(
 
             ],
             style={
-            'height': '12vh',
-            'backgroundColor': '#f8f9fa',
-            'display': 'flex',
-            # 'justifyContent': 'flex-start',
-            'alignItems': 'center',
-            'gap': '10px'
-        }
+                'height': '12vh',
+                'backgroundColor': '#f8f9fa',
+                'display': 'flex',
+                # 'justifyContent': 'flex-start',
+                'alignItems': 'center',
+                'gap': '10px',
+                'marginRight': '10px',
+                'marginLeft': '10px',
+            }
         ),
         html.Div(
-            style={'flexGrow': 1},
+            style={'flexGrow': 1, 'marginRight':'20px', 'marginLeft':'10px',},
             children=[
                 dcc.Graph(
                     id='ontario-map',
@@ -320,9 +323,9 @@ def compute_optimal_solution(n_clicks, budget_data, stored_clicked_lhrs, toggle_
 
 @callback(
     [Output('placeholder-output-two', 'children'),
-    Output('coverage', 'data'),
-    Output('wait_time', 'data'),
-    Output('util', 'data')],
+     Output('coverage', 'data'),
+     Output('wait_time', 'data'),
+     Output('util', 'data')],
     [Input('compute-sim', 'n_clicks')],
     [State('budget-store', 'data'),
      State('store-clicked-lhrs', 'data'),
@@ -348,9 +351,7 @@ def compute_optimal_solution_and_run_simulation(n_clicks, budget_data, stored_cl
                 optimal_solution = model.get_optimal(
                     budget, stored_clicked_lhrs)
                 station_ranges = model.get_ranges()
-            # print(optimal_solution, station_ranges)
             # Run the simulation with the optimal solution
-            # Run the simulation
             sim.simulate(optimal_solution, station_ranges)
 
             # Gather results from the simulation
@@ -367,8 +368,8 @@ def compute_optimal_solution_and_run_simulation(n_clicks, budget_data, stored_cl
 
             # Combine summaries
             results_summary = solution_summary + simulation_summary
-            print(results_summary)
-            return results_summary, coverage, util, wait_time
+            # print(results_summary)
+            return results_summary, coverage, wait_time, util
         else:
             return "Please enter a valid budget.", dash.no_update, dash.no_update, dash.no_update
     return dash.no_update, dash.no_update, dash.no_update, dash.no_update
@@ -629,7 +630,6 @@ def draw_coverage_lines(coverage_dict, fig):
     #     segment_group = sorted_lhrs[i:i+4]
     #     covered_count = sum(1 for lhrs in segment_group if coverage_dict[str(lhrs)] >= 1.0)
     #     print(covered_count)
-    print(coverage_dict)
     i = 0
     while i < len(sorted_lhrs):
         segment_group = sorted_lhrs[i:i+4]
