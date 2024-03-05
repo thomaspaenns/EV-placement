@@ -110,20 +110,14 @@ class Simulation:
         return df
 
     # Create specific stations for this simulation
-    def setup(self, charging_stations, station_ranges):
-        # Testing Data
-        # self.arrival_times = {
-        #     1: [10,20,30,40,50,60,70,80,90,100,110,120],
-        #     2: [10,20,30,40,50,60,70,80,90,100,110,120],
-        #     3: [10,20,30,40,50,60,70,80,90,100,110,120],
-        #     4: [10,20,30,40,50,60,70,80,90,100,110,120],
-        #     5: [10,20,30,40,50,60,70,80,90,100,110,120]
-        # }  # Vehicles arrive every X minutes
+    def setup(self, charging_stations, station_ranges, year=2024):
+        year_convert = {2024:1.0, 2029: 4.12, 2034:7.24, 2039:10.36, 2044:13.48, 2049: 16.6}
+        yr_scalar = year_convert[year]
         self.cars_charged = None
         self.cars_not_charged = None
         self.arrival_times = {}
         for index, row in self.data.iterrows():
-            inter_time = (24*60)/row['demand']
+            inter_time = (24*60)/(row['demand']*yr_scalar)
             beta = inter_time  # 0
             # This is an adjustor - un-comment to artifically increase rural demand
             # if inter_time > 100.0:
@@ -179,10 +173,10 @@ class Simulation:
 
     # Method to execute the simulation
 
-    def simulate(self, charging_stations, station_ranges):
+    def simulate(self, charging_stations, station_ranges, year=2024):
         # Setup
         file = open('simulation/sim_log.txt', 'w')
-        self.setup(charging_stations, station_ranges)
+        self.setup(charging_stations, station_ranges, year=year)
         station_arrivals = []  # Format = [[station_id, time, car]]
         station_departures = []  # Format = [[station_id, time]]
         # Run simulation

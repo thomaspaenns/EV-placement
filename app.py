@@ -31,6 +31,7 @@ app.layout = html.Div([
     dcc.Store(id='coverage', storage_type='memory', data=initial_coverage_dict),
     dcc.Store(id='wait_time', storage_type='memory', data=initial_wait_dict),
     dcc.Store(id='util', storage_type='memory', data=initial_util_dict),
+    dcc.Store(id='year',storage_type='memory', data={'year':2024}),
     
     # Navbar
     html.Img(src=image_path, style={'display': 'inline-block', 'verticalAlign': 'top'}),

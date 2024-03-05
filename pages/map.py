@@ -188,8 +188,6 @@ layout = html.Div(
                  style={'padding': '20px', 'fontSize': '20px'}),
         html.Div(id='placeholder-output-two',
                  style={'padding': '20px', 'fontSize': '20px'}),
-        # For storing selected year after confirmation
-        html.Div(id='stored-year', style={'display': 'none'})
     ]
 )
 
@@ -209,9 +207,6 @@ remove_modal = dbc.Modal(
 )
 
 layout.children.append(remove_modal)
-# Store the selected year in a hidden div after confirmation
-layout.children.append(
-    html.Div(id='stored-year', style={'display': 'none'}))
 
 
 def is_within_radius(station_lat, station_lon, polyline, radius_km=0.5):
@@ -283,9 +278,9 @@ for index, station in relevant_stations.iterrows():
     [State('budget-store', 'data'),  # Use the budget from the budget-store
      State('store-clicked-lhrs', 'data'),
      State('toggle-stations', 'n_clicks'),
-     State('stored-year', 'children')]
+     State('year', 'data')]
 )
-def compute_optimal_solution(n_clicks, budget_data, stored_clicked_lhrs, toggle_clicks, selected_year_str):
+def compute_optimal_solution(n_clicks, budget_data, stored_clicked_lhrs, toggle_clicks, selected_year):
     if n_clicks > 0:
         # Extract budget from budget_data
         budget = budget_data.get('current_budget') if budget_data else None
@@ -293,9 +288,9 @@ def compute_optimal_solution(n_clicks, budget_data, stored_clicked_lhrs, toggle_
         if budget is not None:
             # Convert the year from string to integer
             try:
-                selected_year = int(selected_year_str)
+                selected_year = int(selected_year.get('year'))
             except (ValueError, TypeError):
-                print("Invalid year format:", selected_year_str)
+                print("Invalid year format:", selected_year)
                 return "Error: Invalid year format"
 
             # Use stored_clicked_lhrs instead of clicked_lhrs_dict
@@ -306,11 +301,12 @@ def compute_optimal_solution(n_clicks, budget_data, stored_clicked_lhrs, toggle_
             if toggle_clicks % 2 == 1:
                 # Stations are shown, pass in both dictionaries
                 optimal_solution = model.get_optimal(
-                    budget, stored_clicked_lhrs, lhrs_ev_dc_fast_count_sum)
+                    budget, stored_clicked_lhrs,
+                    lhrs_ev_dc_fast_count_sum, year=selected_year)
             else:
                 # Stations are not shown, pass in only stored_clicked_lhrs
                 optimal_solution = model.get_optimal(
-                    budget, stored_clicked_lhrs)
+                    budget, stored_clicked_lhrs, year=selected_year)
 
             # Format the optimal solution for display
             solution_str = ", ".join(
@@ -330,14 +326,14 @@ def compute_optimal_solution(n_clicks, budget_data, stored_clicked_lhrs, toggle_
     [State('budget-store', 'data'),
      State('store-clicked-lhrs', 'data'),
      State('toggle-stations', 'n_clicks'),
-     State('stored-year', 'children')]
+     State('year', 'data')]
 )
-def compute_optimal_solution_and_run_simulation(n_clicks, budget_data, stored_clicked_lhrs, toggle_clicks, selected_year_str):
+def compute_optimal_solution_and_run_simulation(n_clicks, budget_data, stored_clicked_lhrs, toggle_clicks, selected_year):
     if n_clicks > 0:
         budget = budget_data.get('current_budget') if budget_data else None
         if budget is not None:
             try:
-                selected_year = int(selected_year_str)
+                selected_year = int(selected_year.get('year'))
             except (ValueError, TypeError):
                 return "Error: Invalid year format.", ''
 
@@ -345,14 +341,15 @@ def compute_optimal_solution_and_run_simulation(n_clicks, budget_data, stored_cl
             # This step remains unchanged
             if toggle_clicks % 2 == 1:
                 optimal_solution = model.get_optimal(
-                    budget, stored_clicked_lhrs, lhrs_ev_dc_fast_count_sum)
+                    budget, stored_clicked_lhrs,
+                    lhrs_ev_dc_fast_count_sum, year=selected_year)
                 station_ranges = model.get_ranges()
             else:
                 optimal_solution = model.get_optimal(
-                    budget, stored_clicked_lhrs)
+                    budget, stored_clicked_lhrs, year=selected_year)
                 station_ranges = model.get_ranges()
             # Run the simulation with the optimal solution
-            sim.simulate(optimal_solution, station_ranges)
+            sim.simulate(optimal_solution, station_ranges, year=selected_year)
 
             # Gather results from the simulation
             coverage = sim.get_coverage()
@@ -377,15 +374,12 @@ def compute_optimal_solution_and_run_simulation(n_clicks, budget_data, stored_cl
 
 # Update this callback to remove dependencies on 'confirm-year' and 'edit-year' buttons
 @callback(
-    Output('stored-year', 'children'),
+    Output('year', 'data'),
     [Input('selected-year-slider', 'value')]
 )
 def update_year(value):
     # Simply return the slider value, which will be stored in 'stored-year'
-    return value
-
-# Assuming your app initialization and other setups are done above
-
+    return {'year':int(value)}
 
 @callback(
     Output('modal-confirm', 'disabled'),

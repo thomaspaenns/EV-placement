@@ -46,13 +46,15 @@ class Model:
     # A method to get the optimal station locations and covered surrounding areas
     # based on the budget, the set_stations (set by user) and the existing
     # stations (if the toggle is enabled)
-    def get_optimal(self, budget, set_stations, existing_stations=None):
+    def get_optimal(self, budget, set_stations, existing_stations=None, year=2024):
+        year_convert = {2024:1.0, 2029: 4.12, 2034:7.24, 2039:10.36, 2044:13.48, 2049: 16.6}
+        yr_scalar = year_convert[year]
         # Create Sets and Params
         I = self.data['LHRS']
         J = I
         C = [1, 2, 3] #corresponding to 2, 4, and 8 charging stations
         Cap = {1: 96, 2: 192, 3: 384}  # Cars charged per day (2 per hr per port)
-        d = dict(zip(I, self.data['demand']))
+        d = dict(zip(I, self.data['demand']*yr_scalar))
         f = {
             1: dict(zip(I, self.data['cost 1'])),
             2: dict(zip(I, self.data['cost 2'])),
