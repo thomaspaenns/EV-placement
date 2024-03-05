@@ -60,7 +60,7 @@ def update_overall_stats(coverage_data, util_data, wait_time):
     if avg_wait < 0 or avg_coverage < 0 or avg_util < 0:
         stat_str = 'Run the model to see your results'
     else:
-        stat_str = f"Average Coverage: {avg_coverage*100}%. Average Utilization: {avg_util*100}%. Average Wait Time: {avg_wait} min."
+        stat_str = f"Average Coverage: {round(avg_coverage*100,1)}%. Average Utilization: {round(avg_util*100,1)}%. Average Wait Time: {avg_wait} min."
         coverage_df = pd.DataFrame.from_dict(coverage_data, orient='index', columns=['Coverage'])
         util_df = pd.DataFrame.from_dict(util_data, orient='index', columns=['Util'])
         wait_df = pd.DataFrame.from_dict(wait_time, orient='index', columns=['Wait (minutes)'])

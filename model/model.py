@@ -48,6 +48,7 @@ class Model:
     # stations (if the toggle is enabled)
     def get_optimal(self, budget, set_stations, existing_stations=None, year=2024):
         year_convert = {2024:1.0, 2029: 4.12, 2034:7.24, 2039:10.36, 2044:13.48, 2049: 16.6}
+        # year_convert = {2024:1.0, 2029: 4.12, 2034:9.24, 2039:13.36, 2044:17.48, 2049: 21.6} #75%
         yr_scalar = year_convert[year]
         # Create Sets and Params
         I = self.data['LHRS']
