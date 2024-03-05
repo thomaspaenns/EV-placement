@@ -164,3 +164,4 @@ cython_debug/
 
 # Logs
 simulation/sim_log.txt
+sim_log.txt
