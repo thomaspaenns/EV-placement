@@ -98,7 +98,7 @@ def update_coverage_map(coverage_data, util_data, wait_time):
                     lon=[row['Longitude']],
                     mode='markers',
                     marker=dict(color='purple', size=10),
-                    text=f"Util: {util_data[lhrs_str]*100}% | Avg wait: {wait_time[lhrs_str]} min | {row['Location Description']}",
+                    text=f"Util: {round(util_data[lhrs_str]*100,1)}% | Avg wait: {wait_time[lhrs_str]} min | {row['Location Description']}",
                     hoverinfo='text'
                 ))
     # Set up map layout
@@ -144,7 +144,7 @@ def draw_coverage_lines(coverage_dict, fig):
             lon=group_lon,
             mode='lines',
             line=dict(width=4, color=color),
-            text = f"Coverage: {100*covered_count/4}%",
+            text = f"Coverage: {round(100*covered_count/4,1)}%",
             hoverinfo='text' if covered_count >= 0 else 'none'
         ))
     return fig
