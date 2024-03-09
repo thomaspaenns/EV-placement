@@ -81,14 +81,14 @@ layout = html.Div(
         #           data=initial_util_dict),
         html.Div(
             [
-                dbc.Button("Toggle Stations", id="toggle-stations",
+                dbc.Button("Toggle Existing Stations", id="toggle-stations",
                            n_clicks=0),
                 # html.Div([
                 dbc.Input(id="budget-input", type="number",
                           placeholder="Enter Budget", style={'width': '15%'}),
-                dbc.Button("Compute Optimal Solution",
-                           id="compute-optimal", n_clicks=0),
-                dbc.Button("Run Simulation", id="compute-sim", n_clicks=0),
+                # dbc.Button("Compute Optimal Solution",
+                #            id="compute-optimal", n_clicks=0),
+                dbc.Button("Optimize & Simulate", id="compute-sim", n_clicks=0),
                 # ], style={'display': 'flex', 'gap': '10px', 'marginTop': '10px','marginBottom': '10px'}),
 
                 html.Div(id='remaining-budget',
@@ -272,49 +272,49 @@ for index, station in relevant_stations.iterrows():
 #     print(f"LHRS {lhrs} has a total EV DC Fast Count of {total_count}")
 
 
-@callback(
-    Output('placeholder-output', 'children'),
-    [Input('compute-optimal', 'n_clicks')],
-    [State('budget-store', 'data'),  # Use the budget from the budget-store
-     State('store-clicked-lhrs', 'data'),
-     State('toggle-stations', 'n_clicks'),
-     State('year', 'data')]
-)
-def compute_optimal_solution(n_clicks, budget_data, stored_clicked_lhrs, toggle_clicks, selected_year):
-    if n_clicks > 0:
-        # Extract budget from budget_data
-        budget = budget_data.get('current_budget') if budget_data else None
+# @callback(
+#     Output('placeholder-output', 'children'),
+#     [Input('compute-optimal', 'n_clicks')],
+#     [State('budget-store', 'data'),  # Use the budget from the budget-store
+#      State('store-clicked-lhrs', 'data'),
+#      State('toggle-stations', 'n_clicks'),
+#      State('year', 'data')]
+# )
+# def compute_optimal_solution(n_clicks, budget_data, stored_clicked_lhrs, toggle_clicks, selected_year):
+#     if n_clicks > 0:
+#         # Extract budget from budget_data
+#         budget = budget_data.get('current_budget') if budget_data else None
 
-        if budget is not None:
-            # Convert the year from string to integer
-            try:
-                selected_year = int(selected_year.get('year'))
-            except (ValueError, TypeError):
-                print("Invalid year format:", selected_year)
-                return "Error: Invalid year format"
+#         if budget is not None:
+#             # Convert the year from string to integer
+#             try:
+#                 selected_year = int(selected_year.get('year'))
+#             except (ValueError, TypeError):
+#                 print("Invalid year format:", selected_year)
+#                 return "Error: Invalid year format"
 
-            # Use stored_clicked_lhrs instead of clicked_lhrs_dict
-            if stored_clicked_lhrs is None:
-                stored_clicked_lhrs = {}
+#             # Use stored_clicked_lhrs instead of clicked_lhrs_dict
+#             if stored_clicked_lhrs is None:
+#                 stored_clicked_lhrs = {}
 
-            # Check if stations are being shown or not
-            if toggle_clicks % 2 == 1:
-                # Stations are shown, pass in both dictionaries
-                optimal_solution = model.get_optimal(
-                    budget, stored_clicked_lhrs,
-                    lhrs_ev_dc_fast_count_sum, year=selected_year)
-            else:
-                # Stations are not shown, pass in only stored_clicked_lhrs
-                optimal_solution = model.get_optimal(
-                    budget, stored_clicked_lhrs, year=selected_year)
+#             # Check if stations are being shown or not
+#             if toggle_clicks % 2 == 1:
+#                 # Stations are shown, pass in both dictionaries
+#                 optimal_solution = model.get_optimal(
+#                     budget, stored_clicked_lhrs,
+#                     lhrs_ev_dc_fast_count_sum, year=selected_year)
+#             else:
+#                 # Stations are not shown, pass in only stored_clicked_lhrs
+#                 optimal_solution = model.get_optimal(
+#                     budget, stored_clicked_lhrs, year=selected_year)
 
-            # Format the optimal solution for display
-            solution_str = ", ".join(
-                f"LHRS {key}: Level {value}" for key, value in optimal_solution.items())
-            return f"Optimal solution computed: {solution_str}"
-        else:
-            return "Please enter a valid budget."
-    return no_update
+#             # Format the optimal solution for display
+#             solution_str = ", ".join(
+#                 f"LHRS {key}: Level {value}" for key, value in optimal_solution.items())
+#             return f"Optimal solution computed: {solution_str}"
+#         else:
+#             return "Please enter a valid budget."
+#     return no_update
 
 
 @callback(
