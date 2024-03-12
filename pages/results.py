@@ -4,6 +4,7 @@ import dash_bootstrap_components as dbc
 from dash import dcc, html, callback, Input, Output
 import plotly.graph_objs as go
 import pandas as pd
+import dash_table
 
 # Load your data
 df = pd.read_csv('data/401_Data.csv', encoding='ISO-8859-1')
@@ -27,14 +28,16 @@ layout = html.Div([
                     title="Export data to CSV (will not export if model has not been run)"),
         ], style={'display': 'flex', 'justify-content': 'space-between'}),
         html.Div(id='overall-stats', style={"font-weight": "bold"}),
-        dcc.Graph(id='coverage-map')
+        dcc.Graph(id='coverage-map'),
+        html.Div(id='export-table-container')
     ], style={'marginLeft': '20px', 'marginRight': '20px'})
 ], style={'marginTop': '10px','backgroundColor': '#f8f9fa',})
 
 
 @callback(
     [Output('overall-stats', 'children'),
-     Output('download-link', 'href')],
+     Output('download-link', 'href'),
+     Output('export-table-container', 'children')],
     [Input('coverage', 'data'), Input(
         'util', 'data'), Input('wait_time', 'data')]
 )
@@ -55,10 +58,13 @@ def update_overall_stats(coverage_data, util_data, wait_time):
     for k, v in wait_time.items():
         tot_wait += v
     avg_wait = round(tot_wait/station_count,2)
+
+
     stat_str = ''
     download_link = None
     if avg_wait < 0 or avg_coverage < 0 or avg_util < 0:
         stat_str = 'Run the model to see your results'
+        export_table=None
     else:
         stat_str = f"Average Coverage: {avg_coverage*100}%. Average Utilization: {avg_util*100}%. Average Wait Time: {avg_wait} min."
         coverage_df = pd.DataFrame.from_dict(coverage_data, orient='index', columns=['Coverage'])
@@ -68,7 +74,32 @@ def update_overall_stats(coverage_data, util_data, wait_time):
         csv_string = export_df.to_csv(index_label='LHRS_num')
         csv_base64 = base64.b64encode(csv_string.encode()).decode()
         download_link = "data:text/csv;charset=utf-8;base64," + csv_base64
-    return stat_str, download_link
+
+        df.reset_index(drop=True, inplace=True)
+        export_df.reset_index(drop=True, inplace=True)
+
+        export_df = pd.concat([df, export_df], axis=1).iloc[:,[0,6,30,31,32]]
+        export_df = export_df[export_df['Util']>0]
+
+        export_table = dash_table.DataTable(
+            id='export-datatable',
+            columns=[{"name": i, "id": i} for i in export_df.columns],
+            data=export_df.to_dict('records'),
+            style_table={'overflowX': 'auto'},
+            style_header={
+                'backgroundColor': 'rgb(230, 230, 230)',
+                'fontWeight': 'bold'
+            },
+            style_cell={
+                'whiteSpace': 'normal',
+                'textAlign': 'left',
+                'minWidth': '180px',
+                'maxWidth': '180px',
+                'overflow': 'hidden',
+                'textOverflow': 'ellipsis',
+            })
+    return stat_str, download_link, export_table
+
 
 
 @callback(
