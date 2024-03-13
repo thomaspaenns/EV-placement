@@ -19,7 +19,7 @@ layout = html.Div([
                 ]),
                 html.Br(),
             ]),
-            width=2
+            width=3
         ),
         dbc.Col(
             html.Div(style={'border-left': '1px solid #ccc', 'height': '100%'}),
@@ -40,8 +40,10 @@ layout = html.Div([
                     children=html.Div(
                         style={'background-color': 'white', 'padding': '1rem 2rem', 'border-radius': '10px', 'width': '590px', 'min-height': '150px', 'text-align': 'center', 'margin-right': '20px'},
                         children=[
-                            html.H2('Data Engineering Problem', style={'color': '#19264f'}),
-                            html.P('Our data collection process involved gathering traffic volume data from Ontario\'s Ministry of Transportation, analyzing charging station utilization across the province, and referencing successful charging network projects in the United States, such as the West Coast Pacific Highway initiative. By synthesizing insights from these diverse sources, we gained valuable information to inform our strategic planning efforts for optimizing EV charging infrastructure in Ontario.', style={'color': '#4C4C4C'})
+                            html.H2('M/M/C Queueing Problem', style={'color': '#19264f'}),
+                            html.P('To simulate the arrival and departure of cars at our charging stations, we incorporated the M/M/C queuing model into our simulation framework.' 
+                                   ' Critical parameters include car interarrival times (based on demand data), charging stall service time, balking probability due to long queues, and maximum queue size before additional balking.'
+                                   ' SimPy execution in Python allowed us to estimate these parameters to formulate our model', style={'color': '#4C4C4C'})
                         ]
                     )
                 ),
@@ -62,13 +64,12 @@ layout = html.Div([
                     children=html.Div(
                         style={'background-color': 'white', 'padding': '1rem 2rem', 'border-radius': '10px', 'width': '590px', 'min-height': '150px', 'text-align': 'center', 'margin-right': '20px'},
                         children=[
-                            html.H2('M/M/C Queueing Problem', style={'color': '#19264f'}),
-                            html.P('To simulate the arrival and departure of cars at our charging stations, we incorporated the M/M/C queuing model into our simulation framework.' 
-                                   ' Critical parameters include car interarrival times (based on demand data), charging stall service time, balking probability due to long queues, and maximum queue size before additional balking.'
-                                   ' SimPy execution in Python allowed us to estimate these parameters to formulate our model', style={'color': '#4C4C4C'})
+                            html.H2('Data Collection', style={'color': '#19264f'}),
+                            html.P('Our data collection process involved gathering traffic volume data from Ontario\'s Ministry of Transportation, analyzing charging station utilization across the province, and referencing successful charging network projects in the United States, such as the West Coast Pacific Highway initiative. By synthesizing insights from these diverse sources, we gained valuable information to inform our strategic planning efforts for optimizing EV charging infrastructure in Ontario.', style={'color': '#4C4C4C'})
                         ]
                     )
                 ),
+                html.Br(),
                 html.H3('Event Simulation', id='simulation-flow', style={'font-weight': 'bold'}),
                 html.Div('The simulation primarily tracks the series of events that will occur throughout the process of charging a vehicle. Critical parameters such as driving speed, balking probability due to long queues, and '
                          'duration of charging stall service time were assumed based on historical data. Future steps involve large-scale SimPy execution in Python'),
