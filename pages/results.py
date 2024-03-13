@@ -4,7 +4,6 @@ import dash_bootstrap_components as dbc
 from dash import dcc, html, callback, Input, Output
 import plotly.graph_objs as go
 import pandas as pd
-import dash_table
 
 # Load your data
 df = pd.read_csv('data/401_Data.csv', encoding='ISO-8859-1')
