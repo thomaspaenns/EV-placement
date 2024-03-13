@@ -13,13 +13,13 @@ layout = html.Div([
                 html.Ul([
                     html.Li(html.A('Purpose of Voltpath', href='#purpose')),
                     html.Li(html.A('Solution Development', href='#solution')),
-                    html.Li(html.A('System Flow Diagram', href='#system-flow')),
                     html.Li(html.A('Simulation Flow', href='#simulation-flow')),
+                    html.Li(html.A('System Flow Diagram', href='#system-flow')),
                     html.Li(html.A('FAQ', href='#faq')),
                 ]),
                 html.Br(),
             ]),
-            width=3
+            width=2
         ),
         dbc.Col(
             html.Div(style={'border-left': '1px solid #ccc', 'height': '100%'}),
@@ -40,9 +40,8 @@ layout = html.Div([
                     children=html.Div(
                         style={'background-color': 'white', 'padding': '1rem 2rem', 'border-radius': '10px', 'width': '590px', 'min-height': '150px', 'text-align': 'center', 'margin-right': '20px'},
                         children=[
-                            html.H2('Simulation Problem', style={'color': '#19264f'}),
-                            html.P('To simulate traffic throughout the network, we built a simulation around an M/M/C queuing model for each station, with arrivals based on the demand in nearby segments.' 
-                                   ' Critical parameters include car interarrival times (based on demand data), charging stall service time, balking probability due to long queues, and the speeds at which cars drive along the highway.'
+                            html.H2('Data Engineering Problem', style={'color': '#19264f'}),
+                            html.P('Our team leveraged public traffic volume and road data from Ontario\'s Ministry of Transportation, along with publicly available US government data on existing charging infrastructure in North America. All data sources were validated by the Ontario Ministry of Transportation. By synthesizing insights from these diverse sources, we were able to define the parameters of our Model and our Simulation.', style={'color': '#4C4C4C'})
                         ]
                     )
                 ),
@@ -57,20 +56,21 @@ layout = html.Div([
                         ]
                     )
                 ),
-                html.Br(),
                 html.Div(
                     style={'display': 'flex', 'justify-content': 'center', 'align-items': 'center'},
                     children=html.Div(
                         style={'background-color': 'white', 'padding': '1rem 2rem', 'border-radius': '10px', 'width': '590px', 'min-height': '150px', 'text-align': 'center', 'margin-right': '20px'},
                         children=[
-                            html.H2('Data Problem', style={'color': '#19264f'}),
-                            html.P('Our team leveraged public traffic volume and road data from Ontario\'s Ministry of Transportation, along with publicly available US government data on existing charging infrastructure in North America. All data sources were validated by the Ontario Ministry of Transportation. By synthesizing insights from these diverse sources, we were able to define the parameters of our Model and our Simulation.', style={'color': '#4C4C4C'})
+                            html.H2('Simulation Problem', style={'color': '#19264f'}),
+                            html.P('To simulate traffic throughout the network, we built a simulation around an M/M/C queuing model for each station, with arrivals based on the demand in nearby segments.' 
+                                   ' Critical parameters include car interarrival times (based on demand data), charging stall service time, balking probability due to long queues, and the speeds at which cars drive along the highway.')
                         ]
                     )
                 ),
                 html.Br(),
+                html.Br(),
                 html.H3('Simulation Flow Chart', id='simulation-flow', style={'font-weight': 'bold'}),
-                html.Div('The flow chart below, illustrates the process of any one given vehicle in the simulation. While the simulation is being run, this process occurs thousands of times, across the road network. '
+                html.Div('The flow chart below, illustrates the process of any one given vehicle in the simulation. While the simulation is being run, this process occurs thousands of times, across the road network. '),
                 html.Br(),
                 html.Div(
                     style={'display': 'flex', 'justify-content': 'center', 'align-items': 'center'},
