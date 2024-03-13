@@ -40,10 +40,9 @@ layout = html.Div([
                     children=html.Div(
                         style={'background-color': 'white', 'padding': '1rem 2rem', 'border-radius': '10px', 'width': '590px', 'min-height': '150px', 'text-align': 'center', 'margin-right': '20px'},
                         children=[
-                            html.H2('M/M/C Queueing Problem', style={'color': '#19264f'}),
-                            html.P('To simulate the arrival and departure of cars at our charging stations, we incorporated the M/M/C queuing model into our simulation framework.' 
-                                   ' Critical parameters include car interarrival times (based on demand data), charging stall service time, balking probability due to long queues, and maximum queue size before additional balking.'
-                                   ' SimPy execution in Python allowed us to estimate these parameters to formulate our model', style={'color': '#4C4C4C'})
+                            html.H2('Simulation Problem', style={'color': '#19264f'}),
+                            html.P('To simulate traffic throughout the network, we built a simulation around an M/M/C queuing model for each station, with arrivals based on the demand in nearby segments.' 
+                                   ' Critical parameters include car interarrival times (based on demand data), charging stall service time, balking probability due to long queues, and the speeds at which cars drive along the highway.'
                         ]
                     )
                 ),
@@ -53,8 +52,8 @@ layout = html.Div([
                     children=html.Div(
                         style={'background-color': 'white', 'padding': '1rem 2rem', 'border-radius': '10px', 'width': '590px', 'min-height': '150px', 'text-align': 'center', 'margin-right': '20px'},
                         children=[
-                            html.H2('Linear Programming Problem (IP)', style={'color': '#19264f'}),
-                            html.P('By integrating an original Integer programming model, we can mathematically identify the coverage of our charging stations. We utilized this model to define a neighborhood around each potential charging station location, considering areas within a certain distance along the shortest path as covered. Our objective was to minimize costs while achieving a predefined coverage level.', style={'color': '#4C4C4C'})
+                            html.H2('Optimization Problem', style={'color': '#19264f'}),
+                            html.P('By integrating an original Integer Programming Model, we determine the optimal locations of charging stations. The objective of the model is to maximize the coverage of segments (defined as fraction of demand met in that segment) while adhering to a budget constraint', style={'color': '#4C4C4C'})
                         ]
                     )
                 ),
@@ -64,15 +63,14 @@ layout = html.Div([
                     children=html.Div(
                         style={'background-color': 'white', 'padding': '1rem 2rem', 'border-radius': '10px', 'width': '590px', 'min-height': '150px', 'text-align': 'center', 'margin-right': '20px'},
                         children=[
-                            html.H2('Data Collection', style={'color': '#19264f'}),
-                            html.P('Our data collection process involved gathering traffic volume data from Ontario\'s Ministry of Transportation, analyzing charging station utilization across the province, and referencing successful charging network projects in the United States, such as the West Coast Pacific Highway initiative. By synthesizing insights from these diverse sources, we gained valuable information to inform our strategic planning efforts for optimizing EV charging infrastructure in Ontario.', style={'color': '#4C4C4C'})
+                            html.H2('Data Problem', style={'color': '#19264f'}),
+                            html.P('Our team leveraged public traffic volume and road data from Ontario\'s Ministry of Transportation, along with publicly available US government data on existing charging infrastructure in North America. All data sources were validated by the Ontario Ministry of Transportation. By synthesizing insights from these diverse sources, we were able to define the parameters of our Model and our Simulation.', style={'color': '#4C4C4C'})
                         ]
                     )
                 ),
                 html.Br(),
-                html.H3('Event Simulation', id='simulation-flow', style={'font-weight': 'bold'}),
-                html.Div('The simulation primarily tracks the series of events that will occur throughout the process of charging a vehicle. Critical parameters such as driving speed, balking probability due to long queues, and '
-                         'duration of charging stall service time were assumed based on historical data. Future steps involve large-scale SimPy execution in Python'),
+                html.H3('Simulation Flow Chart', id='simulation-flow', style={'font-weight': 'bold'}),
+                html.Div('The flow chart below, illustrates the process of any one given vehicle in the simulation. While the simulation is being run, this process occurs thousands of times, across the road network. '
                 html.Br(),
                 html.Div(
                     style={'display': 'flex', 'justify-content': 'center', 'align-items': 'center'},
@@ -83,7 +81,7 @@ layout = html.Div([
                 ),
                 html.Br(),
                 html.H3('System Flow Diagram', id='system-flow', style={'font-weight': 'bold'}),
-                html.Div('The following diagram illustrates the relationship between the tools, and the FAQ section below could address some of the questions you might have. For each model, certain features will be necessary. For all features, if future projections cannot be obtained then they will have to be forecasted.'),
+                html.Div('The following diagram illustrates the relationship between the components of our tool, and how you as a user might iteratively interact with them. The FAQ section below could address some of the questions you might have. '),
                 html.Div(
                     style={'display': 'flex', 'justify-content': 'center', 'align-items': 'center'},
                     children=html.Img(src='assets/final_system.png', style={'align-items': 'center'}),
@@ -92,22 +90,20 @@ layout = html.Div([
                 html.Br(),
                 html.H3('Frequently Asked Questions', id='faq', style={'font-weight': 'bold'}),
                 html.Div([
-                    html.H5('1. What is Integer Programming (IP)?'),
-                    html.P('IP is a mathematical optimization technique where decision variables are restricted to be integers. Link to our IP problem can be found here:'),
+                    html.H5('1. What is an Integer Programming Model?'),
+                    html.P('An integer programming model allows us to define locations of stations as integer decision variables, and define constraints and parameters such that a solver can then find the optimal solution to the defined problem'),
                     html.Div(
                         [
                             html.A("Link to our IP problem", href="https://uofwaterloo.sharepoint.com/:b:/s/tm-arts-23-24mgtecapstone-Team10/EWrFsD7LvMlDmAouvAOTAO0BRn96RlvSks6X56_Q0UrURQ?e=5U9hnl")
                         ]),
                     html.Br(),
 
-                    html.H5('2. What is M/M/C model in queuing theory?'),
-                    html.P('An M/M/c model represents a queueing system that has exponential arrivals, c servers with exponential service time'),
 
-                    html.H5('3. What do the charging ports mean?'),
-                    html.P('The 2, 4, 8 charging ports in the simulation refers to the number of physical connectors or outlets available for vehicles to plug into and charge simultaneously at a charging station.'),
+                    html.H5('3. What do the numbers of charging ports represent?'),
+                    html.P('The program allows both the user and/or the optimization model to select either 2, 4, or 8 charging ports for any given charging station. This refers to the number of physical connectors or outlets available for vehicles to plug into and charge simultaneously at a charging station.'),
 
                     html.H5('4. Is Voltpath suitable for large-scale deployment planning?'),
-                    html.P('Yes, Voltpath is designed to handle large-scale deployment planning for EV charging stations. Its optimization and simulation capabilities make it suitable for strategic planning at the regional or city level.'),
+                    html.P('Yes, Voltpath is designed to handle large-scale deployment planning for EV charging stations. Its optimization and simulation capabilities make it suitable for strategic planning at the regional or provincial level.'),
                 ]),
                 html.Br(),
             ]),
