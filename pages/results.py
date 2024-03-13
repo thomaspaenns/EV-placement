@@ -1,7 +1,7 @@
 import base64
 import dash
 import dash_bootstrap_components as dbc
-from dash import dcc, html, callback, Input, Output
+from dash import dcc, html, callback, dash_table, Input, Output
 import plotly.graph_objs as go
 import pandas as pd
 
@@ -28,7 +28,7 @@ layout = html.Div([
         ], style={'display': 'flex', 'justify-content': 'space-between'}),
         html.Div(id='overall-stats', style={"font-weight": "bold"}),
         dcc.Graph(id='coverage-map'),
-        html.Div(id='export-table-container')
+        html.Div(id='export-table-container', style={'margin-top':'20px','margin-bottom': '20px'})
     ], style={'marginLeft': '20px', 'marginRight': '20px'})
 ], style={'marginTop': '10px','backgroundColor': '#f8f9fa',})
 
@@ -77,10 +77,13 @@ def update_overall_stats(coverage_data, util_data, wait_time):
         df.reset_index(drop=True, inplace=True)
         export_df.reset_index(drop=True, inplace=True)
 
-        export_df = pd.concat([df, export_df], axis=1).iloc[:,[0,6,30,31,32]]
+        export_df = pd.concat([df, export_df], axis=1).iloc[:,[0,6,30,31]]
         export_df = export_df[export_df['Util']>0]
 
-        export_table = dash_table.DataTable(
+        export_table = html.Div([
+            html.H3('Station Information', style={"font-weight": "bold"}),
+
+            dash_table.DataTable(
             id='export-datatable',
             columns=[{"name": i, "id": i} for i in export_df.columns],
             data=export_df.to_dict('records'),
@@ -97,6 +100,10 @@ def update_overall_stats(coverage_data, util_data, wait_time):
                 'overflow': 'hidden',
                 'textOverflow': 'ellipsis',
             })
+        ])
+        
+        
+        
     return stat_str, download_link, export_table
 
 
