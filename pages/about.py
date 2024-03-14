@@ -104,7 +104,6 @@ layout = html.Div([
                     html.P(['An integer programming model allows us to define locations of stations as integer decision variables, and define constraints and parameters such that a solver can then find the optimal solution to the defined problem. \n',
                         html.A("Link to our IP problem", href="https://uofwaterloo.sharepoint.com/:b:/s/tm-arts-23-24mgtecapstone-Team10/EWrFsD7LvMlDmAouvAOTAO0BRn96RlvSks6X56_Q0UrURQ?e=5U9hnl"),
                     ]),
-                    # html.Br(),
                     html.H5('7. Is Voltpath suitable for large-scale deployment planning?'),
                     html.P('Yes, Voltpath is designed to handle large-scale deployment planning for EV charging stations. Its optimization and simulation capabilities make it suitable for strategic planning at the regional or provincial level.'),
                 ]),
