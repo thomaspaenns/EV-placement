@@ -42,8 +42,6 @@ layout = html.Div([
                        style={'font-size':'30', 'width':'40%', 'height':'auto'}),
             html.Br(),
             html.Br(),
-            html.H4('System Flow Diagram', style={'font-weight': 'bold'}),
-            html.Img(src='assets/final_system.png'),
         ], style={'text-align': 'center'}),
     ], style={'backgroundColor': '#f8f9fa',
               'marginLeft': '20px', 'marginRight': '20px'})
