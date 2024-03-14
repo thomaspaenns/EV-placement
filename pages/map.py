@@ -321,7 +321,8 @@ for index, station in relevant_stations.iterrows():
     [Output('placeholder-output-two', 'children'),
      Output('coverage', 'data'),
      Output('wait_time', 'data'),
-     Output('util', 'data')],
+     Output('util', 'data'),
+     Output('optimal', 'data')],
     [Input('compute-sim', 'n_clicks')],
     [State('budget-store', 'data'),
      State('store-clicked-lhrs', 'data'),
@@ -366,10 +367,11 @@ def compute_optimal_solution_and_run_simulation(n_clicks, budget_data, stored_cl
             # Combine summaries
             results_summary = solution_summary + simulation_summary
             # print(results_summary)
-            return results_summary, coverage, wait_time, util
+            # return results_summary, coverage, wait_time, util, optimal_solution
+            return dash.no_update, coverage, wait_time, util, optimal_solution
         else:
-            return "Please enter a valid budget.", dash.no_update, dash.no_update, dash.no_update
-    return dash.no_update, dash.no_update, dash.no_update, dash.no_update
+            return "Please enter a valid budget.", dash.no_update, dash.no_update, dash.no_update, dash.no_update
+    return dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update
 
 
 # Update this callback to remove dependencies on 'confirm-year' and 'edit-year' buttons

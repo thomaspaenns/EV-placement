@@ -37,10 +37,12 @@ layout = html.Div([
     [Output('overall-stats', 'children'),
      Output('download-link', 'href'),
      Output('export-table-container', 'children')],
-    [Input('coverage', 'data'), Input(
-        'util', 'data'), Input('wait_time', 'data')]
+    [Input('coverage', 'data'),
+     Input('util', 'data'),
+     Input('wait_time', 'data'),
+     Input('optimal', 'data')],
 )
-def update_overall_stats(coverage_data, util_data, wait_time):
+def update_overall_stats(coverage_data, util_data, wait_time, optimal):
     seg_count = 0
     tot_coverage = 0.0
     for k, v in coverage_data.items():
@@ -58,31 +60,33 @@ def update_overall_stats(coverage_data, util_data, wait_time):
         tot_wait += v
     avg_wait = round(tot_wait/station_count,2)
 
-
     stat_str = ''
     download_link = None
     if avg_wait < 0 or avg_coverage < 0 or avg_util < 0:
         stat_str = 'Run the model to see your results'
         export_table=None
     else:
-        stat_str = f"Average Coverage: {round(avg_coverage*100,1)}%. Average Utilization: {round(avg_util*100,1)}%. Average Wait Time: {avg_wait} min."
+        level_convert = {0:0, 1:2, 2:4, 3:8}
+        stat_str = f"Average Coverage: {round(avg_coverage*100)}%. Average Utilization: {round(avg_util*100)}%. Average Wait Time: {avg_wait} min."
         coverage_df = pd.DataFrame.from_dict(coverage_data, orient='index', columns=['Coverage'])
         util_df = pd.DataFrame.from_dict(util_data, orient='index', columns=['Util'])
         wait_df = pd.DataFrame.from_dict(wait_time, orient='index', columns=['Wait (minutes)'])
-        export_df = util_df.join(wait_df).join(coverage_df, how='right')
+        for i in optimal.keys():
+            optimal[i] = level_convert[optimal[i]]
+        port_df = pd.DataFrame.from_dict(optimal,orient='index', columns=['Charging Ports'])
+        export_df = util_df.join(wait_df).join(coverage_df, how='right').join(port_df)
         csv_string = export_df.to_csv(index_label='LHRS_num')
         csv_base64 = base64.b64encode(csv_string.encode()).decode()
         download_link = "data:text/csv;charset=utf-8;base64," + csv_base64
 
         df.reset_index(drop=True, inplace=True)
         export_df.reset_index(drop=True, inplace=True)
-
-        export_df = pd.concat([df, export_df], axis=1).iloc[:,[0,6,30,31]]
+        export_df = pd.concat([df, export_df], axis=1)[
+            ['LHRS','Location Description','Util','Wait (minutes)', 'Charging Ports']]
         export_df = export_df[export_df['Util']>0]
-
+        export_df['Util'] = round(export_df['Util']*100).astype(str) + "%"
         export_table = html.Div([
             html.H3('Station Information', style={"font-weight": "bold"}),
-
             dash_table.DataTable(
             id='export-datatable',
             columns=[{"name": i, "id": i} for i in export_df.columns],
@@ -95,15 +99,12 @@ def update_overall_stats(coverage_data, util_data, wait_time):
             style_cell={
                 'whiteSpace': 'normal',
                 'textAlign': 'left',
-                'minWidth': '180px',
-                'maxWidth': '180px',
+                'minWidth': '80px',
+                'maxWidth': '300px',
                 'overflow': 'hidden',
                 'textOverflow': 'ellipsis',
             })
-        ])
-        
-        
-        
+        ])     
     return stat_str, download_link, export_table
 
 
