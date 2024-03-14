@@ -674,7 +674,3 @@ def draw_coverage_lines(coverage_dict, fig):
 #         f"LHRS: {lhrs}, Status: {status}" for lhrs, status in stored_clicked_lhrs.items())
 #     # print(f"Changed LHRS Status:\n{changed_lhrs_statuses}")
 #     return [f"Changed LHRS Status:\n{changed_lhrs_statuses}"]
-
-
-if __name__ == '__main__':
-    app.run_server(debug=True)

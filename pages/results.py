@@ -201,6 +201,3 @@ def draw_coverage_lines(coverage_dict, fig):
 #             csv_string = "data:text/csv;charset=utf-8," + base64.b64encode(csv_string.encode()).decode()
 #             return csv_string
 #     return ""
-
-if __name__ == '__main__':
-    app.run_server(debug=True)
