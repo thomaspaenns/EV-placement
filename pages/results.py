@@ -19,16 +19,15 @@ layout = html.Div([
         html.Div([
             html.H3('Coverage Map',
                     style={"font-weight": "bold", 'display': 'inline-block'}),
-            # html.A(id='download-link', children="Export Data", href="#", 
-            #         style={'display': 'inline-block', 'margin-top':'5px'},
-            #         title="Export data to CSV (will not export if model has not been run)"),
             dbc.Button("Export Data", id='download-link', 
                     style={'display': 'inline-block', 'margin-top':'5px'},
                     title="Export data to CSV (will not export if model has not been run)"),
         ], style={'display': 'flex', 'justify-content': 'space-between'}),
         html.Div(id='overall-stats', style={"font-weight": "bold"}),
-        dcc.Graph(id='coverage-map'),
-        html.Div(id='export-table-container', style={'margin-top':'20px','margin-bottom': '20px'})
+        dbc.Spinner(fullscreen=False, children=[
+            dcc.Graph(id='coverage-map'),
+            html.Div(id='export-table-container', style={'margin-top':'20px','margin-bottom': '20px'})
+        ]),
     ], style={'marginLeft': '20px', 'marginRight': '20px'})
 ], style={'marginTop': '10px','backgroundColor': '#f8f9fa',})
 
@@ -148,7 +147,6 @@ def update_coverage_map(coverage_data, util_data, wait_time):
             zoom=5
         )
     )
-
     return fig
 
 def draw_coverage_lines(coverage_dict, fig):
@@ -186,18 +184,3 @@ def draw_coverage_lines(coverage_dict, fig):
             hoverinfo='text' if covered_count >= 0 else 'none'
         ))
     return fig
-
-# @callback(
-#     Output('export-csv-button', 'n_clicks'),
-#     [Input('export-csv-button', 'n_clicks'),
-#      Input('coverage', 'data'), 
-#      Input('util', 'data'),
-#      Input('wait_time', 'data')]
-# )
-# def export_to_csv(n_clicks, coverage_data, util_data, wait_time):
-#     if n_clicks > 0:
-#         if coverage_data:
-#             csv_string = pd.DataFrame.from_dict(coverage_data, orient='index', columns=['Coverage']).to_csv(index_label='Segment')
-#             csv_string = "data:text/csv;charset=utf-8," + base64.b64encode(csv_string.encode()).decode()
-#             return csv_string
-#     return ""
