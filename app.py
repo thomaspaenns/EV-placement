@@ -35,7 +35,7 @@ app.layout = html.Div([
     dcc.Store(id='optimal',storage_type='memory', data=initial_clicked_lhrs_dict),
 
     # Location for map refresh
-    dcc.Location(id='map', refresh=True),
+    # dcc.Location(id='map', refresh=True),
     
     # Navbar
     html.Img(src=image_path, style={'display': 'inline-block', 'verticalAlign': 'top'}),
@@ -49,7 +49,7 @@ app.layout = html.Div([
             style={'display': 'inline-block', 'marginRight': '20px', 'marginTop': '10px', 'marginBottom': 'auto'}
         ),
         html.Div(
-            dbc.Button("Map", id="map-button", n_clicks=0, color="secondary"),
+            dbc.Button("Map", href="/map", color="secondary"),
             style={'display': 'inline-block', 'marginRight': '20px', 'marginTop': '10px', 'marginBottom': 'auto'}
         ),
         html.Div(
@@ -75,12 +75,12 @@ app.layout = html.Div([
               'text-align': 'center'}),
 ])
 
-@app.callback(
-    Output('map', 'pathname'),
-    [Input('map-button', 'n_clicks')]
-)
-def map_redirect(n_clicks):
-    return '/map'
+# @app.callback(
+#     Output('map', 'pathname'),
+#     [Input('map-button', 'n_clicks')]
+# )
+# def map_redirect(n_clicks):
+#     return '/map'
 
 if __name__ == '__main__':
     app.run(debug=True)

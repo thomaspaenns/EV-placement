@@ -158,9 +158,9 @@ layout = html.Div(
                 dbc.ModalBody(
                     dbc.RadioItems(
                         options=[
-                            {"label": "2 Ports", "value": 1},
-                            {"label": "4 Ports", "value": 2},
-                            {"label": "8 Ports", "value": 3}
+                            {"label": "2 Ports ($35k)", "value": 1},
+                            {"label": "4 Ports ($56k)", "value": 2},
+                            {"label": "8 Ports ($70k)", "value": 3}
                         ],
                         id="station-level-radio",
                         inline=True
@@ -617,6 +617,10 @@ def update_map_and_stored_lhrs_data(confirm_clicks, remove_confirm_clicks, toggl
     # Applying the color update to the figure
     fig['data'][0]['marker']['color'] = updated_colors
 
+    # # Reset cost to zero if new navigation THIS DOESN'T WORK
+    # if trigger_id == 'No clicks yet':
+    #     cumulative_cost = 0
+
     # Ensure to return the updated figure, cumulative cost, and store data
     return fig, {'cumulative_cost': cumulative_cost}, stored_clicked_lhrs
 
@@ -668,14 +672,13 @@ def draw_coverage_lines(coverage_dict, fig):
 
     return fig
 
-
 # @callback(
-#     [Output('clicked-data', 'children')],
-#     [Input('store-clicked-lhrs', 'data')]  # Listening to updates in the store
+#     [Output('budget-store', 'data'),
+#      Output('cumulative-cost-store', 'data')],
+#     [Input('url', 'pathname')]
 # )
-# def display_click_data(stored_clicked_lhrs):
-#     # This function now purely displays data based on the store's state
-#     changed_lhrs_statuses = "\n".join(
-#         f"LHRS: {lhrs}, Status: {status}" for lhrs, status in stored_clicked_lhrs.items())
-#     # print(f"Changed LHRS Status:\n{changed_lhrs_statuses}")
-#     return [f"Changed LHRS Status:\n{changed_lhrs_statuses}"]
+# def reset_stores_on_page_load(pathname):
+#     if pathname == '/map':  # Update this with the actual URL of your page
+#         return {'current_budget': 0}, {'cumulative_cost': 0}
+#     else:
+#         return dash.no_update, dash.no_update
