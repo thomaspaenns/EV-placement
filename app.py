@@ -1,5 +1,5 @@
 import dash
-from dash import Dash, html, dcc
+from dash import Dash, html, dcc, Output, Input
 import dash_bootstrap_components as dbc
 import pandas as pd
 
@@ -31,14 +31,35 @@ app.layout = html.Div([
     dcc.Store(id='coverage', storage_type='memory', data=initial_coverage_dict),
     dcc.Store(id='wait_time', storage_type='memory', data=initial_wait_dict),
     dcc.Store(id='util', storage_type='memory', data=initial_util_dict),
+    dcc.Store(id='year',storage_type='memory', data={'year':2024}),
+    dcc.Store(id='optimal',storage_type='memory', data=initial_clicked_lhrs_dict),
+
+    # Location for map refresh
+    # dcc.Location(id='map', refresh=True),
     
     # Navbar
     html.Img(src=image_path, style={'display': 'inline-block', 'verticalAlign': 'top'}),
     html.Div([
+        # html.Div(
+        #     dbc.Button(f"{page['name']}", href=page["relative_path"], color="secondary"),
+        #     style={'display': 'inline-block', 'marginRight': '20px', 'marginTop': '10px', 'marginBottom': 'auto'}
+        # ) for page in dash.page_registry.values()
         html.Div(
-            dbc.Button(f"{page['name']}", href=page["relative_path"], color="secondary"),
+            dbc.Button(f"Home", href="/", color="secondary"),
             style={'display': 'inline-block', 'marginRight': '20px', 'marginTop': '10px', 'marginBottom': 'auto'}
-        ) for page in dash.page_registry.values()
+        ),
+        html.Div(
+            dbc.Button("Map", href="/map", color="secondary"),
+            style={'display': 'inline-block', 'marginRight': '20px', 'marginTop': '10px', 'marginBottom': 'auto'}
+        ),
+        html.Div(
+            dbc.Button(f"Results", href="/results", color="secondary"),
+            style={'display': 'inline-block', 'marginRight': '20px', 'marginTop': '10px', 'marginBottom': 'auto'}
+        ),
+        html.Div(
+            dbc.Button(f"About", href="/about", color="secondary"),
+            style={'display': 'inline-block', 'marginRight': '20px', 'marginTop': '10px', 'marginBottom': 'auto'}
+        ),
     ], style={'display': 'inline-block', 'marginRight': '10px'}),
     
     # Page container
@@ -53,6 +74,13 @@ app.layout = html.Div([
               'marginBottom': '10px',
               'text-align': 'center'}),
 ])
+
+# @app.callback(
+#     Output('map', 'pathname'),
+#     [Input('map-button', 'n_clicks')]
+# )
+# def map_redirect(n_clicks):
+#     return '/map'
 
 if __name__ == '__main__':
     app.run(debug=True)

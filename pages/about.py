@@ -52,7 +52,7 @@ layout = html.Div([
                         style={'background-color': 'white', 'padding': '1rem 2rem', 'border-radius': '10px', 'width': '590px', 'min-height': '150px', 'text-align': 'center', 'margin-right': '20px'},
                         children=[
                             html.H2('Optimization Problem', style={'color': '#19264f'}),
-                            html.P('By integrating an original Integer Programming Model, we determine the optimal locations of charging stations. The objective of the model is to maximize the coverage of segments (defined as fraction of demand met in that segment) while adhering to a budget constraint', style={'color': '#4C4C4C'})
+                            html.P('By integrating an original Integer Programming Model, we determine the optimal locations of charging stations. The objective of the model is to maximize the coverage of segments (defined as fraction of demand met in that segment) while adhering to a budget constraint.', style={'color': '#4C4C4C'})
                         ]
                     )
                 ),
@@ -90,19 +90,21 @@ layout = html.Div([
                 html.Br(),
                 html.H3('Frequently Asked Questions', id='faq', style={'font-weight': 'bold'}),
                 html.Div([
-                    html.H5('1. What is an Integer Programming Model?'),
-                    html.P('An integer programming model allows us to define locations of stations as integer decision variables, and define constraints and parameters such that a solver can then find the optimal solution to the defined problem'),
-                    html.Div(
-                        [
-                            html.A("Link to our IP problem", href="https://uofwaterloo.sharepoint.com/:b:/s/tm-arts-23-24mgtecapstone-Team10/EWrFsD7LvMlDmAouvAOTAO0BRn96RlvSks6X56_Q0UrURQ?e=5U9hnl")
-                        ]),
-                    html.Br(),
-
-
+                    html.H5('1. How do I add or remove a must-have station?'),
+                    html.P('Click on the grey circle in the map page representing your chosen candidate location. A menu box will appear with options for the number of charging ports. Select the number of ports and confirm; the circle will turn green showing that the station has been added. Remove the station by clicking on the circle again and confirming removal'),
+                    html.H5('2. What does the "Toggle Existing Stations" button do?'),
+                    html.P('This button allows you to choose to include existing EV charging stations in your modelling and simulation. Clicking the button will add or remove those stations in blue from the map.'),
                     html.H5('3. What do the numbers of charging ports represent?'),
                     html.P('The program allows both the user and/or the optimization model to select either 2, 4, or 8 charging ports for any given charging station. This refers to the number of physical connectors or outlets available for vehicles to plug into and charge simultaneously at a charging station.'),
-
-                    html.H5('4. Is Voltpath suitable for large-scale deployment planning?'),
+                    html.H5('4. How do I view the outputs of the model and the Simulation?'),
+                    html.P('After running the optimization model and the simulation, you can see the selected and/or optimal station locations and their effect on coverage, wait-times, and utilization across the road network.'),
+                    html.H5('5. What do the colours of the road on the results page represent?'),
+                    html.P('These colours represent the coverage (percentage of demand for charging met) in each of the segments along the highway. Red indicates that less than 25% of the demand is met. Orange indicates that between 25% and 75% is met. Green indicates that more than 75% of the demand is met.'),
+                    html.H5('6. What is an Integer Programming Model?'),
+                    html.P(['An integer programming model allows us to define locations of stations as integer decision variables, and define constraints and parameters such that a solver can then find the optimal solution to the defined problem. \n',
+                        html.A("Link to our IP problem", href="https://uofwaterloo.sharepoint.com/:b:/s/tm-arts-23-24mgtecapstone-Team10/EWrFsD7LvMlDmAouvAOTAO0BRn96RlvSks6X56_Q0UrURQ?e=5U9hnl"),
+                    ]),
+                    html.H5('7. Is Voltpath suitable for large-scale deployment planning?'),
                     html.P('Yes, Voltpath is designed to handle large-scale deployment planning for EV charging stations. Its optimization and simulation capabilities make it suitable for strategic planning at the regional or provincial level.'),
                 ]),
                 html.Br(),

@@ -50,7 +50,10 @@ class ChargingStation:
             self.charging_cars -= 1
 
     def get_util(self, simulation_time):
-        return float(self.charge_time) / (simulation_time * self.ports)
+        util = float(self.charge_time) / (simulation_time * self.ports)
+        if util > 1.000:
+            util = 1.000
+        return util
 
 # Methods to track car movements
 
@@ -110,21 +113,17 @@ class Simulation:
         return df
 
     # Create specific stations for this simulation
-    def setup(self, charging_stations, station_ranges):
-        # Testing Data
-        # self.arrival_times = {
-        #     1: [10,20,30,40,50,60,70,80,90,100,110,120],
-        #     2: [10,20,30,40,50,60,70,80,90,100,110,120],
-        #     3: [10,20,30,40,50,60,70,80,90,100,110,120],
-        #     4: [10,20,30,40,50,60,70,80,90,100,110,120],
-        #     5: [10,20,30,40,50,60,70,80,90,100,110,120]
-        # }  # Vehicles arrive every X minutes
+    def setup(self, charging_stations, station_ranges, year=2024):
+        year_convert = {2024:1.0, 2029: 4.12, 2034:7.24, 2039:10.36, 2044:13.48, 2049: 16.6}
+        # year_convert = {2024:1.0, 2029: 4.12, 2034:9.24, 2039:13.36, 2044:17.48, 2049: 21.6} #75%
+        yr_scalar = year_convert[year]
         self.cars_charged = None
         self.cars_not_charged = None
         self.arrival_times = {}
         for index, row in self.data.iterrows():
-            inter_time = (24*60)/row['demand']
+            inter_time = (24*60)/(row['demand']*yr_scalar)
             beta = inter_time  # 0
+            # print(f"BETA: {beta}")
             # This is an adjustor - un-comment to artifically increase rural demand
             # if inter_time > 100.0:
             #     beta = inter_time/2
@@ -179,10 +178,10 @@ class Simulation:
 
     # Method to execute the simulation
 
-    def simulate(self, charging_stations, station_ranges):
+    def simulate(self, charging_stations, station_ranges, year=2024):
         # Setup
         file = open('simulation/sim_log.txt', 'w')
-        self.setup(charging_stations, station_ranges)
+        self.setup(charging_stations, station_ranges, year=year)
         station_arrivals = []  # Format = [[station_id, time, car]]
         station_departures = []  # Format = [[station_id, time]]
         # Run simulation
@@ -190,9 +189,9 @@ class Simulation:
             # Demand Generation Logic
             for point_id, arrive_list in self.arrival_times.items():
                 # Generate car at this point
-                if current_time == arrive_list[0]:
+                while current_time == arrive_list[0]:
                     arrive_list.pop(0)  # remove arrival time
-                    self.arrival_times.update({point_id: arrive_list})
+                    # self.arrival_times.update({point_id: arrive_list}) #Move to after while loop
                     car = Car(point_id)  # Create car
                     if point_id in station_ranges:  # If within range of a station
                         station_id, distance = self.get_closest_station(
@@ -207,6 +206,7 @@ class Simulation:
                         self.cars_not_charged[point_id] += 1
                         file.write(
                             f"T{current_time}: Car appeared at {point_id}, not in range\n")
+                self.arrival_times.update({point_id: arrive_list})
             # Departure Logic #include charge counts
             for index, departure in enumerate(station_departures):
                 if current_time == departure[1]:
