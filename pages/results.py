@@ -221,15 +221,14 @@ def draw_coverage_lines(coverage_dict, fig):
     Input('coverage', 'data')
 )
 def update_budget_coverage_plot(coverage_dict):
-    # No Existing Infrastructure
     budget = [0.0,500000,1000000,1500000,2000000,3000000,4000000,5000000,6000000,7000000,8000000,9000000]
-    coverage = [0.0, 0.27, 0.38, 0.41, 0.42, 0.48, 0.53, 0.58, 0.64, 0.75, 0.82, 1.0]
-    util = [1.0, 0.71, 0.60, 0.41, 0.41, 0.34, 0.24, 0.23, 0.20, 0.18, 0.16, 0.15]
-    wait = [None, 10.46, 5.18, 3.12, 2.73, 1.48, 0.86, 0.31, 0.19, 0.09, 0.03, 0.02]
+    coverage = [0.57, 0.65, 0.72, 0.73, 0.79, 0.82, 0.85, 0.87, 0.89, 0.90, 1.0, 1.0]
+    util = [0.65, 0.58, 0.50, 0.39, 0.38, 0.34, 0.28, 0.24, 0.21, 0.18, 0.16, 0.15]
+    wait = [7.28, 6.37, 4.93, 2.86, 1.57, 1.44, 0.98, 0.48, 0.42, 0.32, 0.27, 0.24]
     trace_coverage = go.Scatter(x=budget, y=coverage, mode='lines+markers', name='Coverage')
     trace_util = go.Scatter(x=budget, y=util, mode='lines+markers', name='Util')
     layout = go.Layout(
-        title="<b>Utilization and Coverage by Budget</b> <br><sup>(Not including existing infrastructure)</sup>",
+        title="<b>Utilization and Coverage by Budget</b> <br><sup>(including existing infrastructure)</sup>",
         xaxis=dict(title='Budget'),
         yaxis=dict(title='Percentage', tickformat=',.0%'))
     fig = go.Figure(data=[trace_coverage, trace_util], layout=layout)
@@ -248,7 +247,7 @@ def update_budget_coverage_plot(coverage_dict):
 
     trace_wait_3 = go.Scatter(x=budget, y=wait, mode='lines+markers')
     layout_3 = go.Layout(
-        title="<b>Wait Times by Budget</b> <br><sup>(Not including existing infrastructure)</sup>",
+        title="<b>Wait Times by Budget</b> <br><sup>(including existing infrastructure)</sup>",
         xaxis=dict(title='Budget'),
         yaxis=dict(title='Minutes'))
     fig_3 = go.Figure(data=trace_wait_3, layout=layout_3)
