@@ -148,10 +148,6 @@ class Simulation:
                 self.stations.update({station_id: ChargingStation(4)})
             elif level_type == 3:
                 self.stations.update({station_id: ChargingStation(8)})
-        # OLD LOOP from when only existing stations and not zeroes are passed in
-        # self.stations = {
-        #     station_id: ChargingStation(num_ports) for station_id, num_ports in charging_stations.items()
-        # }
         # Initialize outputs
         self.cars_charged = {point_id: 0 for point_id in self.points}
         self.cars_not_charged = {point_id: 0 for point_id in self.points}
@@ -165,18 +161,6 @@ class Simulation:
                 min_distance = float(distance)
                 station = station_id
         return station, min_distance
-
-    # def get_closest_station(self, point_id, station_ranges):
-    #     closest_station = None
-    #     min_distance = 500000
-    #     for station_id, stations_info in station_ranges.items():
-    #         distance = stations_info.get(point_id)
-    #         if distance is not None and distance < min_distance:
-    #             min_distance = distance
-    #             closest_station = station_id
-    #     return closest_station, min_distance
-
-    # Method to execute the simulation
 
     def simulate(self, charging_stations, station_ranges, year=2024):
         # Setup

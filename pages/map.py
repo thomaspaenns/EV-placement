@@ -23,32 +23,15 @@ alt_fuel_df = pd.read_csv(
 # Create a polyline from the latitude and longitude of the 401 data
 polyline_401 = list(zip(df['Latitude'], df['Longitude']))
 
-
-# # Initialize `store-clicked-lhrs` with all LHRS values set to 0
-# initial_clicked_lhrs_dict = {str(lhrs): 0 for lhrs in df['LHRS'].unique()}
-
-# # Initialize `store-clicked-lhrs` with all LHRS values set to -1
-# initial_coverage_dict = {str(lhrs): -1 for lhrs in df['LHRS'].unique()}
-
-
-# initial_util_dict = {str(lhrs): -1 for lhrs in df['LHRS'].unique()}
-
-
-# initial_wait_dict ={str(lhrs): -1 for lhrs in df['LHRS'].unique()}
-
 # Import model and simulation
 model = Model(df)
 sim = Simulation(df)
-
-# # Initialize Dash app
-# app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 # Global variable to track if a budget is set
 is_budget_set = False
 
 # Global variable to track the current budget
 current_budget = 0
-
 
 # Map configuration
 mapbox_access_token = 'pk.eyJ1IjoienVoYXlyODMiLCJhIjoiY2xrbHc0emVwMHE2NjNsbXZ3cTh2MHNleCJ9.CMVZ7OC27bxxARKMRTttfQ'
@@ -66,25 +49,11 @@ layout = html.Div(
            'backgroundColor': '#f8f9fa',
            'display': 'flex', 'flexDirection': 'column'},
     children=[
-        # # Adding dcc.Store at the top for better organization
-        # dcc.Store(id='store-clicked-lhrs', storage_type='memory',
-        #           data=initial_clicked_lhrs_dict),
-        # dcc.Store(id='cumulative-cost-store', storage_type='memory',
-        #           data={'cumulative_cost': 0}),
-        # dcc.Store(id='budget-store', storage_type='memory',
-        #           data={'current_budget': 0}),
-        # dcc.Store(id='coverage', storage_type='memory',
-        #           data=initial_coverage_dict),
-        # dcc.Store(id='wait_time', storage_type='memory',
-        #           data=initial_wait_dict),
-        # dcc.Store(id='util', storage_type='memory',
-        #           data=initial_util_dict),
         dcc.Location(id='url', refresh='callback-nav'),
         html.Div(
             [
                 dbc.Button("Toggle Existing Stations", id="toggle-stations",
                            n_clicks=0),
-                # html.Div([
                 dbc.Input(id="budget-input", type="number",
                           placeholder="Enter Budget", style={'width': '15%'}),
                 # dbc.Button("Compute Optimal Solution",
@@ -92,8 +61,6 @@ layout = html.Div(
                 dcc.Loading(id="loading-button", children=[
                     dbc.Button("Optimize & Simulate", id="compute-sim", n_clicks=0), # , href="/results"
                 ]),
-                # ], style={'display': 'flex', 'gap': '10px', 'marginTop': '10px','marginBottom': '10px'}),
-
                 html.Div(id='remaining-budget',
                          style={'fontSize': '16px'}),
 
@@ -267,57 +234,6 @@ for index, station in relevant_stations.iterrows():
         lhrs_ev_dc_fast_count_sum[lhrs] += ev_dc_fast_count
     else:
         lhrs_ev_dc_fast_count_sum[lhrs] = ev_dc_fast_count
-
-# Print the sums for validation
-# print(lhrs_ev_dc_fast_count_sum)
-# print(len(lhrs_ev_dc_fast_count_sum))
-# for lhrs, total_count in lhrs_ev_dc_fast_count_sum.items():
-#     print(f"LHRS {lhrs} has a total EV DC Fast Count of {total_count}")
-
-
-# @callback(
-#     Output('placeholder-output', 'children'),
-#     [Input('compute-optimal', 'n_clicks')],
-#     [State('budget-store', 'data'),  # Use the budget from the budget-store
-#      State('store-clicked-lhrs', 'data'),
-#      State('toggle-stations', 'n_clicks'),
-#      State('year', 'data')]
-# )
-# def compute_optimal_solution(n_clicks, budget_data, stored_clicked_lhrs, toggle_clicks, selected_year):
-#     if n_clicks > 0:
-#         # Extract budget from budget_data
-#         budget = budget_data.get('current_budget') if budget_data else None
-
-#         if budget is not None:
-#             # Convert the year from string to integer
-#             try:
-#                 selected_year = int(selected_year.get('year'))
-#             except (ValueError, TypeError):
-#                 print("Invalid year format:", selected_year)
-#                 return "Error: Invalid year format"
-
-#             # Use stored_clicked_lhrs instead of clicked_lhrs_dict
-#             if stored_clicked_lhrs is None:
-#                 stored_clicked_lhrs = {}
-
-#             # Check if stations are being shown or not
-#             if toggle_clicks % 2 == 1:
-#                 # Stations are shown, pass in both dictionaries
-#                 optimal_solution = model.get_optimal(
-#                     budget, stored_clicked_lhrs,
-#                     lhrs_ev_dc_fast_count_sum, year=selected_year)
-#             else:
-#                 # Stations are not shown, pass in only stored_clicked_lhrs
-#                 optimal_solution = model.get_optimal(
-#                     budget, stored_clicked_lhrs, year=selected_year)
-
-#             # Format the optimal solution for display
-#             solution_str = ", ".join(
-#                 f"LHRS {key}: Level {value}" for key, value in optimal_solution.items())
-#             return f"Optimal solution computed: {solution_str}"
-#         else:
-#             return "Please enter a valid budget."
-#     return no_update
 
 
 @callback(
@@ -493,24 +409,6 @@ def update_remaining_budget(n_clicks_confirm, n_clicks_remove, budget_input, cum
     return f"Remaining Budget: ${remaining_budget}"
 
 
-# @app.callback(
-#     Output('error-message', 'children'),
-#     Output('error-message', 'style'),
-#     [Input('modal-confirm', 'n_clicks')],
-#     [State('station-level-radio', 'value'),
-#      State('ontario-map', 'clickData'),
-#      State('budget-input', 'value')]
-# )
-# def display_error_message(n_clicks, selected_level, clickData, budget):
-#     if n_clicks and clickData and selected_level:
-#         point_index = clickData['points'][0]['pointIndex']
-#         cost_column = f'cost {selected_level}'
-#         station_cost = df.iloc[point_index][cost_column]
-#         if cumulative_cost + station_cost > budget:
-#             return "Error: Selection exceeds budget.", {'color': 'red', 'display': 'block'}
-#     return "", {'display': 'none'}
-
-
 @callback(
     [Output('modal', 'is_open'),
      Output('remove-modal', 'is_open')],
@@ -561,7 +459,8 @@ def handle_modal_and_map_clicks(clickData, confirm_clicks, remove_confirm_clicks
      Output('store-clicked-lhrs', 'data')],
     [Input('modal-confirm', 'n_clicks'),
      Input('modal-remove-confirm', 'n_clicks'),
-     Input('toggle-stations', 'n_clicks')],
+     Input('toggle-stations', 'n_clicks'),
+     Input('url', 'pathname')],
     [State('station-level-radio', 'value'),
      State('ontario-map', 'clickData'),
      State('ontario-map', 'figure'),
@@ -569,17 +468,13 @@ def handle_modal_and_map_clicks(clickData, confirm_clicks, remove_confirm_clicks
      State('store-clicked-lhrs', 'data'),
      State('cumulative-cost-store', 'data')]
 )
-def update_map_and_stored_lhrs_data(confirm_clicks, remove_confirm_clicks, toggle_clicks, selected_level, clickData, fig, budget, stored_clicked_lhrs, cumulative_cost_data):
+def update_map_and_stored_lhrs_data(confirm_clicks, remove_confirm_clicks, toggle_clicks, pathname, selected_level, clickData, fig, budget, stored_clicked_lhrs, cumulative_cost_data):
     cumulative_cost = cumulative_cost_data.get('cumulative_cost', 0)
     ctx = dash.callback_context
     if not ctx.triggered:
         trigger_id = 'No clicks yet'
     else:
         trigger_id = ctx.triggered[0]['prop_id'].split('.')[0]
-
-    # if sim_clicks % 2 == 1:
-    #     # Color lines based on coverage
-    #     fig = draw_coverage_lines(coverage_dict, fig)
 
     # Handling adding or removing stations
     if trigger_id in ['modal-confirm', 'modal-remove-confirm'] and clickData:
@@ -617,68 +512,11 @@ def update_map_and_stored_lhrs_data(confirm_clicks, remove_confirm_clicks, toggl
     # Applying the color update to the figure
     fig['data'][0]['marker']['color'] = updated_colors
 
-    # # Reset cost to zero if new navigation THIS DOESN'T WORK
-    # if trigger_id == 'No clicks yet':
-    #     cumulative_cost = 0
+    # # Reset cost to zero if new navigation
+    if trigger_id == 'url':
+        cumulative_cost = 0
+        for lhrs_id in stored_clicked_lhrs.keys():
+            stored_clicked_lhrs[lhrs_id] = 0
 
     # Ensure to return the updated figure, cumulative cost, and store data
     return fig, {'cumulative_cost': cumulative_cost}, stored_clicked_lhrs
-
-
-def draw_coverage_lines(coverage_dict, fig):
-    # Convert coverage_dict keys to integers for sorting and comparison
-    sorted_lhrs = sorted([int(k) for k in coverage_dict.keys()])
-    segments_to_color = {"green": [], "yellow": [], "red": [], "gray": []}
-
-    # for i in range(len(sorted_lhrs) - 3):
-    #     # Extract four consecutive segments
-    #     segment_group = sorted_lhrs[i:i+4]
-    #     covered_count = sum(1 for lhrs in segment_group if coverage_dict[str(lhrs)] >= 1.0)
-    #     print(covered_count)
-    i = 0
-    while i < len(sorted_lhrs):
-        segment_group = sorted_lhrs[i:i+4]
-        i = i + 3
-        covered_count = 0
-        for j in segment_group:
-            covered_count += coverage_dict[str(j)]
-        # Determine color based on coverage
-        if covered_count > 3:
-            color = "green"
-        elif covered_count > 1 and covered_count <= 3:
-            color = "yellow"
-        elif covered_count <= 1 and covered_count >= 0:
-            color = "red"
-        else:
-            color = "gray"
-
-        # Add coordinates for these segments to the corresponding color group
-        for lhrs in segment_group:
-            lat, lon = df[df['LHRS'] == int(
-                lhrs)][['Latitude', 'Longitude']].values[0]
-            segments_to_color[color].append((lat, lon))
-
-    # Draw lines for each color group
-    for color, coordinates in segments_to_color.items():
-        if coordinates:
-            latitudes, longitudes = zip(*coordinates)
-            fig['data'].append(go.Scattermapbox(
-                lat=latitudes,
-                lon=longitudes,
-                mode='lines',
-                line=dict(width=4, color=color),
-                hoverinfo='none'
-            ))
-
-    return fig
-
-# @callback(
-#     [Output('budget-store', 'data'),
-#      Output('cumulative-cost-store', 'data')],
-#     [Input('url', 'pathname')]
-# )
-# def reset_stores_on_page_load(pathname):
-#     if pathname == '/map':  # Update this with the actual URL of your page
-#         return {'current_budget': 0}, {'cumulative_cost': 0}
-#     else:
-#         return dash.no_update, dash.no_update
