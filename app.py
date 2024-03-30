@@ -75,12 +75,5 @@ app.layout = html.Div([
               'text-align': 'center'}),
 ])
 
-# @app.callback(
-#     Output('map', 'pathname'),
-#     [Input('map-button', 'n_clicks')]
-# )
-# def map_redirect(n_clicks):
-#     return '/map'
-
 if __name__ == '__main__':
     app.run(debug=True)
